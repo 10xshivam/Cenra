@@ -1,13 +1,17 @@
 {
   "name": "@workspace/backend",
-  "type": "module",
   "scripts": {
     "dev": "tsc-watch --onSuccess \"node ./dist/index.js\"",
     "build": "tsc -b",
     "start": "node ./dist/index.js"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
   "devDependencies": {
     "@workspace/typescript-config": "workspace:*",
+    "@workspace/db": "workspace:*",
     "tsc-watch": "^7.2.0",
     "typescript": "latest"
   },

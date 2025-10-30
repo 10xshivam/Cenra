@@ -1,9 +1,11 @@
 import express from 'express'
+import { prisma } from '@workspace/db';
 
 const app = express();
 
-app.get('/', (req, res) => {
-  res.send('Hello World');
+app.get('/', async (req, res) => {
+  const users = await prisma.user.findMany();
+  res.send(users);
 })
 
 app.listen(8000, () => {
