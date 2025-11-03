@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { prisma } from "@workspace/db";
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/generateToken";
+import { getGoogleUserProfile } from "../utils/googleAuth";
 
 export const registerUser = async (req: Request, res: Response) => {
   const { name, email, password } = req.body;
@@ -198,6 +199,50 @@ export const getCurrentUser = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error fetching user profile:", error);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+};
+
+export const googleLogin = async (req: Request, res: Response) => {
+  const { code } = req.body;
+
+  try {
+    if (!code) {
+      return res.status(400).json({ message: "Google auth code is required." });
+    }
+
+    const googleProfile = await getGoogleUserProfile(code);
+
+    if (!googleProfile) {
+      return res.status(401).json({ message: "Invalid Google auth code." });
+    }
+
+    const { email, name } = googleProfile;
+
+    const user = await prisma.user.upsert({
+      where: { email },
+      update: { 
+        name,
+      },
+      create: {
+        email,
+        name,
+        password: await bcrypt.hash(Math.random().toString(36), 10), 
+      },
+    });
+
+    generateToken(user.id, res);
+
+    return res.status(200).json({
+      message: "Login successful.",
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email, 
+      },
+    });
+  } catch (error) {
+    console.error("Error logging in user with Google:", error);
     return res.status(500).json({ message: "Internal server error." });
   }
 };

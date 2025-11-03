@@ -1,13 +1,13 @@
 import { Router } from "express";
-import { getCurrentUser, googleAuthCallback, loginUser, logoutUser, registerUser  } from "../controllers/user.controller";
+import { getCurrentUser, googleLogin, loginUser, logoutUser, registerUser  } from "../controllers/user.controller";
 import { verifyAuth } from "../middlewares/auth.middleware";
 
 const router: Router = Router();
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
-router.get("/google/callback", googleAuthCallback);
+router.post("/google", googleLogin);
 router.post("/logout", logoutUser);
-router.get("/me", verifyAuth, getCurrentUser);
+router.get("/user", verifyAuth, getCurrentUser);
 
 export default router;
