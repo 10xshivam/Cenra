@@ -24,13 +24,13 @@ export const OnboardingSidebar = () => {
         <div className="flex gap-3 mt-7">
           <div
             key="1"
-            className="mb-4 flex flex-col w-full p-4 gap-3 bg-neutral-100/80 backdrop-blur-xl rounded-xl ring ring-white/10"
+            className="mb-4 flex flex-col w-full p-4 gap-3 bg-neutral-100 backdrop-blur-xl rounded-xl ring ring-white/10"
           >
             <div className="rounded-full py-1.5 px-[13px] w-fit text-sm bg-black/10">
               1
             </div>
-            <h3 className="text-neutral-500 text-sm">
-              Sign in or create your account
+            <h3 className="text-neutral-600 text-sm">
+              Login in or create your account
             </h3>
           </div>
           <div className="mb-4 flex flex-col w-full p-4 gap-3 bg-white/5 backdrop-blur-xl rounded-xl ring ring-white/10">
@@ -53,4 +53,4 @@ export const OnboardingSidebar = () => {
       </div>
     </div>
   );
-}
+};
