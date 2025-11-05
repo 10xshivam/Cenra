@@ -2,6 +2,7 @@ import "@workspace/ui/globals.css";
 import { Inter } from "next/font/google";
 import { Providers } from "@/providers/providers";
 import { ViewTransitions } from "next-view-transitions";
+import { Toaster } from "sonner";
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -21,6 +22,7 @@ export default function RootLayout({
           className={`${fontSans.variable} font-sans antialiased bg-neutral-50 `}
         >
           <Providers>{children}</Providers>
+          <Toaster position="top-center" />
         </body>
       </html>
     </ViewTransitions>

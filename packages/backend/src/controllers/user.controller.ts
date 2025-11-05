@@ -5,10 +5,10 @@ import { generateToken } from "../utils/generateToken";
 import { getGoogleUserProfile } from "../utils/googleAuth";
 
 export const registerUser = async (req: Request, res: Response) => {
-  const { name, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
   try {
-    if (!name || !email || !password) {
+    if (!firstName || !lastName || !email || !password) {
       return res.status(400).json({ message: "All fields are required." });
     }
 
@@ -24,7 +24,8 @@ export const registerUser = async (req: Request, res: Response) => {
 
     const user = await prisma.user.create({
       data: {
-        name,
+        firstName,
+        lastName,
         email,
         password: hashPassword,
       },
@@ -36,8 +37,9 @@ export const registerUser = async (req: Request, res: Response) => {
         message: "User registered successfully.",
         user: {
           id: user.id,
-          name: user.name,
           email: user.email,
+          firstName: user.firstName,
+          lastName: user.lastName,
         },
       });
     } else {
@@ -75,93 +77,14 @@ export  const loginUser = async (req: Request, res: Response) => {
       message: "Login successful.",
       user: {
         id: user.id,
-        name: user.name,
         email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
       },
     });
   } catch (error) {
     console.error("Error logging in user:", error);
     return res.status(500).json({ message: "Internal server error." });
-  }
-};
-
-export const googleAuthCallback = async (req: Request, res: Response) => {
-  const { code } = req.query;
-  const CLIENT_ID = process.env.GOOGLE_CLIENT_ID!;
-  const CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET!;
-  const REDIRECT_URI = "http://localhost:8080/api/v1/auth/google/callback";
-
-  const scope = ["profile", "email"].join(" ");
-  const authUrl = new URL("https://accounts.google.com/o/oauth2/v2/auth");
-  authUrl.searchParams.set("client_id", CLIENT_ID);
-  authUrl.searchParams.set("redirect_uri", REDIRECT_URI);
-  authUrl.searchParams.set("response_type", "code");
-  authUrl.searchParams.set("scope", scope);
-  authUrl.searchParams.set("access_type", "offline");
-  authUrl.searchParams.set("prompt", "consent");
-
-  try {
-    if (!code) {
-      return res.redirect(authUrl.toString());
-    }
-
-    const tokenResponse = await fetch("https://oauth2.googleapis.com/token", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        code,
-        client_id: CLIENT_ID,
-        client_secret: CLIENT_SECRET,
-        redirect_uri: REDIRECT_URI,
-        grant_type: "authorization_code",
-      }),
-    });
-
-    if (!tokenResponse.ok) {
-      return res.status(tokenResponse.status).json({ message: "Failed to get tokens from Google" });
-    }
-
-    const { id_token } = await tokenResponse.json();
-
-    const userInfoResponse = await fetch(
-      `https://oauth2.googleapis.com/tokeninfo?id_token=${id_token}`
-    );
-
-    if (!userInfoResponse.ok) {
-      return res.status(userInfoResponse.status).json({ message: "Failed to verify ID token" });
-    }
-
-    const userInfo = await userInfoResponse.json();
-
-    // Check or create user in DB by email
-    let user = await prisma.user.findUnique({
-      where: { email: userInfo.email },
-    });
-
-    if (!user) {
-      user = await prisma.user.create({
-        data: {
-          name: userInfo.name,
-          email: userInfo.email,
-          password: "", // No password for OAuth users
-        },
-      });
-    }
-
-    // Generate JWT and set cookie or send token to client
-    generateToken(user.id, res);
-
-    return res.status(200).json({
-      message: "Google login successful.",
-      user: {
-        id: user.id,
-        name: user.name,
-        email: user.email,
-      },
-    });
-  } catch (error) {
-    console.error("Google OAuth Error:", error);
-    return res.status(500).json({ message: "Internal server error" });
   }
 };
 
@@ -193,8 +116,9 @@ export const getCurrentUser = async (req: Request, res: Response) => {
       message: "User profile retrieved successfully.",
       user: {
         id: user.id,
-        name: user.name,
         email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
       },
     });
   } catch (error) {
@@ -217,16 +141,18 @@ export const googleLogin = async (req: Request, res: Response) => {
       return res.status(401).json({ message: "Invalid Google auth code." });
     }
 
-    const { email, name } = googleProfile;
+    const { email, given_name, family_name } = googleProfile;
 
     const user = await prisma.user.upsert({
       where: { email },
       update: { 
-        name,
+        firstName: given_name,
+        lastName: family_name,
       },
       create: {
         email,
-        name,
+        firstName: given_name,
+        lastName: family_name,
         password: await bcrypt.hash(Math.random().toString(36), 10), 
       },
     });
@@ -237,7 +163,8 @@ export const googleLogin = async (req: Request, res: Response) => {
       message: "Login successful.",
       user: {
         id: user.id,
-        name: user.name,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email, 
       },
     });

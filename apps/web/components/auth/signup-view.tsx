@@ -16,19 +16,23 @@ import {
 import { useState } from "react";
 import Image from "next/image";
 import { Link } from "next-view-transitions";
-
-const formSchema = z.object({
-  firstName: z.string().min(2, "Required"),
-  lastName: z.string().min(2, "Required"),
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters long"),
-});
+import { toast } from "sonner";
+import { signupSchema } from "@/schemas/signupSchema";
+import { useGoogleLoginMutation, useSignupUser } from "@/hooks/useAuth";
+import { useGoogleLogin } from "@react-oauth/google";
 
 export const SignupView = () => {
+  const signupMutation = useSignupUser();
+  const googleLoginMutation = useGoogleLoginMutation();
+
   const [showPassword, setShowPassword] = useState("password");
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => (prev === "password" ? "text" : "password"));
+  };
+
+  const form = useForm<z.infer<typeof signupSchema>>({
+    resolver: zodResolver(signupSchema),
     defaultValues: {
       firstName: "",
       lastName: "",
@@ -37,13 +41,17 @@ export const SignupView = () => {
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => (prev === "password" ? "text" : "password"));
-  };
+  const getGoogleCode = useGoogleLogin({
+    flow: "auth-code",
+    onSuccess: (codeResponse) => {
+      googleLoginMutation.mutate(codeResponse.code);
+    },
+    onError: (error) => {
+      toast.error(
+        `Google login failed: ${typeof error === "string" ? error : JSON.stringify(error)}`
+      );
+    },
+  });
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
@@ -59,15 +67,23 @@ export const SignupView = () => {
         <Button
           className="w-full h-12 font-medium text-neutral-500 hover:text-neutral-700 transition-colors duration-300"
           variant="outline"
+          onClick={() => getGoogleCode()}
+          disabled={googleLoginMutation.isPending}
         >
-          <Image
-            src="/google-icon.svg"
-            alt="Google Icon"
-            width={20}
-            height={20}
-            className="mr-1"
-          />
-          Continue with Google
+          {googleLoginMutation.isPending ? (
+            "Loading..."
+          ) : (
+            <>
+              <Image
+                src="/google-icon.svg"
+                alt="Google Icon"
+                width={20}
+                height={20}
+                className="mr-1"
+              />
+              Continue with Google
+            </>
+          )}
         </Button>
         <div className="flex items-center w-full gap-2.5 my-5">
           <Separator className="flex-1" />
@@ -76,7 +92,9 @@ export const SignupView = () => {
         </div>
         <form
           id="form-rhf-demo"
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit((values: z.infer<typeof signupSchema>) =>
+            signupMutation.mutate(values)
+          )}
           className="flex flex-col gap-6"
         >
           <div className="flex gap-3">
@@ -186,8 +204,9 @@ export const SignupView = () => {
           <Button
             type="submit"
             className="w-full h-12 mt-2 bg-emerald-800 hover:bg-emerald-900 rounded-lg transition-colors duration-300"
+            disabled={signupMutation.isPending}
           >
-            Sign Up
+            {signupMutation.isPending ? "Creating account..." : "Sign Up"}
           </Button>
         </form>
         <Link

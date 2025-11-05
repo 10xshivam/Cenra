@@ -16,30 +16,38 @@ import {
 import { useState } from "react";
 import Image from "next/image";
 import { Link } from "next-view-transitions";
-
-const formSchema = z.object({
-  email: z.string().email("Invalid email address"),
-  password: z.string().min(8, "Password must be at least 8 characters long"),
-});
+import { useGoogleLoginMutation, useLogin } from "@/hooks/useAuth";
+import { useGoogleLogin } from "@react-oauth/google";
+import { loginSchema } from "@/schemas/loginSchema";
+import { toast } from "sonner";
 
 export const LoginView = () => {
+  const loginMutation = useLogin();
+  const googleLoginMutation = useGoogleLoginMutation();
+
   const [showPassword, setShowPassword] = useState("password");
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const togglePasswordVisibility = () => {
+    setShowPassword((prev) => (prev === "password" ? "text" : "password"));
+  };
+
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
-  };
-
-  const togglePasswordVisibility = () => {
-    setShowPassword((prev) => (prev === "password" ? "text" : "password"));
-  };
+  const getGoogleCode = useGoogleLogin({
+    flow: "auth-code",
+    onSuccess: (codeResponse) => {
+      googleLoginMutation.mutate(codeResponse.code);
+    },
+    onError: (error) => {
+      toast.error(`Google login failed: ${typeof error === "string" ? error : JSON.stringify(error)}`);
+    },
+  });
 
   return (
     <div className="w-full h-full flex flex-col items-center justify-center">
@@ -55,15 +63,23 @@ export const LoginView = () => {
         <Button
           className="w-full h-12 font-medium text-neutral-500 hover:text-neutral-700 transition-colors duration-300"
           variant="outline"
+          onClick={() => getGoogleCode()}
+          disabled={googleLoginMutation.isPending}
         >
-          <Image
-            src="/google-icon.svg"
-            alt="Google Icon"
-            width={20}
-            height={20}
-            className="mr-1"
-          />
-          Continue with Google
+          {googleLoginMutation.isPending ? (
+            "Loading..."
+          ) : (
+            <>
+              <Image
+                src="/google-icon.svg"
+                alt="Google Icon"
+                width={20}
+                height={20}
+                className="mr-1"
+              />
+              Continue with Google
+            </>
+          )}
         </Button>
         <div className="flex items-center w-full gap-2.5 my-5">
           <Separator className="flex-1" />
@@ -72,7 +88,7 @@ export const LoginView = () => {
         </div>
         <form
           id="form-rhf-demo"
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit((values: z.infer<typeof loginSchema>) => loginMutation.mutate(values))}
           className="flex flex-col gap-6"
         >
           <Controller
@@ -137,9 +153,10 @@ export const LoginView = () => {
           />
           <Button
             type="submit"
+            disabled={loginMutation.isPending}
             className="w-full h-12 mt-2 bg-emerald-800 hover:bg-emerald-900 rounded-lg shadow-inner transition-colors duration-300"
           >
-            Login
+            {loginMutation.isPending ? "Logging in..." : "Login"}
           </Button>
         </form>
         <Link

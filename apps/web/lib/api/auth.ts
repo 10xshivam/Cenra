@@ -1,16 +1,19 @@
 import { axiosInstance } from '@/lib/axios';
+import { loginSchema } from '@/schemas/loginSchema';
+import { signupSchema } from '@/schemas/signupSchema';
+import { z } from "zod";
 
 export const fetchCurrentUser = async () => {
   const { data } = await axiosInstance.get('/auth/user');
   return data.user;
 };
 
-export const registerUser = async (payload: { name: string; email: string; password: string }) => {
+export const registerUser = async (payload: z.infer<typeof signupSchema>) => {
   const { data } = await axiosInstance.post('/auth/register', payload);
   return data.user;
 };
 
-export const loginUser = async (credentials: { email: string; password: string }) => {
+export const loginUser = async (credentials: z.infer<typeof loginSchema>) => {
   const { data } = await axiosInstance.post('/auth/login', credentials);
   return data.user;
 };
