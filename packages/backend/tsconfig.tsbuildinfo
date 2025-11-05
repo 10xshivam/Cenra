@@ -1,1 +1,1 @@
-{"root":["./src/index.ts"],"version":"5.9.3"}
+{"root":["./src/index.ts","./src/controllers/user.controller.ts","./src/middlewares/auth.middleware.ts","./src/routes/user.routes.ts","./src/utils/generatetoken.ts","./src/utils/googleauth.ts"],"version":"5.9.3"}

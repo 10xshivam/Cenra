@@ -25,7 +25,7 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
       <HydrationBoundary state={dehydratedState}>
         <NextThemesProvider
           attribute="class"
-          defaultTheme="system"
+          defaultTheme="light"
           enableSystem
           disableTransitionOnChange
           enableColorScheme
