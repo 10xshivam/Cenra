@@ -13,10 +13,10 @@ model User {
   lastName     String
   email        String        @unique
   password     String
-  organization Organization?
+  workspace    Workspace?
 }
 
-model Organization {
+model Workspace {
   id      String @id @default(uuid())
   name    String
   website String
