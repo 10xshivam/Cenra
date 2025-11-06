@@ -42,7 +42,7 @@ export function useLogin() {
     mutationFn: loginUser,
     onSuccess: (data) => {
       queryClient.setQueryData(["user"], data.user);
-      router.push("/dashboard");
+      router.push("/create-workspace");
     },
     onError: (error) => {
       toast.error(`Login error: ${error instanceof Error ? error.message : String(error)}`);
@@ -67,11 +67,13 @@ export function useGoogleLoginMutation() {
 }
 
 export function useLogout() {
+  const router = useTransitionRouter();
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: logoutUser,
     onSuccess: () => {
       queryClient.removeQueries({ queryKey: ["user"] });
+      router.push("/login");
     },
     onError: (error) => {
       toast.error(`Logout error: ${error instanceof Error ? error.message : String(error)}`);

@@ -1,5 +1,6 @@
 import { prisma } from "@workspace/db";
 import { Request, Response } from "express";
+import { setWorkspaceCookie } from "../utils/setWorkspaceCookie";
 
 export const createWorkspace = async (req: Request, res: Response) => {
   try {
@@ -17,17 +18,27 @@ export const createWorkspace = async (req: Request, res: Response) => {
         .json({ message: "Company name and Website are required" });
     }
 
+    const existingWorkspace = await prisma.workspace.findUnique({
+      where: { userId },
+    });
+
+    if (existingWorkspace) {
+      return res
+        .status(400)
+        .json({ message: "You already have a workspace" });
+    }
+
     const newWorkspace = await prisma.workspace.create({
       data: {
         name,
         website,
-        user: {
-          connect: { id: userId },
-        },
+        userId: userId,
       },
     });
 
+    
     if (newWorkspace) {
+      await setWorkspaceCookie(userId, res);
       return res.status(201).json({
         message: "Workspace created successfully",
         workspace: {
@@ -40,6 +51,7 @@ export const createWorkspace = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Failed to create workspace" });
     }
   } catch (error) {
+    console.error("Error creating workspace:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
@@ -55,8 +67,6 @@ export const getWorkspace = async (req: Request, res: Response) => {
     const workspaces = await prisma.workspace.findFirst({
       where: { userId },
     });
-
-    console.log("Workspaces:", workspaces);
 
     if(workspaces){
         return res.status(200).json({

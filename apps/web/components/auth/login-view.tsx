@@ -87,7 +87,6 @@ export const LoginView = () => {
           <Separator className="flex-1" />
         </div>
         <form
-          id="form-rhf-demo"
           onSubmit={form.handleSubmit((values: z.infer<typeof loginSchema>) => loginMutation.mutate(values))}
           className="flex flex-col gap-6"
         >

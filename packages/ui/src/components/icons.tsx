@@ -200,6 +200,64 @@ export const UserAccountIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
+export const OfficeIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    width={16}
+    height={16}
+    color={"#064e3b"}
+    fill={"none"}
+    {...props}
+  >
+    <path
+      d="M14 22V8C14 5.17157 14 3.75736 13.1213 2.87868C12.2426 2 10.8284 2 8 2C5.17157 2 3.75736 2 2.87868 2.87868C2 3.75736 2 5.17157 2 8V16C2 18.8284 2 20.2426 2.87868 21.1213C3.75736 22 5.17157 22 8 22H14Z"
+      stroke="#064e3b"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+    <path
+      d="M6.5 11H5.5M10.5 11H9.5M6.5 7H5.5M6.5 15H5.5M10.5 7H9.5M10.5 15H9.5"
+      stroke="#064e3b"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+    <path
+      d="M18.5 15H17.5M18.5 11H17.5"
+      stroke="#064e3b"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+    <path
+      d="M18 8H14V22H18C19.8856 22 20.8284 22 21.4142 21.4142C22 20.8284 22 19.8856 22 18V12C22 10.1144 22 9.17157 21.4142 8.58579C20.8284 8 19.8856 8 18 8Z"
+      stroke="#064e3b"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+  </svg>
+);
 
-
-
+export const LinkIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    width={16}
+    height={16}
+    color={"#064e3b"}
+    fill={"none"}
+    {...props}
+  >
+    <path
+      d="M9.5 14.5L14.5 9.49995"
+      stroke="#064e3b"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+    <path
+      d="M16.8463 14.6095L19.4558 12C21.5147 9.94108 21.5147 6.60298 19.4558 4.54411C17.397 2.48524 14.0589 2.48524 12 4.54411L9.39045 7.15366M14.6095 16.8463L12 19.4558C9.94113 21.5147 6.60303 21.5147 4.54416 19.4558C2.48528 17.3969 2.48528 14.0588 4.54416 12L7.1537 9.39041"
+      stroke="#064e3b"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+    />
+  </svg>
+);

@@ -3,6 +3,7 @@ import { prisma } from "@workspace/db";
 import bcrypt from "bcrypt";
 import { generateToken } from "../utils/generateToken";
 import { getGoogleUserProfile } from "../utils/googleAuth";
+import { setWorkspaceCookie } from "../utils/setWorkspaceCookie";
 
 export const registerUser = async (req: Request, res: Response) => {
   const { firstName, lastName, email, password } = req.body;
@@ -33,6 +34,7 @@ export const registerUser = async (req: Request, res: Response) => {
 
     if (user) {
       generateToken(user.id, res);
+      await setWorkspaceCookie(user.id, res);
       return res.status(201).json({
         message: "User registered successfully.",
         user: {
@@ -73,6 +75,7 @@ export  const loginUser = async (req: Request, res: Response) => {
     }
 
     generateToken(user.id, res);
+    await setWorkspaceCookie(user.id, res);
     return res.status(200).json({
       message: "Login successful.",
       user: {
@@ -90,6 +93,11 @@ export  const loginUser = async (req: Request, res: Response) => {
 
 export const logoutUser = (req: Request, res: Response) => {
   res.clearCookie("token", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  });
+  res.clearCookie("hasWorkspace", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
@@ -158,6 +166,7 @@ export const googleLogin = async (req: Request, res: Response) => {
     });
 
     generateToken(user.id, res);
+    await setWorkspaceCookie(user.id, res);
 
     return res.status(200).json({
       message: "Login successful.",

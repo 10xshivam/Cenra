@@ -4,7 +4,7 @@ import { createWorkspace, getWorkspace } from "../controllers/workspace.controll
 
 const router: Router = Router();
 
-router.post("/create",verifyAuth,createWorkspace);
+router.post("/create", verifyAuth, createWorkspace);
 router.get("/get", verifyAuth, getWorkspace);
-
+    
 export default router;

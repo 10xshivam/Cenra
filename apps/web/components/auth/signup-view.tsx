@@ -91,7 +91,6 @@ export const SignupView = () => {
           <Separator className="flex-1" />
         </div>
         <form
-          id="form-rhf-demo"
           onSubmit={form.handleSubmit((values: z.infer<typeof signupSchema>) =>
             signupMutation.mutate(values)
           )}
