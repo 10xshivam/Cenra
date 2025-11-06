@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import userRouter from './routes/user.routes';
+import workspaceRouter from './routes/workspace.route';
 
 dotenv.config();
 
@@ -27,6 +28,7 @@ const PORT = process.env.PORT;
 
 // Routes
 app.use("/api/v1/auth", userRouter);
+app.use("/api/v1/workspace", workspaceRouter);
 
 // Start the server
 app.listen(PORT, () => {
