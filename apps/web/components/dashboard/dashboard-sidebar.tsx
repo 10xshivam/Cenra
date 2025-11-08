@@ -1,7 +1,20 @@
 "use client";
 
-import { useSession } from "@/hooks/useAuth";
 import { useWorkspace } from "@/hooks/useWorkspace";
+import {
+  BarsIcon,
+  BookOpenIcon,
+  InboxIcon,
+  IntegrationIcon,
+  OfficeIcon2,
+  PluginsIcon,
+  RocketIcon,
+  SettingsIcon,
+  Sparkles2Icon,
+  SparklesIcon,
+  SupportIcon,
+  UsersIcon,
+} from "@workspace/ui/components/icons";
 import {
   Sidebar,
   SidebarContent,
@@ -13,33 +26,19 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarRail,
 } from "@workspace/ui/components/sidebar";
-import {
-  Inbox,
-  Rocket,
-  Users,
-  BarChart3,
-  Sparkles,
-  BookOpen,
-  Palette,
-  Grid,
-  Puzzle,
-  Building,
-  User,
-} from "lucide-react";
 
 // Primary navigation items (no label)
 const primaryItems = [
   {
     title: "Get Started",
     url: "#",
-    icon: Rocket,
+    icon: RocketIcon,
   },
   {
     title: "Inbox",
     url: "#",
-    icon: Inbox,
+    icon: InboxIcon,
   },
 ];
 
@@ -48,12 +47,12 @@ const insightsItems = [
   {
     title: "Visitors",
     url: "#",
-    icon: Users,
+    icon: UsersIcon,
   },
   {
     title: "Analytics",
     url: "#",
-    icon: BarChart3,
+    icon: BarsIcon,
   },
 ];
 
@@ -62,12 +61,12 @@ const automationItems = [
   {
     title: "AI Automations",
     url: "#",
-    icon: Sparkles,
+    icon: SparklesIcon,
   },
   {
     title: "Knowledge Base",
     url: "#",
-    icon: BookOpen,
+    icon: BookOpenIcon,
   },
 ];
 
@@ -76,40 +75,54 @@ const configurationItems = [
   {
     title: "Widget Customization",
     url: "#",
-    icon: Palette,
+    icon: Sparkles2Icon,
   },
   {
     title: "Integrations",
     url: "#",
-    icon: Grid,
+    icon: IntegrationIcon,
   },
   {
     title: "Plugins",
     url: "#",
-    icon: Puzzle,
+    icon: PluginsIcon,
+  },
+];
+
+const footerItems = [
+  {
+    title: "Settings",
+    url: "#",
+    icon: SettingsIcon,
+  },
+  {
+    title: "Help & Support",
+    url: "#",
+    icon: SupportIcon,
   },
 ];
 
 export const DashboardSidebar = () => {
   const { data: workspace, isLoading: isWorkspaceLoading } = useWorkspace();
-  const { data: user, isLoading: isUserLoading } = useSession(); 
 
   return (
-    <Sidebar collapsible="icon">
-      <SidebarHeader>
+    <Sidebar collapsible="icon" variant="floating">
+      <SidebarHeader className="h-12 rounded-lg bg-emerald-900/10 border border-b-4 border-emerald-900/15">
         <SidebarMenu>
-          <SidebarMenuButton>
-            <Building />
+          <SidebarMenuItem className="hover:bg-transparent cursor-default flex items-center justify-center pt-1 gap-1.5">
+            <OfficeIcon2 />
             {isWorkspaceLoading ? (
               "Loading..."
             ) : (
-              <span>{workspace?.name}</span>
+              <span className="font-bold text-emerald-900/70 tracking-tight group-data-[collapsible=icon]:hidden!">
+                {workspace?.name}
+              </span>
             )}
-          </SidebarMenuButton>
+          </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
-        <SidebarGroup>
+        <SidebarGroup className="pt-5">
           <SidebarMenu>
             {primaryItems.map((item) => (
               <SidebarMenuItem key={item.title}>
@@ -141,7 +154,7 @@ export const DashboardSidebar = () => {
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
-        
+
         <SidebarGroup>
           <SidebarGroupLabel>Configuration</SidebarGroupLabel>
           <SidebarGroupContent>
@@ -178,19 +191,20 @@ export const DashboardSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>
-      <SidebarFooter>
+      <SidebarFooter className="border-t py-5">
         <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton>
-              <User />
-              {isUserLoading ? ("Loading..." ) : (
-                <span>{user?.lastName}</span>
-              )}
-            </SidebarMenuButton>
-          </SidebarMenuItem>
+          {footerItems.map((item) => (
+            <SidebarMenuItem key={item.title}>
+              <SidebarMenuButton asChild>
+                <a href={item.url}>
+                  <item.icon />
+                  <span>{item.title}</span>
+                </a>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          ))}
         </SidebarMenu>
       </SidebarFooter>
-      <SidebarRail />
     </Sidebar>
   );
 };
