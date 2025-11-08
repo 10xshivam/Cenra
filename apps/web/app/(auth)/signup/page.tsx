@@ -1,4 +1,4 @@
-import { SignupView } from '@/components/auth/signup-view'
+import { SignupView } from '@/views/auth/signup-view'
 
 const Signup = () => {
   return (
