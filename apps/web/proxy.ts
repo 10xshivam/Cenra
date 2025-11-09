@@ -1,9 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const PUBLIC_PATHS = ["/", "/login", "/signup"];
+const PROTECTED_PATHS = ["/inbox", "/create-workspace", "/get-started", "/knowledge-base", "/automations"];
 
 function isPublicPath(path: string) {
   return PUBLIC_PATHS.includes(path);
+}
+
+function isProtectedPath(path: string) {
+  return PROTECTED_PATHS.some((protectedPath) => path.startsWith(protectedPath));
 }
 
 export function proxy(req: NextRequest) {
@@ -11,33 +16,30 @@ export function proxy(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
   const hasWorkspace = req.cookies.get("hasWorkspace")?.value === "true";
 
-  if (pathname.startsWith("/inbox")) {
+  if (isProtectedPath(pathname)) {
     if (!token) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
-    if (!hasWorkspace) {
+    if (!hasWorkspace && pathname !== "/create-workspace") {
       return NextResponse.redirect(new URL("/create-workspace", req.url));
     }
-    return NextResponse.next();
-  }
-
-  if (pathname === "/create-workspace") {
-    if (!token) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
-
-    if (hasWorkspace) {
+    if (hasWorkspace && pathname === "/create-workspace") {
       return NextResponse.redirect(new URL("/inbox", req.url));
     }
     return NextResponse.next();
   }
 
-  if (isPublicPath(pathname) && token && pathname !== "/") {
+  if (isPublicPath(pathname) && token) {
     if (!hasWorkspace) {
-      return NextResponse.redirect(new URL("/create-workspace", req.url));
+      if (pathname !== "/") {
+        return NextResponse.redirect(new URL("/create-workspace", req.url));
+      }
+    } else {
+      if (pathname !== "/") {
+        return NextResponse.redirect(new URL("/inbox", req.url));
+      }
     }
-
-    return NextResponse.redirect(new URL("/inbox", req.url));
+    return NextResponse.next();
   }
 
   return NextResponse.next();
