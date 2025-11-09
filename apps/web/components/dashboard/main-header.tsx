@@ -1,18 +1,23 @@
 "use client";
 
+import { getAllItems } from "@/constants/sidebar.constants";
 import { useSession } from "@/hooks/useAuth";
 import {
   Breadcrumb,
   BreadcrumbItem,
-  BreadcrumbLink,
   BreadcrumbList,
 } from "@workspace/ui/components/breadcrumb";
 import { BellIcon, UserFilledIcon } from "@workspace/ui/components/icons";
 import { Separator } from "@workspace/ui/components/separator";
 import { SidebarTrigger } from "@workspace/ui/components/sidebar";
+import { usePathname } from "next/navigation";
 
 export const MainHeader = () => {
+  const pathname = usePathname();
   const { data: user, isPending } = useSession();
+
+  const allItems = getAllItems();
+  const pageTitle = allItems.find((item) => item.url === pathname)?.title;
   return (
     <header className="flex h-12 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 border-b border-border bg-background/80 backdrop-blur-sm border rounded-lg justify-between">
       <div className="flex h-full items-center gap-2 px-4">
@@ -24,12 +29,7 @@ export const MainHeader = () => {
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem className="hidden md:block">
-              <BreadcrumbLink
-                href="#"
-                className="text-emerald-950/60 hover:text-emerald-950"
-              >
-                Dashboard
-              </BreadcrumbLink>
+              {pageTitle}
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -40,12 +40,12 @@ export const MainHeader = () => {
           orientation="vertical"
           className=" data-[orientation=vertical]:h-4"
         />
-        <div className="flex items-center cursor-pointer">
-          <div className="rounded-full p-1.5  bg-emerald-950/5">
+        <div className="group flex items-center cursor-pointer">
+          <div className="rounded-full p-1.5  bg-neutral-500/10 group-hover:bg-emerald-500/10 text-neutral-500 group-hover:text-emerald-800 transition-colors duration-300">
             <UserFilledIcon />
           </div>
-          <span className="ml-2 text-sm text-emerald-950/60 hover:text-emerald-950 tracking-tight font-medium">
-            {isPending ? "-- --" : user.firstName + " " + user.lastName}
+          <span className="ml-2 text-sm text-neutral-500 group-hover:text-emerald-800 tracking-tight font-medium">
+            {isPending ? "Loading..." : user.firstName + " " + user.lastName}
           </span>
         </div>
       </div>

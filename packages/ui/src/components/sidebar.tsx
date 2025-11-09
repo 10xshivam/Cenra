@@ -3,7 +3,6 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
-import { PanelLeftIcon } from "lucide-react"
 
 import { useIsMobile } from "@workspace/ui/hooks/use-mobile"
 import { cn } from "@workspace/ui/lib/utils"
@@ -245,7 +244,7 @@ function Sidebar({
         <div
           data-sidebar="sidebar"
           data-slot="sidebar-inner"
-          className="bg-sidebar border-b border-x border-emerald-900/15 flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg  "
+          className="bg-sidebar border-b border-x border-neutral-500/15 flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg  "
         >
           {children}
         </div>
@@ -267,7 +266,7 @@ function SidebarTrigger({
       data-slot="sidebar-trigger"
       variant="ghost"
       size="icon"
-      className={cn("size-7 hover:bg-emerald-900/5", className)}
+      className={cn("size-7 hover:bg-emerald-500/10 hover:text-emerald-800", className)}
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()
@@ -406,7 +405,7 @@ function SidebarGroupLabel({
       data-slot="sidebar-group-label"
       data-sidebar="group-label"
       className={cn(
-        "text-emerald-950/60 ring-sidebar-ring flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
+        "text-neutral-500 ring-sidebar-ring flex h-8 shrink-0 items-center rounded-md px-2 text-xs font-medium outline-hidden transition-[margin,opacity] duration-200 ease-linear focus-visible:ring-2 [&>svg]:size-4 [&>svg]:shrink-0",
         "group-data-[collapsible=icon]:-mt-8 group-data-[collapsible=icon]:opacity-0",
         className
       )}
@@ -518,7 +517,7 @@ function SidebarMenuButton({
       data-sidebar="menu-button"
       data-size={size}
       data-active={isActive}
-      className={cn(sidebarMenuButtonVariants({ variant, size }), className,"hover:bg-emerald-900/5 text-emerald-950/95 hover:text-emerald-950")}
+      className={cn(sidebarMenuButtonVariants({ variant, size }), className,"hover:text-emerald-800 text-neutral-600 font-medium tracking-tight hover:bg-emerald-500/10 transition-colors duration-200 data-[active=true]:bg-emerald-500/10 data-[active=true]:text-emerald-800")}
       {...props}
     />
   )

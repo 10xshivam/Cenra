@@ -11,7 +11,7 @@ export function proxy(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
   const hasWorkspace = req.cookies.get("hasWorkspace")?.value === "true";
 
-  if (pathname.startsWith("/dashboard")) {
+  if (pathname.startsWith("/inbox")) {
     if (!token) {
       return NextResponse.redirect(new URL("/login", req.url));
     }
@@ -27,7 +27,7 @@ export function proxy(req: NextRequest) {
     }
 
     if (hasWorkspace) {
-      return NextResponse.redirect(new URL("/dashboard", req.url));
+      return NextResponse.redirect(new URL("/inbox", req.url));
     }
     return NextResponse.next();
   }
@@ -37,7 +37,7 @@ export function proxy(req: NextRequest) {
       return NextResponse.redirect(new URL("/create-workspace", req.url));
     }
 
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+    return NextResponse.redirect(new URL("/inbox", req.url));
   }
 
   return NextResponse.next();

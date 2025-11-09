@@ -19,7 +19,7 @@ export const useCreateWorkspace = () => {
     mutationFn: createWorkspace,
     onSuccess: (workspace) => {
       queryClient.setQueryData(["workspace"], workspace);
-      router.push("/dashboard");
+      router.push("/get-started");
     },
     onError: (error) => {
         toast.error(`Workspace creation error: ${error instanceof Error ? error.message : String(error)}`);

@@ -27,7 +27,7 @@ export function useSignupUser() {
     mutationFn: registerUser,
     onSuccess: (user) => {
       queryClient.setQueryData(["user"], user);
-      router.push("/dashboard");
+      router.push("/get-started");
     },
     onError: (error) => {
       toast.error(`Registration error: ${error instanceof Error ? error.message : String(error)}`);
@@ -42,7 +42,7 @@ export function useLogin() {
     mutationFn: loginUser,
     onSuccess: (data) => {
       queryClient.setQueryData(["user"], data.user);
-      router.push("/create-workspace");
+      router.push("/inbox");
     },
     onError: (error) => {
       toast.error(`Login error: ${error instanceof Error ? error.message : String(error)}`);
@@ -58,7 +58,7 @@ export function useGoogleLoginMutation() {
     mutationFn: loginWithGoogle,
     onSuccess: (data) => {
       queryClient.setQueryData(['user'], data.user);
-      router.push('/dashboard');
+      router.push('/inbox');
     },
     onError: (error) => {
       toast.error(`Google Login error: ${error instanceof Error ? error.message : String(error)}`);
