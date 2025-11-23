@@ -8,18 +8,65 @@ datasource db {
 }
 
 model User {
-  id           String        @id @default(uuid())
-  firstName    String
-  lastName     String
-  email        String        @unique
-  password     String
-  workspace    Workspace?
+  id        String     @id @default(uuid())
+  firstName String
+  lastName  String
+  email     String     @unique
+  password  String
+  workspace Workspace?
 }
 
 model Workspace {
-  id      String @id @default(uuid())
-  name    String
-  website String
-  user    User   @relation(fields: [userId], references: [id])
-  userId  String @unique
+  id            String         @id @default(uuid())
+  name          String
+  website       String?
+  userId        String         @unique
+  user          User           @relation(fields: [userId], references: [id])
+  resources     Resource[]
+  customers     Customer[]
+  conversations Conversation[]
+}
+
+model Resource {
+  id          String             @id @default(uuid())
+  workspaceId String
+  workspace   Workspace          @relation(fields: [workspaceId], references: [id])
+  sourceType  ResourceSourceType
+  url         String?
+  filename    String?
+  mimeType    String?
+  text        String
+  createdAt   DateTime           @default(now())
+}
+
+enum ResourceSourceType {
+  URL
+  FILE
+}
+
+model Customer {
+  id            String         @id @default(uuid())
+  workspaceId   String
+  workspace     Workspace      @relation(fields: [workspaceId], references: [id])
+  name          String?
+  email         String?
+  conversations Conversation[]
+}
+
+enum ConversationStatus {
+  unresolved
+  escalated
+  resolved
+}
+
+model Conversation {
+  id          String             @id @default(uuid())
+  workspaceId String
+  workspace   Workspace          @relation(fields: [workspaceId], references: [id])
+  customerId  String
+  customer    Customer           @relation(fields: [customerId], references: [id])
+  threadId    String             @unique
+  status      ConversationStatus @default(unresolved)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
 }
