@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
 import { prisma } from "@workspace/db";
 import bcrypt from "bcrypt";
-import { generateToken } from "../utils/generateToken";
-import { getGoogleUserProfile } from "../utils/googleAuth";
-import { setWorkspaceCookie } from "../utils/setWorkspaceCookie";
+import { generateToken } from "../utils/auth/generateToken";
+import { getGoogleUserProfile } from "../utils/auth/googleAuth";
+import { setWorkspaceCookie } from "../utils/auth/setWorkspaceCookie";
 
 export const registerUser = async (req: Request, res: Response) => {
   const { firstName, lastName, email, password } = req.body;

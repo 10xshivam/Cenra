@@ -1,6 +1,6 @@
 import { prisma } from "@workspace/db";
 import { Request, Response } from "express";
-import { setWorkspaceCookie } from "../utils/setWorkspaceCookie";
+import { setWorkspaceCookie } from "../utils/auth/setWorkspaceCookie";
 
 export const createWorkspace = async (req: Request, res: Response) => {
   try {
