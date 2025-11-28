@@ -5,33 +5,22 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+const storeCache = new Map<string, QdrantVectorStore>();
+
 export const getWorkspaceVectorStore = async (workspaceId: string) => {
-  try {
-    if (!workspaceId) {
-      console.error("Workspace ID is required");
-      return null;
-    }
-
-    const collections = await client.getCollections();
-    const exists = collections.collections.some(
-      (collection) => collection.name === workspaceId
-    );
-
-    if (!exists) {
-      await client.createCollection(workspaceId, {
-        vectors: {
-          size: 3072,
-          distance: "Cosine",
-        },
-      });
-    }
-
-    return await QdrantVectorStore.fromExistingCollection(embedding, {
-      client,
-      collectionName: workspaceId,
-    });
-  } catch (error) {
-    console.error(`Failed to get or create vector store: ${error}`);
-    return null;
+  if (!workspaceId) {
+    throw new Error("workspaceId is required");
   }
+
+  if (storeCache.has(workspaceId)) {
+    return storeCache.get(workspaceId)!;
+  }
+
+  const vectorStore = await QdrantVectorStore.fromExistingCollection(embedding, {
+    client,
+    collectionName: workspaceId,
+  });
+
+  storeCache.set(workspaceId, vectorStore);
+  return vectorStore;
 };

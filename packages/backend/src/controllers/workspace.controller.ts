@@ -1,6 +1,7 @@
 import { prisma } from "@workspace/db";
 import { Request, Response } from "express";
 import { setWorkspaceCookie } from "../utils/auth/setWorkspaceCookie";
+import { createCollection } from "../utils/file-processing/createCollection";
 
 export const createWorkspace = async (req: Request, res: Response) => {
   try {
@@ -23,9 +24,7 @@ export const createWorkspace = async (req: Request, res: Response) => {
     });
 
     if (existingWorkspace) {
-      return res
-        .status(400)
-        .json({ message: "You already have a workspace" });
+      return res.status(400).json({ message: "You already have a workspace" });
     }
 
     const newWorkspace = await prisma.workspace.create({
@@ -36,9 +35,11 @@ export const createWorkspace = async (req: Request, res: Response) => {
       },
     });
 
-    
     if (newWorkspace) {
-      await setWorkspaceCookie(userId, res);
+      await Promise.allSettled([
+        setWorkspaceCookie(userId, res),
+        createCollection(newWorkspace.id),
+      ]);
       return res.status(201).json({
         message: "Workspace created successfully",
         workspace: {
@@ -68,15 +69,15 @@ export const getWorkspace = async (req: Request, res: Response) => {
       where: { userId },
     });
 
-    if(workspaces){
-        return res.status(200).json({
-            message: "Workspace fetched successfully",
-            workspace: {
-                id: workspaces.id,
-                name: workspaces.name,
-                website: workspaces.website,
-            }
-        });
+    if (workspaces) {
+      return res.status(200).json({
+        message: "Workspace fetched successfully",
+        workspace: {
+          id: workspaces.id,
+          name: workspaces.name,
+          website: workspaces.website,
+        },
+      });
     }
   } catch (error) {
     return res.status(500).json({ message: "Internal server error" });
