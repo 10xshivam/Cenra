@@ -17,14 +17,15 @@ model User {
 }
 
 model Workspace {
-  id            String         @id @default(uuid())
-  name          String
-  website       String?
-  userId        String         @unique
-  user          User           @relation(fields: [userId], references: [id])
-  resources     Resource[]
-  customers     Customer[]
-  conversations Conversation[]
+  id             String          @id @default(uuid())
+  name           String
+  website        String?
+  userId         String          @unique
+  user           User            @relation(fields: [userId], references: [id])
+  resources      Resource[]
+  customers      Customer[]
+  conversations  Conversation[]
+  widgetSettings WidgetSettings?
 }
 
 model Resource {
@@ -69,4 +70,16 @@ model Conversation {
   status      ConversationStatus @default(unresolved)
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
+}
+
+model WidgetSettings {
+  id                 String    @id @default(uuid())
+  workspaceId        String
+  workspace          Workspace @relation(fields: [workspaceId], references: [id])
+  greetMessage       String    @default("Hi! How can I help you today?")
+  defaultSuggestions Json?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@unique([workspaceId])
 }

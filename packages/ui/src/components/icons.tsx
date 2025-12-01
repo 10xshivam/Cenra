@@ -699,3 +699,20 @@ export const BellIcon = (props: React.SVGProps<SVGSVGElement>) => (
     ></path>
   </svg>
 );
+
+export interface IconProps extends React.SVGProps<SVGSVGElement> {
+  size?: string;
+}
+
+export const IconX = ({size = '12px', ...props}: IconProps) => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width={size} height={size} viewBox="0 0 12 12" {...props}><path d="m2.25,10.5c-.192,0-.384-.073-.53-.22-.293-.293-.293-.768,0-1.061L9.22,1.72c.293-.293.768-.293,1.061,0s.293.768,0,1.061l-7.5,7.5c-.146.146-.338.22-.53.22Z" fill="currentColor" strokeWidth="0" data-color="color-2"></path><path d="m9.75,10.5c-.192,0-.384-.073-.53-.22L1.72,2.78c-.293-.293-.293-.768,0-1.061s.768-.293,1.061,0l7.5,7.5c.293.293.293.768,0,1.061-.146.146-.338.22-.53.22Z" strokeWidth="0" fill="currentColor"></path></svg>
+  );
+};
+
+export const IconPaperPlane = ({size = '18px', ...props}: IconProps) => {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width={size} height={size} viewBox="0 0 18 18" {...props}><g data-transform-wrapper="on" transform="rotate(45, 9, 9)"><path d="M16.345,1.654c-.344-.344-.845-.463-1.305-.315L2.117,5.493c-.491,.158-.831,.574-.887,1.087-.056,.512,.187,.992,.632,1.251l4.576,2.669,3.953-3.954c.293-.293,.768-.293,1.061,0s.293,.768,0,1.061l-3.954,3.954,2.669,4.576c.235,.402,.65,.639,1.107,.639,.048,0,.097-.003,.146-.008,.512-.056,.929-.396,1.086-.886L16.661,2.96h0c.148-.463,.027-.963-.316-1.306Z" fill="currentColor"></path></g></svg>
+  );
+};
+

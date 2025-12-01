@@ -8,6 +8,7 @@ import resourceRouter from "./routes/resource.route";
 import conversationRouter from "./routes/conversation.route";
 import customerRouter from "./routes/customer.route";
 import messageRouter from "./routes/message.route";
+import widgetSettingRouter from "./routes/widgetSetting.route";
 import { initLangGraph } from "./config/langgraph";
 
 dotenv.config();
@@ -38,6 +39,7 @@ app.use("/api/v1/workspace", resourceRouter);
 app.use("/api/v1/workspace", customerRouter);
 app.use("/api/v1/workspace", conversationRouter);
 app.use("/api/v1/workspace", messageRouter);
+app.use("/api/v1/workspace", widgetSettingRouter);
 
 // Start the server
 initLangGraph().then(() => {
