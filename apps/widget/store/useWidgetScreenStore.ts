@@ -5,7 +5,7 @@ import { immer } from 'zustand/middleware/immer';
 
 type WidgetScreenState = {
   currentScreen: WidgetScreen;
-  setScreen: (screen: WidgetScreen) => void;
+  setCurrentScreen: (screen: WidgetScreen) => void;
   reset: () => void;
 };
 
@@ -14,7 +14,7 @@ export const useWidgetScreenStore = create<WidgetScreenState>()(
   persist(
     immer((set) => ({
     currentScreen: "loading",
-    setScreen: (screen) =>
+    setCurrentScreen: (screen) =>
       set((state) => {
         state.currentScreen = screen;
       }),

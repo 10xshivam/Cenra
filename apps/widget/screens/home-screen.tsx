@@ -1,27 +1,23 @@
 import { useWidgetScreenStore } from "@/store/useWidgetScreenStore";
+import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 import { Button } from "@workspace/ui/components/button";
 import { IconPaperPlane, IconX } from "@workspace/ui/components/icons";
 import { ChevronRight } from "lucide-react";
 
-interface HomeScreenProps {
-  workspaceSettings: {
-    name: string;
-  };
-}
-
-export const HomeScreen = ({workspaceSettings}: HomeScreenProps) => {
-  const setScreen = useWidgetScreenStore((state) => state.setScreen);
+export const HomeScreen = () => {
+  const { setCurrentScreen } = useWidgetScreenStore();
+  const { workspace } = useWorkspaceStore();
   return (
     <>
       <div className="absolute top-0 left-0 min-h-2/4 w-full bg-gradient-to-b from-emerald-950 to-neutral-50 rounded-t-3xl z-0" />
       <div className="w-full relative z-10 flex justify-between items-center mb-20">
-        <h3 className="text-white text-2xl font-semibold">{workspaceSettings.name}</h3>
+        <h3 className="text-white text-2xl font-semibold">{workspace?.name}</h3>
         <IconX size="20px" color="white" />
       </div>
       <h4 className="relative z-10 text-white text-4xl tracking-tight font-medium">
         Hi there👋 <br /> How can we help?
       </h4>
-      <Button onClick={() => setScreen("chat")} variant="secondary" className="relative text-neutral-500 z-10 w-full h-12 px-3 py-3 flex justify-between items-center mt-8 rounded-lg shadow-md hover:text-emerald-700 bg-white hover:bg-neutral-50 active:scale-95 transition-all">
+      <Button onClick={() => setCurrentScreen("chat")} variant="secondary" className="relative text-neutral-500 z-10 w-full h-12 px-3 py-3 flex justify-between items-center mt-8 rounded-lg shadow-md hover:text-emerald-700 bg-white hover:bg-neutral-50 active:scale-95 transition-all">
           Ask a Question
         <IconPaperPlane size="20px"/>
       </Button>

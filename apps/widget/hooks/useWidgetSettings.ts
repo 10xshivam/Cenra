@@ -1,6 +1,6 @@
 "use client"; 
 
-import { getWorkspaceDetails } from "@/lib/api/widget";
+import { getWidgetInitialization, getWorkspaceDetails } from "@/lib/api/widget";
 import { useQuery } from "@tanstack/react-query";
 
 export const useWidgetSettings = (workspaceId: string) => {
@@ -11,3 +11,13 @@ export const useWidgetSettings = (workspaceId: string) => {
     gcTime: 5 * 60 * 1000,
   });
 };
+
+export const useWidgetInitialization = (workspaceId: string, customerId: string,options?: { enabled?: boolean }) => {
+  return useQuery({
+    queryKey: ["widgetInitialization", workspaceId, customerId],
+    queryFn: () => getWidgetInitialization(workspaceId, customerId),
+    retry: false,
+    gcTime: 5 * 60 * 1000,
+    enabled: options?.enabled ?? true,
+  });
+}
