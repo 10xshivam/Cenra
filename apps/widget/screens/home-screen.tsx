@@ -1,3 +1,5 @@
+"use client";
+
 import { useWidgetScreenStore } from "@/store/useWidgetScreenStore";
 import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 import { Button } from "@workspace/ui/components/button";

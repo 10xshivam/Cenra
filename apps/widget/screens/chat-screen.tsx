@@ -4,7 +4,6 @@ import { useWidgetScreenStore } from "@/store/useWidgetScreenStore";
 import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 import { Message, MessageContent, MessageResponse } from "@workspace/ui/components/ai-elements/message";
 import { ChevronLeft } from "lucide-react";
-import React from "react";
 
 export const ChatScreen = () => {
   const { setCurrentScreen } = useWidgetScreenStore();
