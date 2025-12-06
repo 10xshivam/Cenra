@@ -3,6 +3,7 @@ import { prisma } from "@workspace/db";
 import { getChatbot } from "../config/langgraph";
 import { HumanMessage, AIMessage, BaseMessage } from "@langchain/core/messages";
 import { simplifyMessage } from "../utils/messages/simplifyMessages";
+import { stat } from "fs";
 
 export const createMessage = async (req: Request, res: Response) => {
   try {
@@ -28,6 +29,16 @@ export const createMessage = async (req: Request, res: Response) => {
         .json({ message: "Conversation not found in this workspace" });
     }
 
+    const customer = await prisma.customer.findUnique({
+      where: { id: conversation.customerId, workspaceId },
+    });
+
+    if (customer?.expiresAt && customer.expiresAt < new Date()) {
+      return res
+        .status(403)
+        .json({ message: "Customer session has expired", status: "expired" });
+    }
+
     const chatbot = getChatbot();
 
     const config = {
@@ -41,7 +52,12 @@ export const createMessage = async (req: Request, res: Response) => {
     console.time("chatbot.invoke");
     const finalState = await chatbot.invoke(
       {
-        messages: [new HumanMessage(message)],
+        messages: [
+          new HumanMessage({
+            content: message,
+            additional_kwargs: { timestamp: Date.now() },
+          }),
+        ],
       },
       config
     );
@@ -63,7 +79,7 @@ export const createMessage = async (req: Request, res: Response) => {
 
     return res
       .status(201)
-      .json({ message: "Message processed", reply: replyText });
+      .json({ message: "Message processed", reply: replyText, status: "ok" });
   } catch (error) {
     console.error("Error processing message:", error);
     return res.status(500).json({ message: "Internal server error" });
@@ -82,6 +98,7 @@ export const getConversationMessages = async (req: Request, res: Response) => {
 
     const conversation = await prisma.conversation.findUnique({
       where: { id: conversationId },
+      include: { customer: true },
     });
 
     if (!conversation || conversation.workspaceId !== workspaceId) {
@@ -97,11 +114,32 @@ export const getConversationMessages = async (req: Request, res: Response) => {
     const values = snapshot.values as { messages: BaseMessage[] };
     const all = values.messages ?? [];
 
-    const messages = all
-      .map(simplifyMessage)
-      .filter((m): m is { role: string; content: string } => !!m);
+    // let messages = all
+    //   .map(simplifyMessage)
+    //   .filter((m): m is { role: string; content: string } => !!m);
 
-    return res.json({ messages });
+    let messages = all
+      .map((m) => {
+        const simplified = simplifyMessage(m); // { role, content }
+        return (
+          simplified && {
+            ...simplified,
+            createdAt: m.additional_kwargs?.timestamp ?? null,
+          }
+        );
+      })
+      .filter(
+        (m): m is { role: string; content: string; createdAt: string } => !!m
+      );
+
+    const isIdentified =
+      !!conversation.customer?.name && !!conversation.customer?.email;
+
+    if (!isIdentified) {
+      messages = messages.filter((m) => m.role === "user");
+    }
+
+    return res.json({ messages, isIdentified });
   } catch (error) {
     console.error("Error fetching conversation messages:", error);
     return res.status(500).json({ message: "Internal server error" });

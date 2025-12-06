@@ -35,6 +35,11 @@ async function llmCall(state: GraphState) {
 
   const response = await model.invoke(messages);
 
+   response.additional_kwargs = {
+    ...(response.additional_kwargs ?? {}),
+    timestamp: Date.now(),
+  };
+
   return {
     messages: [response],
   };
