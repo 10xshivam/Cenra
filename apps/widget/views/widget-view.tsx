@@ -17,7 +17,7 @@ export const WidgetView = ({ workspaceId }: { workspaceId: string }) => {
   };
 
   return (
-    <div className="h-fit min-h-[700px] w-[410px] rounded-3xl border relative bg-neutral-50 p-7">
+    <div className="h-fit min-h-[700px] w-[410px] rounded-3xl shadow-sm relative bg-neutral-50 p-7">
       {screenComponents[currentScreen]}
     </div>
   );
