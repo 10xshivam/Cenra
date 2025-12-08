@@ -33,6 +33,7 @@
     "@types/react-dom": "^19.1.7",
     "@workspace/eslint-config": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
+    "tailwind-scrollbar": "^4.0.2",
     "tailwindcss": "^4.1.11",
     "typescript": "^5.9.2"
   },

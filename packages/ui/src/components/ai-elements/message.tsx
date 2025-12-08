@@ -48,8 +48,8 @@ export const MessageContent = ({
   <div
     className={cn(
       "is-user:dark flex w-fit flex-col gap-2 overflow-hidden text-sm",
-      "group-[.is-user]:ml-auto group-[.is-user]:rounded-lg group-[.is-user]:bg-secondary group-[.is-user]:px-4 group-[.is-user]:py-3 group-[.is-user]:text-foreground",
-      "group-[.is-assistant]:text-foreground",
+      "group-[.is-user]:ml-auto group-[.is-user]:leading-tight group-[.is-user]:tracking-[-0.02em]",
+      "group-[.is-assistant]:leading-tight group-[.is-assistant]:tracking-[-0.02em]",
       className
     )}
     {...props}

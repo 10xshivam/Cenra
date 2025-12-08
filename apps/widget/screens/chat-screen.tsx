@@ -7,8 +7,7 @@ import {
   MessageContent,
   MessageResponse,
 } from "@workspace/ui/components/ai-elements/message";
-import { IconPaperPlane2 } from "@workspace/ui/components/icons";
-import { ChevronLeft } from "lucide-react";
+import { Forward, Sparkles } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import {
   getConversationMessages,
@@ -16,6 +15,7 @@ import {
   sendMessage,
   startWidgetConversation,
 } from "@/lib/api/widget";
+import { ChatHeader } from "@/components/chatScreen/ChatHeader";
 
 interface ChatMessage {
   from: "user" | "assistant";
@@ -35,6 +35,7 @@ export const ChatScreen = () => {
   const [identityEmail, setIdentityEmail] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [loadingHistory, setLoadingHistory] = useState(false);
+  const [inputText, setInputText] = useState("");
   const inputRef = useRef<HTMLTextAreaElement>(null);
   const scrollContainerRef = useRef<HTMLDivElement | null>(null);
 
@@ -106,10 +107,12 @@ export const ChatScreen = () => {
     const text = inputRef.current.value.trim();
     if (text === "") return;
 
+
     if (showIdentityForm) return;
 
     pushMessage("user", text);
     inputRef.current.value = "";
+    setInputText("");
     setLoading(true);
 
     try {
@@ -155,6 +158,7 @@ export const ChatScreen = () => {
       setLoading(false);
     }
   };
+
   const handleIdentitySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!customerId) return;
@@ -189,97 +193,158 @@ export const ChatScreen = () => {
     }
   };
 
+  const handleInputChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setInputText(event.target.value);
+  };
+
+  const isInputEmpty = inputText.trim() === '';
+
   return (
-    <>
-      <div className="flex items-center gap-2 border-b pb-3">
-        <ChevronLeft size={20} onClick={() => setCurrentScreen("home")} />
-        <h1 className="text-medium text-neutral-500 text-lg">Chat</h1>
-      </div>
+    <div className="flex flex-col">
+      <ChatHeader setCurrentScreen={setCurrentScreen} workspace={workspace!} />
 
       <div
         ref={scrollContainerRef}
-        className="h-[calc(100vh-440px)] py-4 overflow-y-auto px-2 space-y-2"
+        className="h-[calc(100vh-410px)] py-4 overflow-y-auto px-3 space-y-2 scrollbar-w-1 scrollbar scrollbar-thumb-neutral-300 scrollbar-track-transparent"
       >
         {workspace?.greetMessage && !loadingHistory && (
-          <UiMessage from="assistant">
-            <MessageContent>
-              <MessageResponse>{workspace.greetMessage}</MessageResponse>
-            </MessageContent>
-          </UiMessage>
+          <div className="flex items-end gap-1.5 mb-4">
+            <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 bg-neutral-100 border border-neutral-300">
+              <Sparkles size={12} className="text-neutral-600" />
+            </div>
+            <UiMessage
+              from="assistant"
+              className="border max-w-[75%] w-fit px-3.5 py-2.5 rounded-xl bg-white rounded-bl-none text-neutral-600"
+            >
+              <MessageContent>
+                <MessageResponse>{workspace.greetMessage}</MessageResponse>
+              </MessageContent>
+            </UiMessage>
+          </div>
         )}
 
         {/* Loading history indicator */}
         {loadingHistory && (
-          <UiMessage from="assistant">
-            <MessageContent>
-              <MessageResponse>Loading your previous chat…</MessageResponse>
-            </MessageContent>
-          </UiMessage>
+          <div className="flex w-full justify-start">
+            <div className="flex max-w-[85%] items-end gap-3">
+              <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 bg-neutral-100 border border-neutral-300">
+                <Sparkles size={12} className="text-neutral-600" />
+              </div>
+              <div className="bg-white px-3.5 py-3 rounded-xl rounded-bl-none border flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce"></span>
+              </div>
+            </div>
+          </div>
         )}
 
         {/* Render messages */}
-        {messages.map((m) => (
-          <UiMessage
-            key={m.id}
-            from={m.from === "assistant" ? "assistant" : "user"}
-          >
-            <MessageContent>
-              <MessageResponse>{m.content}</MessageResponse>
-            </MessageContent>
-          </UiMessage>
-        ))}
-        {showIdentityForm && (
-          <div className="p-4 bg-white border rounded-md mx-3 mb-3">
-            <h3 className="font-medium mb-2">One more step</h3>
-            <p className="text-sm text-neutral-500 mb-3">
-              Before we continue, please share your name & email.
-            </p>
-            <form onSubmit={handleIdentitySubmit} className="space-y-2">
-              <input
-                value={identityName}
-                onChange={(e) => setIdentityName(e.target.value)}
-                className="w-full px-3 py-2 border rounded"
-                placeholder="Your name"
-              />
-              <input
-                value={identityEmail}
-                onChange={(e) => setIdentityEmail(e.target.value)}
-                className="w-full px-3 py-2 border rounded"
-                placeholder="you@example.com"
-                type="email"
-              />
-              <div className="flex items-center justify-end gap-2">
-                <button
-                  type="submit"
-                  disabled={loading}
-                  className="px-3 py-2 rounded-md bg-emerald-600 text-white disabled:opacity-60"
-                >
-                  Continue
-                </button>
+        {messages.map((m) =>
+          m.from === "assistant" ? (
+            <div key={m.id} className="flex items-end gap-1.5 mb-4 mt-4">
+              <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 bg-neutral-100 border border-neutral-300">
+                <Sparkles size={12} className="text-neutral-600" />
               </div>
-            </form>
+              <UiMessage
+                from="assistant"
+                className="border max-w-[75%] w-fit px-3.5 py-2.5 rounded-xl bg-white rounded-bl-none text-neutral-600"
+              >
+                <MessageContent>
+                  <MessageResponse className="">{m.content}</MessageResponse>
+                </MessageContent>
+              </UiMessage>
+            </div>
+          ) : (
+            <UiMessage
+              key={m.id}
+              from="user"
+              className="border max-w-[75%] w-fit px-3.5 py-2.5 rounded-xl bg-emerald-800 text-white rounded-br-none border-none"
+            >
+              <MessageContent>
+                <MessageResponse>{m.content}</MessageResponse>
+              </MessageContent>
+            </UiMessage>
+          )
+        )}
+        {loading && !showIdentityForm && (
+          <div className="flex w-full justify-start">
+            <div className="flex max-w-[85%] items-end gap-3">
+              <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 bg-neutral-100 border border-neutral-300">
+                <Sparkles size={12} className="text-neutral-600" />
+              </div>
+              <div className="bg-white px-3.5 py-3 rounded-xl rounded-bl-none border flex items-center gap-2">
+                <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce [animation-delay:-0.3s]"></span>
+                <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce [animation-delay:-0.15s]"></span>
+                <span className="w-1.5 h-1.5 bg-neutral-500 rounded-full animate-bounce"></span>
+              </div>
+            </div>
+          </div>
+        )}
+        {showIdentityForm && (
+          <div className="flex items-end gap-1.5 mb-2">
+            <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 bg-neutral-100 border border-neutral-300">
+              <Sparkles size={12} className="text-neutral-600" />
+            </div>
+            <div className="px-3.5 py-3 bg-white border rounded-xl rounded-bl-none mt-2 max-w-[75%] w-full">
+              <p className="text-sm mb-3">
+                Before we continue, please share your name & email.
+              </p>
+              <form onSubmit={handleIdentitySubmit} className="space-y-2">
+                <input
+                  value={identityName}
+                  onChange={(e) => setIdentityName(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-neutral-300 text-neutral-600 transition-colors duration-300"
+                  placeholder="Your name"
+                />
+                <input
+                  value={identityEmail}
+                  onChange={(e) => setIdentityEmail(e.target.value)}
+                  className="w-full px-3 py-2 border rounded-lg text-sm outline-none focus:border-neutral-300 text-neutral-600 transition-colors duration-300"
+                  placeholder="you@example.com"
+                  type="email"
+                />
+                <div className="flex items-center justify-end gap-2">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="px-3 py-2 rounded-lg bg-emerald-800 text-white disabled:opacity-60 text-sm"
+                  >
+                    {loading ? "Submitting..." : "Submit & Continue"}
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         )}
       </div>
 
-      <div className="w-[95%] h-24 border rounded-2xl absolute bottom-2.5 left-2.5 bg-white">
-        <textarea
-          ref={inputRef}
-          className="w-full h-full rounded-3xl p-4 resize-none outline-none border-0 focus:ring-0"
-          placeholder="Type your message..."
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleSendMessage();
-            }
-          }}
-        />
-        <IconPaperPlane2
-          onClick={handleSendMessage}
-          size="20px"
-          className="absolute bottom-4 right-4 text-neutral-400 hover:text-emerald-700 cursor-pointer"
-        />
+      <div className="flex flex-col items-center">
+        <div className="relative w-[95%] border rounded-2xl bg-white">
+          <textarea
+            ref={inputRef}
+            className="w-full p-3 resize-none outline-none border-0 focus:ring-0 text-sm text-neutral-600 scrollbar-w-1 scrollbar scrollbar-thumb-neutral-300 scrollbar-track-transparent"
+            placeholder="Type your message..."
+            value={inputText}
+            onChange={handleInputChange}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSendMessage();
+              }
+            }}
+          />
+          <div className="w-full pb-1.5 px-1.5 flex justify-end">
+          <button  onClick={handleSendMessage} disabled={isInputEmpty} className="rounded-full disabled:bg-neutral-300/50 bg-emerald-800 hover:bg-emerald-800 disabled:text-neutral-600 text-white p-2">
+          <Forward size={14} strokeWidth={3} />
+          </button>
+
+          </div>
+        </div>
+        <p className="text-xs text-neutral-400 my-1.5 tracking-tight">
+          Powered by Cenra
+        </p>
       </div>
-    </>
+    </div>
   );
 };

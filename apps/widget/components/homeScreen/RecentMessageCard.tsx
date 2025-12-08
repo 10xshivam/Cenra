@@ -31,11 +31,11 @@ export const RecentMessageCard = ({
         <div className="flex items-center gap-2 overflow-hidden cursor-pointer">
           <div className="h-10 w-10 rounded-full  flex items-center justify-center text-xs font-semibold">
             <Image
-              src="https://avatar.vercel.sh/c"
+              src="/cenra-ai.png"
               alt="avatar"
               width={39}
               height={39}
-              className="rounded-md shadow-sm"
+              className="rounded-full shadow-sm"
             />
           </div>
           <div className="flex flex-col items-start overflow-hidden">

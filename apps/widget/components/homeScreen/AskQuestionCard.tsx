@@ -25,7 +25,7 @@ export const AskQuestionCard = ({ handleOpenChat }: AskQuestionCardProps) => {
         </div>
 
         <Image
-          src="https://avatar.vercel.sh/c"
+          src="/cenra-ai.png"
           alt="avatar"
           width={39}
           height={39}

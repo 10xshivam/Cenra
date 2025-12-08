@@ -5,7 +5,7 @@ import { FeaturedArticleCards } from "@/components/homeScreen/FeaturedArticleCar
 import { RecentMessageCard } from "@/components/homeScreen/RecentMessageCard";
 import { WhatsNewCards } from "@/components/homeScreen/WhatsNewCards";
 import { getConversationMessages } from "@/lib/api/widget";
-import { RecentMessageSkeleton } from "@/scaletons/RecentMessageSceleton";
+import { RecentMessageSkeleton } from "@/skeletons/RecentMessageSkeleton";
 import { useWidgetScreenStore } from "@/store/useWidgetScreenStore";
 import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 import { RecentInfo, WidgetMessage } from "@/types/homeScreen";
@@ -69,7 +69,7 @@ export const HomeScreen = () => {
   };
 
   return (
-    <>
+    <div className="relative p-7 h-full w-full">
       <div className="absolute top-0 left-0 min-h-2/4 w-full bg-gradient-to-b from-emerald-950 to-neutral-50 rounded-t-3xl z-0" />
       <div className="w-full relative z-10 flex justify-between items-center mb-20">
         <h3 className="text-white text-2xl font-semibold">{workspace?.name}</h3>
@@ -94,6 +94,6 @@ export const HomeScreen = () => {
       </div>
       <WhatsNewCards />
       <FeaturedArticleCards />
-    </>
+    </div>
   );
 };
