@@ -114,13 +114,9 @@ export const getConversationMessages = async (req: Request, res: Response) => {
     const values = snapshot.values as { messages: BaseMessage[] };
     const all = values.messages ?? [];
 
-    // let messages = all
-    //   .map(simplifyMessage)
-    //   .filter((m): m is { role: string; content: string } => !!m);
-
     let messages = all
       .map((m) => {
-        const simplified = simplifyMessage(m); // { role, content }
+        const simplified = simplifyMessage(m);
         return (
           simplified && {
             ...simplified,
@@ -142,6 +138,74 @@ export const getConversationMessages = async (req: Request, res: Response) => {
     return res.json({ messages, isIdentified });
   } catch (error) {
     console.error("Error fetching conversation messages:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getLastMessage = async (req: Request, res: Response) => {
+  try {
+    const { workspaceId, conversationId } = req.params;
+
+    if (!workspaceId || !conversationId) {
+      return res
+        .status(400)
+        .json({ message: "Workspace ID and Conversation ID are required" });
+    }
+
+    const conversation = await prisma.conversation.findUnique({
+      where: { id: conversationId },
+      include: { customer: true },
+    });
+
+    if (!conversation || conversation.workspaceId !== workspaceId) {
+      return res.status(404).json({ message: "Conversation not found" });
+    }
+
+    const chatbot = getChatbot();
+
+    const snapshot = await chatbot.getState({
+      configurable: { thread_id: conversation.threadId },
+    });
+
+    const values = snapshot.values as { messages?: BaseMessage[] };
+    const all = values.messages ?? [];
+
+    
+    let messages = all
+      .map((m) => {
+        const simplified = simplifyMessage(m);
+        return (
+          simplified && {
+            ...simplified,
+            createdAt: (m as any).additional_kwargs?.timestamp ?? null,
+          }
+        );
+      })
+      .filter(
+        (
+          m
+        ): m is { role: string; content: string; createdAt: number | null } =>
+          !!m
+      );
+
+    const isIdentified =
+      !!conversation.customer?.name && !!conversation.customer?.email;
+
+    if (!isIdentified) {
+      messages = messages.filter((m) => m.role === "user");
+    }
+
+    const lastMessage = messages.length ? messages[messages.length - 1] : null;
+
+    return res.json(
+      {
+        lastMessage: lastMessage?.content,
+        lastMessageAt: lastMessage?.createdAt
+      }
+      
+    );
+  } catch (error) {
+    console.error("Error fetching last message:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };

@@ -1,6 +1,6 @@
 "use client";
 
-import { useWidgetInitialization } from "@/hooks/useWidgetSettings";
+import { useWidgetInitialization } from "@/hooks/useWidget";
 import { useWidgetScreenStore } from "@/store/useWidgetScreenStore";
 import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 import { Loader } from "@workspace/ui/components/loader";
@@ -27,6 +27,11 @@ export const LoadingScreen = ({ workspaceId }: { workspaceId: string }) => {
   );
 
   useEffect(() => {
+    if (isError) {
+      setCurrentScreen("error");
+      return;
+    }
+
     if (!isReady || isLoading || !data) return;
 
     if (data.workspace) {
@@ -43,10 +48,10 @@ export const LoadingScreen = ({ workspaceId }: { workspaceId: string }) => {
       localStorage.setItem("customerId", data.session.customerId);
       setCurrentScreen("chat");
     }
-  }, [isReady, isLoading, data, setCurrentScreen]);
+  }, [isReady, isLoading, data, setCurrentScreen,isError]);
 
   return (
-    <div className="absolute inset-0 flex justify-center items-center ">
+    <div className="absolute inset-0 flex justify-center items-center">
       <Loader />
     </div>
   );

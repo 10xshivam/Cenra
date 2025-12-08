@@ -153,7 +153,7 @@ export const ChatScreen = () => {
       }
     } catch (error) {
       console.error(error);
-      pushMessage("assistant", "Network error, please try again.");
+      setCurrentScreen("error");
     } finally {
       setLoading(false);
     }
@@ -187,7 +187,7 @@ export const ChatScreen = () => {
       }
     } catch (err) {
       console.error(err);
-      pushMessage("assistant", "Network error submitting identity");
+      setCurrentScreen("error");
     } finally {
       setLoading(false);
     }

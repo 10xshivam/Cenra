@@ -1,6 +1,7 @@
 "use client";
 
 import { ChatScreen } from "@/screens/chat-screen";
+import { ErrorScreen } from "@/screens/error-screen";
 import { HomeScreen } from "@/screens/home-screen";
 import { LoadingScreen } from "@/screens/loading-screen";
 import { useWidgetScreenStore } from "@/store/useWidgetScreenStore";
@@ -13,11 +14,12 @@ export const WidgetView = ({ workspaceId }: { workspaceId: string }) => {
   const screenComponents: Record<WidgetScreen, JSX.Element> = {
     loading: <LoadingScreen workspaceId={workspaceId} />,
     home: <HomeScreen />,
-    chat: <ChatScreen />
+    chat: <ChatScreen />,
+    error: <ErrorScreen />,
   };
 
   return (
-    <div className="min-h-[700px] w-[410px] rounded-3xl shadow-sm bg-neutral-50">
+    <div className="min-h-[700px] w-[410px] rounded-3xl shadow-sm bg-neutral-50 relative">
       {screenComponents[currentScreen]}
     </div>
   );
