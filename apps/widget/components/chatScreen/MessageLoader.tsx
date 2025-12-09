@@ -2,7 +2,7 @@ import { Sparkles } from "lucide-react";
 
 export const MessageLoader = () => {
   return (
-    <div className="flex w-full justify-start">
+    <div className="flex w-full justify-start my-4">
       <div className="flex max-w-[85%] items-end gap-3">
         <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 bg-neutral-100 border border-neutral-300">
           <Sparkles size={12} className="text-neutral-600" />
