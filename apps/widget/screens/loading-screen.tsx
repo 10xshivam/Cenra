@@ -1,29 +1,20 @@
 "use client";
 
+import { useEffect } from "react";
 import { useWidgetInitialization } from "@/hooks/useWidget";
 import { useWidgetScreenStore } from "@/store/useWidgetScreenStore";
 import { useWorkspaceStore } from "@/store/useWorkspaceStore";
+import { useWidgetSessionStore } from "@/store/useWidgetSessionStore";
 import { Loader } from "@workspace/ui/components/loader";
-import { useEffect, useState } from "react";
 
 export const LoadingScreen = ({ workspaceId }: { workspaceId: string }) => {
-  const [isReady, setIsReady] = useState(false); 
-  const [customerId, setCustomerId] = useState<string>("");
   const { setCurrentScreen } = useWidgetScreenStore();
   const { setWorkspace } = useWorkspaceStore();
-
-  useEffect(() => {
-    const stored = localStorage.getItem("customerId") ?? "";
-    setCustomerId(stored);
-    setIsReady(true);
-  }, []);
+  const { customerId, setCustomerId } = useWidgetSessionStore();
 
   const { data, isLoading, isError } = useWidgetInitialization(
     workspaceId,
-    customerId,
-    {
-      enabled: isReady,
-    }
+    customerId || undefined
   );
 
   useEffect(() => {
@@ -32,23 +23,30 @@ export const LoadingScreen = ({ workspaceId }: { workspaceId: string }) => {
       return;
     }
 
-    if (!isReady || isLoading || !data) return;
+    if (isLoading || !data) return;
 
     if (data.workspace) {
       setWorkspace(data.workspace);
     }
 
     if (!data.session?.active) {
-      localStorage.removeItem("customerId");
+      setCustomerId(null);
       setCurrentScreen("home");
       return;
     }
 
     if (data.session.active && data.session.customerId) {
-      localStorage.setItem("customerId", data.session.customerId);
+      setCustomerId(data.session.customerId);
       setCurrentScreen("chat");
     }
-  }, [isReady, isLoading, data, setCurrentScreen,isError]);
+  }, [
+    isError,
+    isLoading,
+    data,
+    setCurrentScreen,
+    setWorkspace,
+    setCustomerId,
+  ]);
 
   return (
     <div className="absolute inset-0 flex justify-center items-center">
@@ -56,3 +54,4 @@ export const LoadingScreen = ({ workspaceId }: { workspaceId: string }) => {
     </div>
   );
 };
+

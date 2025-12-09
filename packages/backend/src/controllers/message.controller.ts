@@ -3,7 +3,6 @@ import { prisma } from "@workspace/db";
 import { getChatbot } from "../config/langgraph";
 import { HumanMessage, AIMessage, BaseMessage } from "@langchain/core/messages";
 import { simplifyMessage } from "../utils/messages/simplifyMessages";
-import { stat } from "fs";
 
 export const createMessage = async (req: Request, res: Response) => {
   try {

@@ -1,20 +1,7 @@
+import { DefaultSuggestions, Workspace } from '@/types/widget';
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
-
-// Types
-type DefaultSuggestions = {
-  suggestion1: string | null;
-  suggestion2: string | null;
-  suggestion3: string | null;
-};
-
-type Workspace = {
-  id: string;
-  name: string;
-  greetMessage: string;
-  defaultSuggestions: DefaultSuggestions;
-};
 
 type WorkspaceState = {
   workspace: Workspace | null;
@@ -28,7 +15,6 @@ const initialState: Pick<WorkspaceState, 'workspace'> = {
   workspace: null,
 };
 
-// Create the store
 export const useWorkspaceStore = create<WorkspaceState>()(
   persist(
     immer((set) => ({
@@ -62,7 +48,7 @@ export const useWorkspaceStore = create<WorkspaceState>()(
         }),
     })),
     {
-      name: 'workspace-store', // localStorage key
+      name: 'workspace-store',
     }
   )
 );

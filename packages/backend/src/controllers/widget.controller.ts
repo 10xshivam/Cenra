@@ -1,7 +1,7 @@
 import { prisma } from "@workspace/db";
 import { Request, Response } from "express";
 import { getChatbot } from "../config/langgraph";
-import { AIMessage, BaseMessage } from "langchain";
+import { BaseMessage } from "langchain";
 
 const SESSION_DURATION_MS = 48 * 60 * 60 * 1000; // 48 hours in milliseconds
 const SESSION_EXTENSION_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds

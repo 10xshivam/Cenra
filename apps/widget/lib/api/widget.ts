@@ -1,9 +1,10 @@
+import { WidgetInitResponse } from "@/types/widget";
 import { axiosInstance } from "../axios";
 
 export const getWidgetInitialization = async (
   workspaceId: string,
   customerId?: string
-) => {
+): Promise<WidgetInitResponse> => {
   const url = customerId
     ? `/widget/init/${workspaceId}?customerId=${customerId}`
     : `/widget/init/${workspaceId}`;

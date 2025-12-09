@@ -8,34 +8,19 @@ import {
   sendMessage,
   startWidgetConversation,
 } from "@/lib/api/widget";
-import { QueryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { WidgetInitResponse } from "@/types/widget";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useWidgetInitialization = (
   workspaceId: string,
-  customerId: string,
-  options?: { enabled?: boolean }
-) => {
-  return useQuery({
-    queryKey: ["widgetInitialization", workspaceId, customerId],
-    queryFn: () => getWidgetInitialization(workspaceId, customerId),
-    retry: false,
-    gcTime: 5 * 60 * 1000,
-    enabled: options?.enabled ?? true,
+  customerId?: string
+) =>
+  useQuery<WidgetInitResponse>({
+    queryKey: ["widget-init", workspaceId, customerId ?? null],
+    queryFn: () => getWidgetInitialization(workspaceId, customerId ?? ""),
+    enabled: !!workspaceId,
+    retry: 0,
   });
-};
-
-// export const useWidgetInitialization = (
-//   workspaceId: string,
-//   customerId?: string,
-//   options?: QueryOptions
-// ) =>
-//   useQuery({
-//     queryKey: ["widget-init", workspaceId, customerId ?? null],
-//     queryFn: () => getWidgetInitialization(workspaceId, customerId),
-//     enabled: !!workspaceId,
-//     retry: 0,
-//     ...options,
-//   });
 
 export const useStartConversation = () => {
   const queryClient = useQueryClient();
@@ -87,7 +72,6 @@ export const useSendMessage = () => {
     }) => sendMessage(workspaceId, conversationId, message),
 
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["conversation-messages"] });
       queryClient.invalidateQueries({ queryKey: ["last-message"] });
     },
   });
@@ -101,7 +85,6 @@ export const useConversationMessages = (
     queryKey: ["conversation-messages", workspaceId, conversationId],
     queryFn: () => getConversationMessages(workspaceId, conversationId),
     enabled: !!workspaceId && !!conversationId,
-    refetchInterval: 2000,
   });
 
 export const useLastMessage = (workspaceId: string, conversationId: string) =>
@@ -109,5 +92,4 @@ export const useLastMessage = (workspaceId: string, conversationId: string) =>
     queryKey: ["last-message", workspaceId, conversationId],
     queryFn: () => getLastMessage(workspaceId, conversationId),
     enabled: !!workspaceId && !!conversationId,
-    refetchInterval: 2000,
   });

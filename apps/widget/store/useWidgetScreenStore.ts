@@ -9,7 +9,6 @@ type WidgetScreenState = {
   reset: () => void;
 };
 
-// Create the store
 export const useWidgetScreenStore = create<WidgetScreenState>()(
   persist(
     immer((set) => ({
@@ -24,9 +23,7 @@ export const useWidgetScreenStore = create<WidgetScreenState>()(
       }),
   })),
     {
-      name: 'widget-screen-store', // localStorage key
-      // You can also customize storage (sessionStorage, etc.)
-      // storage: createJSONStorage(() => sessionStorage),
+      name: 'widget-screen-store',
     }
   )
 );
