@@ -41,7 +41,7 @@ export const MainHeader = () => {
           className=" data-[orientation=vertical]:h-4"
         />
         <div className="group flex items-center cursor-pointer">
-          <div className="rounded-full p-1.5  bg-neutral-500/10 group-hover:bg-emerald-500/10 text-neutral-500 group-hover:text-emerald-800 transition-colors duration-300">
+          <div className="rounded-full p-1.5  bg-neutral-500/10  text-neutral-500 group-hover:text-emerald-800 transition-colors duration-300">
             <UserFilledIcon />
           </div>
           <span className="ml-2 text-sm text-neutral-500 group-hover:text-emerald-800 tracking-tight font-medium">

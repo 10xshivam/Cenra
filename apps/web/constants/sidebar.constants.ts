@@ -45,7 +45,7 @@ export const SIDEBAR_ITEMS = {
     },
     {
       title: "Knowledge Base",
-      url: "/helpdesk",
+      url: "/knowledge-sources",
       icon: BookOpenIcon,
     },
   ],

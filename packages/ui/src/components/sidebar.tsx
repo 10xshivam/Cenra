@@ -266,7 +266,7 @@ function SidebarTrigger({
       data-slot="sidebar-trigger"
       variant="ghost"
       size="icon"
-      className={cn("size-7 hover:bg-emerald-500/10 hover:text-emerald-800", className)}
+      className={cn("size-7 hover:bg-neutral-500/10 hover:text-emerald-800 text-neutral-500 transition-colors duration-300", className)}
       onClick={(event) => {
         onClick?.(event)
         toggleSidebar()
@@ -517,7 +517,7 @@ function SidebarMenuButton({
       data-sidebar="menu-button"
       data-size={size}
       data-active={isActive}
-      className={cn(sidebarMenuButtonVariants({ variant, size }), className,"hover:text-emerald-800 text-neutral-600 font-medium tracking-tight hover:bg-emerald-500/10 transition-colors duration-200 data-[active=true]:bg-emerald-500/10 data-[active=true]:text-emerald-800")}
+      className={cn(sidebarMenuButtonVariants({ variant, size }), className,"hover:text-emerald-800 text-neutral-600 font-medium tracking-tight hover:bg-neutral-400/10 transition-colors duration-200 data-[active=true]:bg-neutral-400/10 data-[active=true]:text-emerald-800 data-[active=true]:inset-shadow-sm")}
       {...props}
     />
   )

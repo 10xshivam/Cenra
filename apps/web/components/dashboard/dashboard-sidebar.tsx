@@ -15,6 +15,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@workspace/ui/components/sidebar";
+import { Link } from "next-view-transitions";
 import { usePathname } from "next/navigation";
 
 export const DashboardSidebar = () => {
@@ -23,7 +24,7 @@ export const DashboardSidebar = () => {
 
   return (
     <Sidebar collapsible="icon" variant="floating">
-      <SidebarHeader className="group h-12 rounded-lg bg-neutral-500/10 hover:bg-emerald-500/10 border-b-4 border-neutral-500/15 hover:border-emerald-600/15 transition-colors duration-300 text-neutral-500 hover:text-emerald-800">
+      <SidebarHeader className="group h-12 rounded-lg bg-neutral-500/10 hover:bg-neutral-500/10 border-b-4 border-neutral-500/15 hover:border-neutral-600/15 transition-colors duration-300 text-neutral-500 hover:text-emerald-800">
         <SidebarMenu>
           <SidebarMenuItem className="hover:bg-transparent cursor-default flex items-center justify-center pt-1 gap-1.5">
             <OfficeIcon2 />
@@ -39,10 +40,10 @@ export const DashboardSidebar = () => {
             {SIDEBAR_ITEMS.primary.map((item) => (
               <SidebarMenuItem key={item.title}>
                 <SidebarMenuButton asChild isActive={pathname === item.url}>
-                  <a href={item.url}>
+                  <Link href={item.url}>
                     <item.icon />
                     <span>{item.title}</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
@@ -55,10 +56,10 @@ export const DashboardSidebar = () => {
               {SIDEBAR_ITEMS.automation.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={pathname === item.url}>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -72,10 +73,10 @@ export const DashboardSidebar = () => {
               {SIDEBAR_ITEMS.configuration.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={pathname === item.url}>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -89,10 +90,10 @@ export const DashboardSidebar = () => {
               {SIDEBAR_ITEMS.insights.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild isActive={pathname === item.url}>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}
@@ -105,10 +106,10 @@ export const DashboardSidebar = () => {
           {SIDEBAR_ITEMS.footer.map((item) => (
             <SidebarMenuItem key={item.title}>
               <SidebarMenuButton asChild>
-                <a href={item.url}>
+                <Link href={item.url}>
                   <item.icon />
                   <span>{item.title}</span>
-                </a>
+                </Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
           ))}
