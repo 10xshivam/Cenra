@@ -1,4 +1,5 @@
-# Cenra - AI Agent that actually understands your business
+# Cenra
+### AI Agent that actually understands your business
 Cenra turns your content, docs, and product knowledge into a conversational support agent that remembers chats, understands context, and responds like your best teammate, without building AI infrastructure.
 
 ## What Cenra does
