@@ -9,6 +9,7 @@ import conversationRouter from "./routes/conversation.route";
 import customerRouter from "./routes/customer.route";
 import messageRouter from "./routes/message.route";
 import widgetSettingRouter from "./routes/widgetSetting.route";
+import widgetRouter from "./routes/widget.routes";
 import { initLangGraph } from "./config/langgraph";
 
 dotenv.config();
@@ -18,7 +19,7 @@ const app = express();
 // CORS Configuration
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: ["http://localhost:3000", "http://localhost:3001"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
@@ -40,6 +41,7 @@ app.use("/api/v1/workspace", customerRouter);
 app.use("/api/v1/workspace", conversationRouter);
 app.use("/api/v1/workspace", messageRouter);
 app.use("/api/v1/workspace", widgetSettingRouter);
+app.use("/api/v1/widget", widgetRouter);
 
 // Start the server
 initLangGraph().then(() => {

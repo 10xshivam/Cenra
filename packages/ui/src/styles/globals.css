@@ -5,7 +5,13 @@
 
 @import "tw-animate-css";
 
+@plugin 'tailwind-scrollbar' {
+    nocompatible: true;
+    preferredStrategy: 'pseudoelements';
+}
+
 @custom-variant dark (&:is(.dark *));
+
 
 :root {
   --background: oklch(1 0 0);

@@ -52,6 +52,7 @@ model Customer {
   name          String?
   email         String?
   conversations Conversation[]
+  expiresAt     DateTime?      
 }
 
 enum ConversationStatus {

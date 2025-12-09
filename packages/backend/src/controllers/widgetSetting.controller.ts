@@ -64,18 +64,30 @@ export const getWidgetSettings = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "Workspace ID is required" });
     }
 
+    const workspace = await prisma.workspace.findUnique({
+      where: { id: workspaceId },
+    });
+
+    if (!workspace) {
+      return res.status(404).json({ message: "Workspace not found" });
+    }
+
     const widgetSettings = await prisma.widgetSettings.findUnique({
-      where: { workspaceId },
+      where: { workspaceId: workspace.id },
     });
     
     if (!widgetSettings) {
       return res.status(404).json({ message: "Widget settings not found" });
     }
 
-    const { id, workspaceId: widgetWorkspaceId, ...rest } = widgetSettings;
     return res.status(200).json({
       message: "Widget settings retrieved successfully",
-      widgetSettings: rest,
+      widgetSettings: {
+        name: workspace.name,
+        website: workspace.website,
+        greetMessage: widgetSettings.greetMessage,
+        defaultSuggestions: widgetSettings.defaultSuggestions,
+      },
     });
   } catch (error) {
     console.error("Error retrieving widget settings:", error);
