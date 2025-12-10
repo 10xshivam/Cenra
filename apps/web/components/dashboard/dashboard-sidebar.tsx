@@ -1,7 +1,7 @@
 "use client";
 
 import { SIDEBAR_ITEMS } from "@/constants/sidebar.constants";
-import { useWorkspace } from "@/hooks/useWorkspace";
+import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 import { OfficeIcon2 } from "@workspace/ui/components/icons";
 import {
   Sidebar,
@@ -19,7 +19,7 @@ import { Link } from "next-view-transitions";
 import { usePathname } from "next/navigation";
 
 export const DashboardSidebar = () => {
-  const { data: workspace, isLoading: isWorkspaceLoading } = useWorkspace();
+  const { workspace } = useWorkspaceStore();
   const pathname = usePathname();
 
   return (
@@ -29,7 +29,7 @@ export const DashboardSidebar = () => {
           <SidebarMenuItem className="hover:bg-transparent cursor-default flex items-center justify-center pt-1 gap-1.5">
             <OfficeIcon2 />
             <span className="font-bold tracking-tight group-data-[collapsible=icon]:hidden!">
-              {isWorkspaceLoading ? "Loading..." : workspace?.name || "Workspace"}
+              {workspace?.name || "Loading..."}
             </span>
           </SidebarMenuItem>
         </SidebarMenu>
