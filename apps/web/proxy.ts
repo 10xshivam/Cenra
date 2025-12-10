@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
 const PUBLIC_PATHS = ["/", "/login", "/signup"];
-const PROTECTED_PATHS = ["/inbox", "/create-workspace", "/get-started", "/knowledge-base", "/automations"];
+const PROTECTED_PATHS = ["/inbox", "/create-workspace", "/get-started", "/knowledge-sources", "/automations"];
 
 function isPublicPath(path: string) {
   return PUBLIC_PATHS.includes(path);

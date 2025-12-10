@@ -7,6 +7,7 @@ import {
   logoutUser,
   registerUser,
 } from "@/lib/api/auth";
+import { useUserStore } from "@/store/useUserStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTransitionRouter } from "next-view-transitions";
 import { toast } from "sonner";
@@ -20,63 +21,97 @@ export function useSession() {
   });
 }
 
-export function useSignupUser() {
+export const useSignupUser = () => {
   const queryClient = useQueryClient();
   const router = useTransitionRouter();
+  const setUser = useUserStore((s) => s.setUser);
+
   return useMutation({
     mutationFn: registerUser,
     onSuccess: (user) => {
+      setUser({
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      });
       queryClient.setQueryData(["user"], user);
       router.push("/get-started");
     },
     onError: (error) => {
-      toast.error(`Registration error: ${error instanceof Error ? error.message : String(error)}`);
-    }
+      toast.error(
+        `Registration error: ${error instanceof Error ? error.message : String(error)}`
+      );
+    },
   });
 }
 
-export function useLogin() {
+export const useLogin = () => {
   const queryClient = useQueryClient();
   const router = useTransitionRouter();
+  const setUser = useUserStore((s) => s.setUser);
+
   return useMutation({
     mutationFn: loginUser,
-    onSuccess: (data) => {
-      queryClient.setQueryData(["user"], data.user);
+    onSuccess: (user) => {
+      setUser({
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      });
+      queryClient.setQueryData(["user"], user);
       router.push("/inbox");
     },
     onError: (error) => {
-      toast.error(`Login error: ${error instanceof Error ? error.message : String(error)}`);
-    }
+      toast.error(
+        `Login error: ${error instanceof Error ? error.message : String(error)}`
+      );
+    },
   });
 }
 
-export function useGoogleLoginMutation() {
+export const useGoogleLoginMutation = () => {
   const queryClient = useQueryClient();
   const router = useTransitionRouter();
+  const setUser = useUserStore((s) => s.setUser);
 
   return useMutation({
     mutationFn: loginWithGoogle,
-    onSuccess: (data) => {
-      queryClient.setQueryData(['user'], data.user);
-      router.push('/inbox');
+    onSuccess: (user) => {
+      setUser({
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      });
+      queryClient.setQueryData(["user"], user);
+      router.push("/inbox");
     },
     onError: (error) => {
-      toast.error(`Google Login error: ${error instanceof Error ? error.message : String(error)}`);
-    }
+      toast.error(
+        `Google Login error: ${error instanceof Error ? error.message : String(error)}`
+      );
+    },
   });
 }
 
-export function useLogout() {
+export const useLogout = () => {
   const router = useTransitionRouter();
   const queryClient = useQueryClient();
+  const clearUser = useUserStore((s) => s.clearUser);
+
   return useMutation({
     mutationFn: logoutUser,
     onSuccess: () => {
+      clearUser();
       queryClient.removeQueries({ queryKey: ["user"] });
       router.push("/login");
     },
     onError: (error) => {
-      toast.error(`Logout error: ${error instanceof Error ? error.message : String(error)}`);
-    }
+      toast.error(
+        `Logout error: ${error instanceof Error ? error.message : String(error)}`
+      );
+    },
   });
 }

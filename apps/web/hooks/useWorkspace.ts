@@ -1,4 +1,5 @@
 import { createWorkspace, fetchWorkspace } from "@/lib/api/workspace";
+import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useTransitionRouter } from "next-view-transitions";
 import { toast } from "sonner";
@@ -15,14 +16,25 @@ export const useWorkspace = () => {
 export const useCreateWorkspace = () => {
   const queryClient = useQueryClient();
   const router = useTransitionRouter();
+  const setWorkspace = useWorkspaceStore((s) => s.setWorkspace);
+
   return useMutation({
     mutationFn: createWorkspace,
     onSuccess: (workspace) => {
-      queryClient.setQueryData(["workspace"], workspace);
-      router.push("/get-started");
+      setWorkspace({
+        id: workspace.id,
+        name: workspace.name,
+        website: workspace.website,
+      });
+      queryClient.setQueryData(['workspace'], workspace);
+      router.push('/get-started');
     },
     onError: (error) => {
-        toast.error(`Workspace creation error: ${error instanceof Error ? error.message : String(error)}`);
+      toast.error(
+        `Workspace creation error: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      );
     },
   });
 };

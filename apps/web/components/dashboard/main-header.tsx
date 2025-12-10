@@ -1,7 +1,7 @@
 "use client";
 
 import { getAllItems } from "@/constants/sidebar.constants";
-import { useSession } from "@/hooks/useAuth";
+import { useUserStore } from "@/store/useUserStore";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -14,7 +14,7 @@ import { usePathname } from "next/navigation";
 
 export const MainHeader = () => {
   const pathname = usePathname();
-  const { data: user, isPending } = useSession();
+  const { user } = useUserStore();
 
   const allItems = getAllItems();
   const pageTitle = allItems.find((item) => item.url === pathname)?.title;
@@ -45,7 +45,7 @@ export const MainHeader = () => {
             <UserFilledIcon />
           </div>
           <span className="ml-2 text-sm text-neutral-500 group-hover:text-emerald-800 tracking-tight font-medium">
-            {isPending ? "Loading..." : user.firstName + " " + user.lastName}
+            {user ? user.firstName + " " + user.lastName : "Loading..."}
           </span>
         </div>
       </div>
