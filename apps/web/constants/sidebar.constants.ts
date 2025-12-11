@@ -44,9 +44,19 @@ export const SIDEBAR_ITEMS = {
       icon: SparklesIcon,
     },
     {
-      title: "Knowledge Base",
-      url: "/knowledge-sources",
+      title: "Knowledge Sources",
+      url: "#",
       icon: BookOpenIcon,
+      items: [
+        {
+          title: "Web Content",
+          url: "/knowledge-sources/web-content",
+        },
+        {
+          title: "Data Importer",
+          url: "/knowledge-sources/data-importer",
+        },
+      ],
     },
   ],
   configuration: [
@@ -79,5 +89,3 @@ export const SIDEBAR_ITEMS = {
     },
   ],
 };
-
-export const getAllItems = () => Object.values(SIDEBAR_ITEMS).flat();

@@ -14,6 +14,9 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
 } from "@workspace/ui/components/sidebar";
 import { Link } from "next-view-transitions";
 import { usePathname } from "next/navigation";
@@ -53,16 +56,37 @@ export const DashboardSidebar = () => {
           <SidebarGroupLabel>Automation</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {SIDEBAR_ITEMS.automation.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild isActive={pathname === item.url}>
-                    <Link href={item.url}>
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
+              {SIDEBAR_ITEMS.automation.map((item) => {
+                const isActive =
+                  pathname === item.url ||
+                  item.items?.some((sub) => pathname === sub.url);
+
+                return (
+                  <SidebarMenuItem key={item.title}>
+                    <SidebarMenuButton asChild isActive={isActive}>
+                      <Link href={item.url}>
+                        <item.icon />
+                        <span>{item.title}</span>
+                      </Link>
+                    </SidebarMenuButton>
+
+                    {item.items?.length ? (
+                      <SidebarMenuSub>
+                        {item.items.map((item) => (
+                          <SidebarMenuSubItem key={item.title}>
+                            <SidebarMenuSubButton
+                              asChild
+                              isActive={pathname === item.url}
+                            >
+                              <Link href={item.url}>{item.title}</Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    ) : null}
+                  </SidebarMenuItem>
+                );
+              })}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>

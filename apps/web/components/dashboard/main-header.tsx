@@ -1,23 +1,25 @@
 "use client";
 
-import { getAllItems } from "@/constants/sidebar.constants";
+import { findPathInSidebar } from "@/lib/nav";
+import { SIDEBAR_ITEMS } from "@/constants/sidebar.constants";
 import { useUserStore } from "@/store/useUserStore";
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
+  BreadcrumbSeparator,
 } from "@workspace/ui/components/breadcrumb";
 import { BellIcon, UserFilledIcon } from "@workspace/ui/components/icons";
 import { Separator } from "@workspace/ui/components/separator";
 import { SidebarTrigger } from "@workspace/ui/components/sidebar";
 import { usePathname } from "next/navigation";
+import React from "react";
 
 export const MainHeader = () => {
   const pathname = usePathname();
   const { user } = useUserStore();
 
-  const allItems = getAllItems();
-  const pageTitle = allItems.find((item) => item.url === pathname)?.title;
+  const breadcrumbPath = findPathInSidebar(SIDEBAR_ITEMS, pathname) ?? [];
   return (
     <header className="flex h-12 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 border-b border-border bg-background/80 backdrop-blur-sm border rounded-lg justify-between">
       <div className="flex h-full items-center gap-2 px-4">
@@ -28,8 +30,17 @@ export const MainHeader = () => {
         />
         <Breadcrumb>
           <BreadcrumbList>
-            <BreadcrumbItem className="hidden md:block">
-              {pageTitle}
+            {breadcrumbPath.slice(0, -1).map((item) => (
+              <React.Fragment key={item.url}>
+                <BreadcrumbItem className="hidden md:block">
+                  {item.title}
+                </BreadcrumbItem>
+                <BreadcrumbSeparator className="hidden md:block" />
+              </React.Fragment>
+            ))}
+
+            <BreadcrumbItem>
+              {breadcrumbPath.at(-1)?.title ?? "Dashboard"}
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>

@@ -14,7 +14,7 @@ export const DashboardLayout = async ({
     <SidebarProvider defaultValue={defaultOpen ? "true" : "false"}>
       <DashboardSidebar />
       <main className="w-full p-2 pl-0">
-        <div className="bg-neutral-200 rounded-lg w-full h-full overflow-hidden">
+        <div className="bg-neutral-50 rounded-lg w-full h-full overflow-hidden border">
           <MainHeader />
           {children}
         </div>
