@@ -931,10 +931,84 @@ export const WebCrawlIcon = (props: React.SVGProps<SVGSVGElement>) => (
   </svg>
 );
 
-
-export const SquareInfo = ({size = '24px', ...props}: IconProps) => {
+export const SquareInfo = ({ size = "24px", ...props }: IconProps) => {
   return (
-    <svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width={size} height={size} viewBox="0 0 24 24" {...props}><path d="m19,2H5c-1.654,0-3,1.346-3,3v14c0,1.654,1.346,3,3,3h14c1.654,0,3-1.346,3-3V5c0-1.654-1.346-3-3-3Zm-6,16h-2v-6h-2v-2h2.5c.827,0,1.5.673,1.5,1.5v6.5Zm-1-9.5c-.689,0-1.25-.561-1.25-1.25s.561-1.25,1.25-1.25,1.25.561,1.25,1.25-.561,1.25-1.25,1.25Z" strokeWidth="0" fill="currentColor"></path></svg>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      width={size}
+      height={size}
+      viewBox="0 0 24 24"
+      {...props}
+    >
+      <path
+        d="m19,2H5c-1.654,0-3,1.346-3,3v14c0,1.654,1.346,3,3,3h14c1.654,0,3-1.346,3-3V5c0-1.654-1.346-3-3-3Zm-6,16h-2v-6h-2v-2h2.5c.827,0,1.5.673,1.5,1.5v6.5Zm-1-9.5c-.689,0-1.25-.561-1.25-1.25s.561-1.25,1.25-1.25,1.25.561,1.25,1.25-.561,1.25-1.25,1.25Z"
+        strokeWidth="0"
+        fill="currentColor"
+      ></path>
+    </svg>
   );
 };
 
+export const ReloadIcon = ({ size = "12px", ...props }: IconProps) => {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      x="0px"
+      y="0px"
+      width={size}
+      height={size}
+      viewBox="0 0 12 12"
+      {...props}
+    >
+      <g data-transform-wrapper="on" transform="translate(12 0) scale(-1 1)">
+        <circle
+          cx="6"
+          cy="11.25"
+          r=".75"
+          fill="currentColor"
+          strokeWidth="0"
+          data-color="color-2"
+        ></circle>
+        <circle
+          cx="3.375"
+          cy="10.547"
+          r=".75"
+          fill="currentColor"
+          strokeWidth="0"
+          data-color="color-2"
+        ></circle>
+        <circle
+          cx="1.453"
+          cy="8.625"
+          r=".75"
+          fill="currentColor"
+          strokeWidth="0"
+          data-color="color-2"
+        ></circle>
+        <circle
+          cx="8.625"
+          cy="10.547"
+          r=".75"
+          fill="currentColor"
+          strokeWidth="0"
+          data-color="color-2"
+        ></circle>
+        <circle
+          cx="10.547"
+          cy="8.625"
+          r=".75"
+          fill="currentColor"
+          strokeWidth="0"
+          data-color="color-2"
+        ></circle>
+        <path
+          d="m6,0c-1.517,0-2.922.565-4,1.534v-.784c0-.414-.336-.75-.75-.75s-.75.336-.75.75v3c0,.414.336.75.75.75h3c.414,0,.75-.336.75-.75s-.336-.75-.75-.75h-1.606c.839-.944,2.045-1.5,3.356-1.5,2.481,0,4.5,2.019,4.5,4.5,0,.414.336.75.75.75s.75-.336.75-.75c0-3.309-2.691-6-6-6Z"
+          strokeWidth="0"
+          fill="currentColor"
+        ></path>
+      </g>
+    </svg>
+  );
+};
