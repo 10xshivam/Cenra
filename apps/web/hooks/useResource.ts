@@ -1,5 +1,5 @@
-import { createResource, deleteResource, Resource, toggleResource } from "@/lib/api/resource";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createResource, deleteResource, getAllResources, Resource, toggleResource } from "@/lib/api/resource";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export const useCreateResource = () => {
@@ -50,5 +50,14 @@ export const useDeleteResource = (workspaceId: string, resourceId: string) => {
         }`
       );
     },
+  });
+};
+
+export const useGetAllResources = (workspaceId: string) => {
+  return useQuery({
+    queryKey: ["resources"],
+    queryFn: () => getAllResources(workspaceId),
+    retry: false,
+    gcTime: 5 * 60 * 1000,
   });
 };

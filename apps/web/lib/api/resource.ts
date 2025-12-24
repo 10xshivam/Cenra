@@ -5,6 +5,13 @@ export type Resource = {
   workspaceId: string;
 };
 
+export const getAllResources = async (workspaceId: string) => {
+  const { data } = await axiosInstance.get(
+    `workspace/${workspaceId}/resources`
+  );
+  return data.resources;
+}
+
 export const createResource = async ({ file, workspaceId }: Resource) => {
   const formData = new FormData();
   formData.append("file", file);

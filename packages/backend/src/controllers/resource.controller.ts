@@ -7,6 +7,21 @@ import { prisma } from "@workspace/db";
 import fs from "fs";
 import { client } from "../config/qdrant";
 
+export const getAllResources = async (req: Request, res: Response) => {
+  try {
+    const { workspaceId } = req.params;
+    const resources = await prisma.resource.findMany({
+      where: { workspaceId },
+      orderBy: { createdAt: "desc" },
+    });
+    return res.json({ success: true, resources });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
 export const createResource = async (req: Request, res: Response) => {
   try {
     const { workspaceId } = req.params;
