@@ -20,3 +20,25 @@ export const createResource = async ({ file, workspaceId }: Resource) => {
   console.log("Created resource:", data);
   return data.resource;
 };
+
+export const toggleResource = async (
+  workspaceId: string,
+  resourceId: string,
+  active: boolean
+) => {
+  const { data } = await axiosInstance.patch(
+    `workspace/${workspaceId}/resources/${resourceId}/toggle`,
+    { active }
+  );
+  return data;
+};
+
+export const deleteResource = async (
+  workspaceId: string,
+  resourceId: string
+) => {
+  const { data } = await axiosInstance.delete(
+    `workspace/${workspaceId}/resources/${resourceId}`
+  );
+  return data;
+};
