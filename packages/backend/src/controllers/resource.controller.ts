@@ -5,6 +5,7 @@ import { getWorkspaceVectorStore } from "../utils/file-processing/workspaceVecto
 import { Document } from "langchain";
 import { prisma } from "@workspace/db";
 import fs from "fs";
+import { client } from "../config/qdrant";
 
 export const createResource = async (req: Request, res: Response) => {
   try {
@@ -62,7 +63,6 @@ export const createResource = async (req: Request, res: Response) => {
       chunkOverlap: 200,
     });
 
-    // split + store in vector store
     const splitDocs = await splitter.splitDocuments(docsWithMeta);
 
     const vectorStore = await getWorkspaceVectorStore(workspaceId);
@@ -74,7 +74,6 @@ export const createResource = async (req: Request, res: Response) => {
 
     await vectorStore.addDocuments(splitDocs);
 
-    // delete file from disk AFTER success
     await fs.promises.unlink(file.path);
 
     return res.json({ success: true, resource });
@@ -83,5 +82,70 @@ export const createResource = async (req: Request, res: Response) => {
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const toggleResource = async (req: Request, res: Response) => {
+  try {
+    const { resourceId } = req.params;
+    const { active } = req.body;
+
+    if (typeof active !== "boolean") {
+      return res.status(400).json({ message: "Active flag required" });
+    }
+
+    const resource = await prisma.resource.update({
+      where: { id: resourceId },
+      data: { active },
+    });
+
+    return res.json({
+      success: true,
+      message: resource.active
+        ? "Resource enabled for AI"
+        : "Resource disabled for AI",
+    });
+  } catch (error) {
+    console.error("toggleResource failed", error);
+    return res.status(500).json({ message: "Failed to update resource" });
+  }
+};
+
+export const deleteResource = async (req: Request, res: Response) => {
+  try {
+    const { resourceId } = req.params;
+
+    const resource = await prisma.resource.findUnique({
+      where: { id: resourceId },
+    });
+
+    if (!resource) {
+      return res.status(404).json({ message: "Resource not found" });
+    }
+
+    await client.delete(resource.workspaceId, {
+      filter: {
+        must: [
+          {
+            key: "metadata.resourceId",
+            match: {
+              value: resourceId,
+            },
+          },
+        ],
+      },
+    });
+
+    await prisma.resource.delete({
+      where: { id: resourceId },
+    });
+
+    return res.json({
+      success: true,
+      message: "Resource deleted permanently",
+    });
+  } catch (error) {
+    console.error("deleteResource failed", error);
+    return res.status(500).json({ message: "Failed to delete resource" });
   }
 };
