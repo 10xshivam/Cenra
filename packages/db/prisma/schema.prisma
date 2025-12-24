@@ -37,6 +37,7 @@ model Resource {
   filename    String?
   mimeType    String?
   text        String
+  active      Boolean            @default(true)
   createdAt   DateTime           @default(now())
 }
 
@@ -52,7 +53,7 @@ model Customer {
   name          String?
   email         String?
   conversations Conversation[]
-  expiresAt     DateTime?      
+  expiresAt     DateTime?
 }
 
 enum ConversationStatus {
