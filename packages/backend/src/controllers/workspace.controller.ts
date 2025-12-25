@@ -36,6 +36,9 @@ export const createWorkspace = async (req: Request, res: Response) => {
     });
 
     if (newWorkspace) {
+      await prisma.widgetSettings.create({
+        data: { workspaceId: newWorkspace.id },
+      })
       await Promise.allSettled([
         setWorkspaceCookie(userId, res),
         createCollection(newWorkspace.id),
