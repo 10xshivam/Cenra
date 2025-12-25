@@ -53,7 +53,8 @@ interface Resource {
 
 export const DataImporterView = () => {
   const { workspace } = useWorkspaceStore();
-  const { data: resources } = useGetAllResources(workspace?.id!);
+
+  const { data: resources } = useGetAllResources(workspace?.id || "");
   const toggleMutation = useToggleResource();
   const deleteMutation = useDeleteResource();
 

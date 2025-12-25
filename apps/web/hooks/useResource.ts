@@ -65,5 +65,6 @@ export const useGetAllResources = (workspaceId: string) => {
     queryFn: () => getAllResources(workspaceId),
     retry: false,
     gcTime: 5 * 60 * 1000,
+    enabled: !!workspaceId 
   });
 };
