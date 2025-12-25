@@ -2,6 +2,12 @@ import { createResource, deleteResource, getAllResources, Resource, toggleResour
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
+interface ToggleResourceVariables {
+  active: boolean;
+  workspaceId: string;
+  resourceId: string;
+}
+
 export const useCreateResource = () => {
   const queryClient = useQueryClient();
   return useMutation({
@@ -19,10 +25,10 @@ export const useCreateResource = () => {
   });
 };
 
-export const useToggleResource = (workspaceId: string, resourceId: string) => {
+export const useToggleResource = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (active: boolean) => toggleResource(workspaceId, resourceId, active),
+    mutationFn: ({ active, workspaceId, resourceId }: ToggleResourceVariables) => toggleResource(workspaceId, resourceId, active),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["resources"] });
     },
@@ -36,10 +42,10 @@ export const useToggleResource = (workspaceId: string, resourceId: string) => {
   });
 };
 
-export const useDeleteResource = (workspaceId: string, resourceId: string) => {
+export const useDeleteResource = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: () => deleteResource(workspaceId, resourceId),
+    mutationFn: ({ workspaceId, resourceId }: { workspaceId: string; resourceId: string }) => deleteResource(workspaceId, resourceId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["resources"] });
     },
