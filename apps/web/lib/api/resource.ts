@@ -12,7 +12,7 @@ export const getAllResources = async (workspaceId: string, sourceType: string) =
   return data.resources;
 }
 
-export const createResource = async ({ file, workspaceId }: Resource) => {
+export const createFileResource = async ({ file, workspaceId }: Resource) => {
   const formData = new FormData();
   formData.append("file", file);
   const { data } = await axiosInstance.post(
@@ -24,7 +24,14 @@ export const createResource = async ({ file, workspaceId }: Resource) => {
       },
     }
   );
-  console.log("Created resource:", data);
+  return data.resource;
+};
+
+export const createWebResource = async ({ url, workspaceId }: { url: string; workspaceId: string }) => {
+  const { data } = await axiosInstance.post(
+    `workspace/${workspaceId}/resources/web`,
+    { url }
+  );
   return data.resource;
 };
 

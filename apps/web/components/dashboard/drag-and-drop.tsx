@@ -1,5 +1,5 @@
 "use client";
-import { useCreateResource } from "@/hooks/useResource";
+import { useCreateFileResource } from "@/hooks/useResource";
 import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 import {
   ReloadIcon,
@@ -17,7 +17,7 @@ const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 export const DragAndDrop = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const { workspace } = useWorkspaceStore();
-  const createResourceMutation = useCreateResource();
+  const createResourceMutation = useCreateFileResource();
   const [fileName, setFileName] = useState<string | null>(null);
   const isUploading = createResourceMutation.isPending;
 

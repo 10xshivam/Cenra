@@ -1,4 +1,4 @@
-import { createResource, deleteResource, getAllResources, Resource, toggleResource } from "@/lib/api/resource";
+import { createFileResource, createWebResource, deleteResource, getAllResources, Resource, toggleResource } from "@/lib/api/resource";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -8,20 +8,38 @@ interface ToggleResourceVariables {
   resourceId: string;
 }
 
-export const useCreateResource = () => {
+export const useCreateFileResource = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (value: Resource) => createResource(value),
+    mutationFn: (value: Resource) => createFileResource(value),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["resources"] });
     },
     onError: (error) => {
       toast.error(
-        `Resource creation error: ${
+        `File resource creation error: ${
           error instanceof Error ? error.message : String(error)
         }`
       );
     },
+  });
+};
+
+export const useCreateWebResource = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ url, workspaceId }: { url: string; workspaceId: string }) =>
+      createWebResource({ url, workspaceId }),
+      onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["resources"] });
+    }
+  ,    onError: (error) => {
+      toast.error(
+        `Web resource creation error: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
+    }
   });
 };
 
