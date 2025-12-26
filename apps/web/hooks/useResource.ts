@@ -59,10 +59,10 @@ export const useDeleteResource = () => {
   });
 };
 
-export const useGetAllResources = (workspaceId: string) => {
+export const useGetAllResources = (workspaceId: string, sourceType: string) => {
   return useQuery({
     queryKey: ["resources"],
-    queryFn: () => getAllResources(workspaceId),
+    queryFn: () => getAllResources(workspaceId, sourceType),
     retry: false,
     gcTime: 5 * 60 * 1000,
     enabled: !!workspaceId 

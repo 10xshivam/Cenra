@@ -46,7 +46,7 @@ import { Button } from "@workspace/ui/components/button";
 interface Resource {
   id: string;
   filename: string;
-  text: string;
+  fileText: string;
   createdAt: string;
   active: boolean;
 }
@@ -54,7 +54,7 @@ interface Resource {
 export const DataImporterView = () => {
   const { workspace } = useWorkspaceStore();
 
-  const { data: resources } = useGetAllResources(workspace?.id || "");
+  const { data: resources } = useGetAllResources(workspace?.id || "", "FILE");
   const toggleMutation = useToggleResource();
   const deleteMutation = useDeleteResource();
 
@@ -217,7 +217,7 @@ export const DataImporterView = () => {
                               </DialogTitle>
                               <div className="overflow-y-auto max-h-[60vh] scrollbar-none scrollbar-w-1 scrollbar-thumb-neutral-400">
                                 <DialogDescription className="p-5 whitespace-pre-wrap">
-                                  {resource.text}
+                                  {resource.fileText}
                                 </DialogDescription>
                               </div>
                             </DialogHeader>

@@ -5,9 +5,9 @@ export type Resource = {
   workspaceId: string;
 };
 
-export const getAllResources = async (workspaceId: string) => {
+export const getAllResources = async (workspaceId: string, sourceType: string) => {
   const { data } = await axiosInstance.get(
-    `workspace/${workspaceId}/resources`
+    `workspace/${workspaceId}/resources?sourceType=${sourceType}`
   );
   return data.resources;
 }

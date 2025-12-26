@@ -6,23 +6,9 @@ import { Document } from "langchain";
 import { prisma } from "@workspace/db";
 import fs from "fs";
 import { client } from "../config/qdrant";
+import { crawlWebsitePages } from "../utils/resources/crawlPage";
 
-export const getAllResources = async (req: Request, res: Response) => {
-  try {
-    const { workspaceId } = req.params;
-    const resources = await prisma.resource.findMany({
-      where: { workspaceId },
-      orderBy: { createdAt: "desc" },
-    });
-    return res.json({ success: true, resources });
-  } catch (error) {
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal server error" });
-  }
-};
-
-export const createResource = async (req: Request, res: Response) => {
+export const createFileResource = async (req: Request, res: Response) => {
   try {
     const { workspaceId } = req.params;
 
@@ -33,6 +19,8 @@ export const createResource = async (req: Request, res: Response) => {
     }
 
     const { file } = req;
+
+    console.log("Uploaded file:", file);
 
     if (!file) {
       return res
@@ -56,7 +44,7 @@ export const createResource = async (req: Request, res: Response) => {
         filename: file.originalname,
         workspaceId,
         mimeType: file.mimetype,
-        text,
+        fileText: text,
         sourceType: "FILE",
       },
     });
@@ -94,6 +82,111 @@ export const createResource = async (req: Request, res: Response) => {
     return res.json({ success: true, resource });
   } catch (error) {
     await fs.promises.unlink(req.file!.path);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const createWebResource = async (req: Request, res: Response) => {
+  try {
+    const { workspaceId } = req.params;
+    const { url, paths } = req.body as {
+      url: string;
+      paths?: string[];
+    };
+
+    if (!workspaceId || !url) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Workspace ID and URL are required" });
+    }
+
+    const normalizedPaths = Array.isArray(paths)
+      ? paths.filter((p) => typeof p === "string" && p.trim().length > 0)
+      : undefined;
+
+    const crawled = await crawlWebsitePages(url, normalizedPaths);
+    if (!crawled || crawled.length === 0) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Failed to crawl the webpage" });
+    }
+
+    const resource = await prisma.resource.create({
+      data: {
+        filename: url,
+        workspaceId,
+        mimeType: "text/markdown",
+        webContent: crawled,
+        sourceType: "WEB",
+      },
+    });
+
+    const docsWithMeta: Document[] = crawled.map(({ page, content }) => {
+      return new Document({
+        pageContent: content,
+        metadata: {
+          workspaceId,
+          resourceId: resource.id,
+          source: "web",
+          url,
+          pagePath: page, 
+        },
+      });
+    });
+
+    const splitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 700,
+      chunkOverlap: 200,
+    });
+
+    const splitDocs = await splitter.splitDocuments(docsWithMeta);
+
+    const vectorStore = await getWorkspaceVectorStore(workspaceId);
+    if (!vectorStore) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Failed to access vector store" });
+    }
+
+    await vectorStore.addDocuments(splitDocs);
+
+    return res.json({
+      success: true,
+      message: "Web resource created successfully",
+      pagesIndexed: crawled.length,
+    });
+  } catch (error) {
+    console.error("createWebResource failed", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
+export const getAllResources = async (req: Request, res: Response) => {
+  try {
+    const { workspaceId } = req.params;
+    const { sourceType } = req.query;
+
+    if (sourceType && sourceType !== "FILE" && sourceType !== "WEB") {
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid sourceType parameter" });
+    }
+    
+    if (!workspaceId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Workspace ID is required" });
+    }
+    const resources = await prisma.resource.findMany({
+      where: { workspaceId, sourceType: sourceType as "FILE" | "WEB" | undefined },
+      orderBy: { createdAt: "desc" },
+    });
+    return res.json({ success: true, resources });
+  } catch (error) {
     return res
       .status(500)
       .json({ success: false, message: "Internal server error" });
@@ -164,3 +257,7 @@ export const deleteResource = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Failed to delete resource" });
   }
 };
+
+
+
+
