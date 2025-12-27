@@ -28,8 +28,8 @@ export const useCreateFileResource = () => {
 export const useCreateWebResource = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ url, workspaceId }: { url: string; workspaceId: string }) =>
-      createWebResource({ url, workspaceId }),
+    mutationFn: ({ url, paths, workspaceId }: { url: string; paths?: string[]; workspaceId: string }) =>
+      createWebResource({ url, paths, workspaceId }),
       onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["resources"] });
     }
@@ -79,7 +79,7 @@ export const useDeleteResource = () => {
 
 export const useGetAllResources = (workspaceId: string, sourceType: string) => {
   return useQuery({
-    queryKey: ["resources"],
+    queryKey: ["resources", workspaceId, sourceType],
     queryFn: () => getAllResources(workspaceId, sourceType),
     retry: false,
     gcTime: 5 * 60 * 1000,

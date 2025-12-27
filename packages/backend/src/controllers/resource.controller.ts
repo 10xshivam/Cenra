@@ -117,7 +117,7 @@ export const createWebResource = async (req: Request, res: Response) => {
       data: {
         filename: url,
         workspaceId,
-        mimeType: "text/markdown",
+        url,
         webContent: crawled,
         sourceType: "WEB",
       },

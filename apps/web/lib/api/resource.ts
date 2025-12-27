@@ -27,10 +27,10 @@ export const createFileResource = async ({ file, workspaceId }: Resource) => {
   return data.resource;
 };
 
-export const createWebResource = async ({ url, workspaceId }: { url: string; workspaceId: string }) => {
+export const createWebResource = async ({ url, paths, workspaceId }: { url: string; paths?: string[]; workspaceId: string }) => {
   const { data } = await axiosInstance.post(
     `workspace/${workspaceId}/resources/web`,
-    { url }
+    { url, paths }
   );
   return data.resource;
 };
