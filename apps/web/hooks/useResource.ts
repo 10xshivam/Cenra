@@ -1,4 +1,4 @@
-import { createResource, deleteResource, getAllResources, Resource, toggleResource } from "@/lib/api/resource";
+import { createFileResource, createWebResource, deleteResource, getAllResources, recrawlWebResource, Resource, toggleResource } from "@/lib/api/resource";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
@@ -8,20 +8,49 @@ interface ToggleResourceVariables {
   resourceId: string;
 }
 
-export const useCreateResource = () => {
+interface CreateWebResourceVariables {
+  url: string;
+  paths?: string[];
+  workspaceId: string;
+}
+
+interface CommonResourceVariables {
+  resourceId: string;
+  workspaceId: string;
+}
+
+export const useCreateFileResource = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (value: Resource) => createResource(value),
+    mutationFn: (value: Resource) => createFileResource(value),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["resources"] });
     },
     onError: (error) => {
       toast.error(
-        `Resource creation error: ${
+        `File resource creation error: ${
           error instanceof Error ? error.message : String(error)
         }`
       );
     },
+  });
+};
+
+export const useCreateWebResource = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ url, paths, workspaceId }: CreateWebResourceVariables) =>
+      createWebResource({ url, paths, workspaceId }),
+      onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["resources"] });
+    }
+  ,    onError: (error) => {
+      toast.error(
+        `Web resource creation error: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
+    }
   });
 };
 
@@ -45,7 +74,7 @@ export const useToggleResource = () => {
 export const useDeleteResource = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ workspaceId, resourceId }: { workspaceId: string; resourceId: string }) => deleteResource(workspaceId, resourceId),
+    mutationFn: ({ workspaceId, resourceId }: CommonResourceVariables) => deleteResource(workspaceId, resourceId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["resources"] });
     },
@@ -59,10 +88,27 @@ export const useDeleteResource = () => {
   });
 };
 
-export const useGetAllResources = (workspaceId: string) => {
+export const useRecrawlWebResource = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ workspaceId, resourceId }: CommonResourceVariables) => recrawlWebResource(workspaceId, resourceId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["resources"] });
+    },
+    onError: (error) => {
+      toast.error(
+        `Web resource recrawl error: ${
+          error instanceof Error ? error.message : String(error)
+        }`
+      );
+    },
+  });
+}
+
+export const useGetAllResources = (workspaceId: string, sourceType: string) => {
   return useQuery({
-    queryKey: ["resources"],
-    queryFn: () => getAllResources(workspaceId),
+    queryKey: ["resources", workspaceId, sourceType],
+    queryFn: () => getAllResources(workspaceId, sourceType),
     retry: false,
     gcTime: 5 * 60 * 1000,
     enabled: !!workspaceId 

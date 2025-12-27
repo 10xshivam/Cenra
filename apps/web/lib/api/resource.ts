@@ -5,14 +5,14 @@ export type Resource = {
   workspaceId: string;
 };
 
-export const getAllResources = async (workspaceId: string) => {
+export const getAllResources = async (workspaceId: string, sourceType: string) => {
   const { data } = await axiosInstance.get(
-    `workspace/${workspaceId}/resources`
+    `workspace/${workspaceId}/resources?sourceType=${sourceType}`
   );
   return data.resources;
 }
 
-export const createResource = async ({ file, workspaceId }: Resource) => {
+export const createFileResource = async ({ file, workspaceId }: Resource) => {
   const formData = new FormData();
   formData.append("file", file);
   const { data } = await axiosInstance.post(
@@ -24,7 +24,14 @@ export const createResource = async ({ file, workspaceId }: Resource) => {
       },
     }
   );
-  console.log("Created resource:", data);
+  return data.resource;
+};
+
+export const createWebResource = async ({ url, paths, workspaceId }: { url: string; paths?: string[]; workspaceId: string }) => {
+  const { data } = await axiosInstance.post(
+    `workspace/${workspaceId}/resources/web`,
+    { url, paths }
+  );
   return data.resource;
 };
 
@@ -49,3 +56,13 @@ export const deleteResource = async (
   );
   return data;
 };
+
+export const recrawlWebResource = async (
+  workspaceId: string,
+  resourceId: string
+) => {
+  const { data } = await axiosInstance.post(
+    `workspace/${workspaceId}/resources/${resourceId}/recrawl`
+  );
+  return data;
+}

@@ -1,8 +1,8 @@
-import React from 'react'
+import { WebContentView } from '@/views/dashboard/web-content-view'
 
 const WebContent = () => {
   return (
-    <div>WebContent</div>
+    <WebContentView />
   )
 }
 

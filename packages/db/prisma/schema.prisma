@@ -34,15 +34,18 @@ model Resource {
   workspace   Workspace          @relation(fields: [workspaceId], references: [id])
   sourceType  ResourceSourceType
   url         String?
+  paths       String[]           @default([])
   filename    String?
   mimeType    String?
-  text        String
+  fileText    String?
+  webContent  Json?
   active      Boolean            @default(true)
+  updatedAt   DateTime           @default(now())
   createdAt   DateTime           @default(now())
 }
 
 enum ResourceSourceType {
-  URL
+  WEB
   FILE
 }
 

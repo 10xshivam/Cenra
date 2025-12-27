@@ -1,6 +1,6 @@
 import { Router } from "express";
 import multer from "multer";
-import { createResource, deleteResource, getAllResources, toggleResource } from "../controllers/resource.controller";
+import { createFileResource, createWebResource, deleteResource, getAllResources, recrawlWebResource, toggleResource } from "../controllers/resource.controller";
 
 const router: Router = Router();
 
@@ -11,7 +11,14 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post("/:workspaceId/resources/file", upload.single("file"),createResource);
+// File Resource Routes
+router.post("/:workspaceId/resources/file", upload.single("file"),createFileResource);
+
+// Web Resource Routes
+router.post("/:workspaceId/resources/web", createWebResource);
+router.post("/:workspaceId/resources/:resourceId/recrawl", recrawlWebResource);
+
+// Other Resource Routes
 router.get("/:workspaceId/resources", getAllResources);
 router.patch("/:workspaceId/resources/:resourceId/toggle", toggleResource);
 router.delete("/:workspaceId/resources/:resourceId", deleteResource);
