@@ -20,8 +20,6 @@ export const createFileResource = async (req: Request, res: Response) => {
 
     const { file } = req;
 
-    console.log("Uploaded file:", file);
-
     if (!file) {
       return res
         .status(400)
