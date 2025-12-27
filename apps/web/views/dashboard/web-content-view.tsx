@@ -3,6 +3,7 @@
 import { Button } from "@workspace/ui/components/button";
 import { CloudCheckIcon, SquareInfo } from "@workspace/ui/components/icons";
 import {
+  CheckCircle2,
   ChevronDown,
   ChevronRight,
   CircleArrowOutUpRight,
@@ -10,6 +11,7 @@ import {
   Globe,
   RotateCw,
   Trash,
+  Trash2,
 } from "lucide-react";
 import { useState } from "react";
 import {
@@ -34,7 +36,9 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   useCreateWebResource,
+  useDeleteResource,
   useGetAllResources,
+  useRecrawlWebResource,
   useToggleResource,
 } from "@/hooks/useResource";
 import { useWorkspaceStore } from "@/store/useWorkspaceStore";
@@ -58,7 +62,7 @@ interface WebResource {
         content: string;
       }[]
     | null;
-  createdAt: string;
+  updatedAt: string;
   id: string;
   active: boolean;
 }
@@ -68,6 +72,9 @@ export const WebContentView = () => {
   const [openCollapsibles, setOpenCollapsibles] = useState<
     Record<string, boolean>
   >({});
+  const [openRecrawlDialogs, setOpenRecrawlDialogs] = useState<
+    Record<string, boolean>
+  >({});
   const { workspace } = useWorkspaceStore();
   const createWebResourceMutation = useCreateWebResource();
   const { data: resources, isPending } = useGetAllResources(
@@ -75,6 +82,8 @@ export const WebContentView = () => {
     "WEB"
   );
   const toggleMutation = useToggleResource();
+  const deleteMutation = useDeleteResource();
+  const crawlMutation = useRecrawlWebResource();
 
   const form = useForm<z.infer<typeof webContentSchema>>({
     resolver: zodResolver(webContentSchema),
@@ -215,9 +224,12 @@ export const WebContentView = () => {
                       type="submit"
                       className="h-11 mt-2 bg-emerald-800 hover:bg-emerald-900 rounded-lg transition-colors duration-300"
                     >
-                      {createWebResourceMutation.isPending
-                        ? "Importing..."
-                        : "Import Your Website"}
+                      {createWebResourceMutation.isPending ? (
+                        <RotateCw className="size-4 animate-spin" />
+                      ) : (
+                        <CheckCircle2 className="size-4" />
+                      )}
+                      Import Your Website
                     </Button>
                   </DialogFooter>
                 </form>
@@ -253,7 +265,7 @@ export const WebContentView = () => {
                 {(resource.webContent ?? []).length} pages crawled
               </span>
               <span className="flex items-center gap-1.5 tracking-tight text-sm text-emerald-700 font-medium">
-                {handleTimeSince(resource.createdAt)}
+                {handleTimeSince(resource.updatedAt)}
               </span>
               <Switch
                 disabled={
@@ -271,33 +283,151 @@ export const WebContentView = () => {
               />
               <div className="flex gap-3">
                 <span className="border p-1.5 px-2 flex gap-3 rounded-xl border-neutral-300">
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button className="cursor-pointer">
-                        <RotateCw
-                          className="size-4 text-emerald-700"
-                          strokeWidth={2}
-                        />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Crawl Again</p>
-                    </TooltipContent>
-                  </Tooltip>
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <button className="cursor-pointer">
-                        <Trash
-                          className="size-4 text-red-600"
-                          strokeWidth={2}
-                        />
-                      </button>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Delete</p>
-                    </TooltipContent>
-                  </Tooltip>
+                  {/* Recrawl Content */}
+                  <Dialog
+                    open={openRecrawlDialogs[resource.id] || false}
+                    onOpenChange={(isOpenState) => {
+                      if (isOpenState || !crawlMutation.isPending) {
+                        setOpenRecrawlDialogs((prev) => ({
+                          ...prev,
+                          [resource.id]: isOpenState,
+                        }));
+                      }
+                    }}
+                  >
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <DialogTrigger asChild>
+                          <button className="cursor-pointer">
+                            <RotateCw
+                              className="size-4 text-emerald-700"
+                              strokeWidth={2}
+                            />
+                          </button>
+                        </DialogTrigger>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Refresh Pages</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <DialogContent
+                      className="max-w-2xl rounded-2xl p-1.5 pb-5 bg-neutral-300"
+                      showCloseButton={false}
+                    >
+                      <div className="flex flex-col gap-5 relative w-full rounded-xl p-5 border border-neutral-400 bg-neutral-50">
+                        <DialogHeader>
+                          <DialogTitle className="text-emerald-700 tracking-tight font-semibold">
+                            Refresh all domain pages?
+                          </DialogTitle>
+                          <DialogDescription className="flex flex-col gap-1 mt-1 text-neutral-500 text-sm tracking-tight">
+                            <span>
+                              If your website content has changed, you can
+                              refresh your domains to update the data Cenra uses
+                              for answering questions. This will start a new
+                              crawl and reindex your pages so your AI assistant
+                              stays aligned with your latest content.
+                            </span>
+                            <span>
+                              To ensure reliable performance, avoid triggering
+                              refreshes too frequently.
+                            </span>
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button variant="outline">Cancel</Button>
+                          </DialogClose>
+                          <Button
+                            onClick={() =>
+                              crawlMutation.mutate(
+                                {
+                                  workspaceId: workspace?.id!,
+                                  resourceId: resource.id,
+                                },
+                                {
+                                  onSuccess: () =>
+                                    setOpenRecrawlDialogs((prev) => ({
+                                      ...prev,
+                                      [resource.id]: false,
+                                    })),
+                                }
+                              )
+                            }
+                            type="submit"
+                            disabled={crawlMutation.isPending}
+                            className=" bg-emerald-800 hover:bg-emerald-900 rounded-lg transition-colors duration-300"
+                          >
+                            <RotateCw
+                              className={`size-3.5 ${crawlMutation.isPending ? "animate-spin" : ""}`}
+                            />
+                            Start Refreshing Domain
+                          </Button>
+                        </DialogFooter>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+
+                  {/* Delete Content */}
+                  <Dialog>
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <DialogTrigger asChild>
+                          <button className="cursor-pointer">
+                            <Trash
+                              className="size-4 text-red-600"
+                              strokeWidth={2}
+                            />
+                          </button>
+                        </DialogTrigger>
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <p>Delete</p>
+                      </TooltipContent>
+                    </Tooltip>
+                    <DialogContent
+                      className="max-w-2xl rounded-2xl p-1.5 pb-5 bg-neutral-300"
+                      showCloseButton={false}
+                    >
+                      <div className="flex flex-col gap-4 relative w-full rounded-xl p-5 border border-neutral-400 bg-neutral-50">
+                        <DialogHeader>
+                          <DialogTitle className="text-neutral-600 tracking-tight font-medium">
+                            Delete this domain?
+                          </DialogTitle>
+                          <DialogDescription className=" text-neutral-500 text-sm tracking-tight">
+                            All crawled pages for this domain will be removed.
+                            Cenra AI will lose knowledge about those removed
+                            pages. You can still add this domain back again
+                            later.
+                          </DialogDescription>
+                        </DialogHeader>
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button variant="outline">Cancel</Button>
+                          </DialogClose>
+                          <Button
+                            onClick={() =>
+                              deleteMutation.mutate({
+                                workspaceId: workspace?.id!,
+                                resourceId: resource.id,
+                              })
+                            }
+                            variant="destructive"
+                            type="submit"
+                            disabled={deleteMutation.isPending}
+                          >
+                            {deleteMutation.isPending ? (
+                              <RotateCw className="size-3.5 animate-spin" />
+                            ) : (
+                              <Trash2 className="size-3.5" />
+                            )}
+                            Yes, Delete Domain
+                          </Button>
+                        </DialogFooter>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
                 </span>
+
                 <CollapsibleTrigger asChild>
                   <button>
                     {openCollapsibles[resource.id] ? (

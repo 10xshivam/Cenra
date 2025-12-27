@@ -120,6 +120,7 @@ export const createWebResource = async (req: Request, res: Response) => {
         url,
         webContent: crawled,
         sourceType: "WEB",
+        paths: normalizedPaths
       },
     });
 
@@ -257,6 +258,98 @@ export const deleteResource = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Failed to delete resource" });
   }
 };
+
+export const recrawlWebResource = async (req: Request, res: Response) => {
+  try {
+    const { workspaceId, resourceId } = req.params;
+
+    if (!workspaceId || !resourceId) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Workspace ID and Resource ID are required" });
+    }
+
+    const resource = await prisma.resource.findFirst({
+      where: { id: resourceId, workspaceId },
+    });
+
+    if (!resource) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Resource not found" });
+    }
+
+    const { url, paths } = resource;
+
+    if (!url) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Resource has no URL config" });
+    }
+
+    const crawled = await crawlWebsitePages(url, paths);
+    if (!crawled || crawled.length === 0) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Recrawl failed: no content" });
+    }
+
+    const docsWithMeta = crawled.map(({ page, content }) => ({
+      pageContent: content,
+      metadata: {
+        workspaceId,
+        resourceId,
+        source: "web",
+        url,
+        pagePath: page,
+      },
+    }));
+
+    const splitter = new RecursiveCharacterTextSplitter({
+      chunkSize: 700,
+      chunkOverlap: 200,
+    });
+    const splitDocs = await splitter.splitDocuments(docsWithMeta);
+
+    const vectorStore = await getWorkspaceVectorStore(workspaceId);
+    if (!vectorStore) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Failed to access vector store" });
+    }
+
+    await client.delete(resource.workspaceId, {
+      filter: {
+        must: [
+          {
+            key: "metadata.resourceId",
+            match: {
+              value: resourceId,
+            },
+          },
+        ],
+      },
+    });
+
+    await vectorStore.addDocuments(splitDocs);
+
+    await prisma.resource.update({
+      where: { id: resourceId },
+      data: { updatedAt: new Date() },
+    });
+
+    return res.json({
+      success: true,
+      message: "Recrawl completed",
+    });
+  } catch (error) {
+    console.error("recrawlWebResource failed", error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+};
+
 
 
 

@@ -18,6 +18,8 @@ import {
   CircleX,
   EllipsisVertical,
   File,
+  RotateCw,
+  Trash2,
   X,
 } from "lucide-react";
 import {
@@ -157,40 +159,45 @@ export const DataImporterView = () => {
                             </TooltipContent>
                           </Tooltip>
                           <DialogContent
-                            className="max-w-xl rounded-2xl"
+                            className="max-w-2xl rounded-2xl p-1.5 pb-5 bg-neutral-300"
                             showCloseButton={false}
                           >
-                            <DialogHeader>
-                              <DialogTitle className="text-neutral-600 tracking-tight font-medium">
-                                Delete this document?
-                              </DialogTitle>
-                              <DialogDescription className=" text-neutral-500 text-sm tracking-tight">
-                                This document, and all its contents, will be
-                                removed. Your Agent will lose knowledge about
-                                this removed content. Are you sure you want to
-                                proceed?
-                              </DialogDescription>
-                            </DialogHeader>
-                            <DialogFooter>
-                              <DialogClose asChild>
-                                <Button variant="outline">Cancel</Button>
-                              </DialogClose>
-                              <Button
-                                onClick={() =>
-                                  deleteMutation.mutate({
-                                    workspaceId: workspace?.id!,
-                                    resourceId: resource.id,
-                                  })
-                                }
-                                variant="destructive"
-                                type="submit"
-                                disabled={deleteMutation.isPending}
-                              >
-                                {deleteMutation.isPending
-                                  ? "Deleting..."
-                                  : "Yes, Delete Document"}
-                              </Button>
-                            </DialogFooter>
+                            <div className="flex flex-col gap-4 relative w-full rounded-xl p-5 border border-neutral-400 bg-neutral-50">
+                              <DialogHeader>
+                                <DialogTitle className="text-neutral-600 tracking-tight font-medium">
+                                  Delete this document?
+                                </DialogTitle>
+                                <DialogDescription className=" text-neutral-500 text-sm tracking-tight">
+                                  This document, and all its contents, will be
+                                  removed. Your Agent will lose knowledge about
+                                  this removed content. Are you sure you want to
+                                  proceed?
+                                </DialogDescription>
+                              </DialogHeader>
+                              <DialogFooter>
+                                <DialogClose asChild>
+                                  <Button variant="outline">Cancel</Button>
+                                </DialogClose>
+                                <Button
+                                  onClick={() =>
+                                    deleteMutation.mutate({
+                                      workspaceId: workspace?.id!,
+                                      resourceId: resource.id,
+                                    })
+                                  }
+                                  variant="destructive"
+                                  type="submit"
+                                  disabled={deleteMutation.isPending}
+                                >
+                                  {deleteMutation.isPending ? (
+                                    <RotateCw className="size-3.5 animate-spin" />
+                                  ) : (
+                                    <Trash2 className="size-3.5" />
+                                  )}
+                                  Yes, Delete Document
+                                </Button>
+                              </DialogFooter>
+                            </div>
                           </DialogContent>
                         </Dialog>
                         <File className="size-3.5" strokeWidth={2.5} />

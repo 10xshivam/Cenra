@@ -56,3 +56,13 @@ export const deleteResource = async (
   );
   return data;
 };
+
+export const recrawlWebResource = async (
+  workspaceId: string,
+  resourceId: string
+) => {
+  const { data } = await axiosInstance.post(
+    `workspace/${workspaceId}/resources/${resourceId}/recrawl`
+  );
+  return data;
+}

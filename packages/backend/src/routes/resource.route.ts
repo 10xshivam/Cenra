@@ -1,6 +1,6 @@
 import { Router } from "express";
 import multer from "multer";
-import { createFileResource, createWebResource, deleteResource, getAllResources, toggleResource } from "../controllers/resource.controller";
+import { createFileResource, createWebResource, deleteResource, getAllResources, recrawlWebResource, toggleResource } from "../controllers/resource.controller";
 
 const router: Router = Router();
 
@@ -16,6 +16,7 @@ router.post("/:workspaceId/resources/file", upload.single("file"),createFileReso
 
 // Web Resource Routes
 router.post("/:workspaceId/resources/web", createWebResource);
+router.post("/:workspaceId/resources/:resourceId/recrawl", recrawlWebResource);
 
 // Other Resource Routes
 router.get("/:workspaceId/resources", getAllResources);
