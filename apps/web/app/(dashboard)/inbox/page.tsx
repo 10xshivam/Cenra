@@ -1,8 +1,8 @@
-import React from 'react'
+import { InboxView } from '@/views/dashboard/inbox/inbox-view'
 
 const Inbox = () => {
   return (
-    <div>Inbox</div>
+    <InboxView />
   )
 }
 

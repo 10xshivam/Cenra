@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { SquareInfo } from "@workspace/ui/components/icons";
-import { DragAndDrop } from "@/components/dashboard/drag-and-drop";
+import { DragAndDrop } from "@/components/dashboard/knowledge-sources/drag-and-drop";
 import {
   Table,
   TableBody,

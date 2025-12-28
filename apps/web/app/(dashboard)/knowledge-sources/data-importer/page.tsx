@@ -1,4 +1,4 @@
-import { DataImporterView } from '@/views/dashboard/data-importer-view'
+import { DataImporterView } from '@/views/dashboard/knowledge-source/data-importer-view'
 
 const DataImporter = () => {
   return (

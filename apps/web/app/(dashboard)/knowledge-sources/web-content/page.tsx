@@ -1,4 +1,4 @@
-import { WebContentView } from '@/views/dashboard/web-content-view'
+import { WebContentView } from '@/views/dashboard/knowledge-source/web-content-view'
 
 const WebContent = () => {
   return (
