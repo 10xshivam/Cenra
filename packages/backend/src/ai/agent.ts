@@ -18,7 +18,6 @@ export type GraphState = typeof MessagesAnnotation.State;
 
 // 1) LLM node
 async function llmCall(state: GraphState) {
-  console.log("llmCall history length:", state.messages.length);
 
   const messages: BaseMessage[] = [
     new SystemMessage(

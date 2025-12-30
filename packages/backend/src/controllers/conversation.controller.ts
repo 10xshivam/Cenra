@@ -1,8 +1,9 @@
-import { prisma } from "@workspace/db";
+import { ConversationStatus, prisma } from "@workspace/db";
 import { Request, Response } from "express";
 import { v4 as uuidv4 } from "uuid";
 import { getChatbot } from "../config/langgraph";
-import { HumanMessage } from "langchain";
+import { BaseMessage, HumanMessage } from "langchain";
+import { simplifyMessage } from "../utils/messages/simplifyMessages";
 
 export const createConversation = async (req: Request, res: Response) => {
   try {
@@ -118,6 +119,91 @@ export const startConversation = async (req: Request, res: Response) => {
     });
   } catch (error) {
     console.error("Error starting conversation:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getConversations = async (req: Request, res: Response) => {
+  try {
+    const { workspaceId } = req.params;
+    const { status } = req.query as { status?: ConversationStatus };
+
+    if (!workspaceId) {
+      return res.status(400).json({ message: "Workspace ID is required" });
+    }
+
+    const allowedStatuses: ConversationStatus[] = [
+      "unresolved",
+      "escalated",
+      "resolved",
+    ];
+    const hasValidStatus =
+      !status || allowedStatuses.includes(status as ConversationStatus);
+
+    if (!hasValidStatus) {
+      return res.status(400).json({ message: "Invalid status filter" });
+    }
+
+    const conversations = await prisma.conversation.findMany({
+      where: {
+        workspaceId,
+        ...(status ? { status: status as ConversationStatus } : {}),
+      },
+      include: {
+        customer: true,
+      },
+      orderBy: {
+        updatedAt: "desc",
+      },
+    });
+
+    const chatbot = getChatbot();
+
+    const conversationsWithLastMessage = await Promise.all(
+      conversations.map(async (conversation) => {
+        const snapshot = await chatbot.getState({
+          configurable: { thread_id: conversation.threadId },
+        });
+
+        const values = snapshot.values as { messages?: BaseMessage[] };
+        const all = values.messages ?? [];
+
+        let messages = all
+          .map((m) => {
+            const simplified = simplifyMessage(m);
+            return (
+              simplified && {
+                ...simplified,
+                createdAt: (m as any).additional_kwargs?.timestamp ?? null,
+              }
+            );
+          })
+          .filter(
+            (
+              m
+            ): m is {
+              role: string;
+              content: string;
+              createdAt: number | null;
+            } => !!m
+          );
+
+        const lastMessage = messages.length
+          ? messages[messages.length - 1]
+          : null;
+
+        return {
+          ...conversation,
+          lastMessage,
+        };
+      })
+    );
+
+    return res
+      .status(200)
+      .json({ conversations: conversationsWithLastMessage });
+  } catch (error) {
+    console.error("Error getting conversations:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };
