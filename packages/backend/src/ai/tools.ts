@@ -37,4 +37,46 @@ export const vectorSearchTool = tool(
   }
 );
 
-export const toolsByName = { [vectorSearchTool.name]: vectorSearchTool };
+export const escalateConversationTool = tool(
+  async ({ conversationId }: { conversationId: string }) => {
+    await prisma.conversation.update({
+      where: { id: conversationId },
+      data: { status: "escalated" },
+    });
+
+    return "Conversation has been escalated to a human agent.";
+  },
+  {
+    name: "escalate_conversation",
+    description:
+      "Escalate the conversation to a human agent when the user asks for human help or is unhappy.",
+    schema: z.object({
+      conversationId: z.string(),
+    }),
+  }
+);
+
+export const resolveConversationTool = tool(
+  async ({ conversationId }: { conversationId: string }) => {
+    await prisma.conversation.update({
+      where: { id: conversationId },
+      data: { status: "resolved" },
+    });
+
+    return "Conversation has been marked as resolved.";
+  },
+  {
+    name: "resolve_conversation",
+    description:
+      "Mark the conversation as resolved when the user confirms their issue is solved.",
+    schema: z.object({
+      conversationId: z.string(),
+    }),
+  }
+);
+
+export const toolsByName = {
+  vector_search: vectorSearchTool,
+  escalate_conversation: escalateConversationTool,
+  resolve_conversation: resolveConversationTool,
+};

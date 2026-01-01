@@ -1,5 +1,5 @@
 import { AIMessage } from "@langchain/core/messages";
-import { getChatbot } from "@workspace/backend/config/langgraph";
+import { getChatbot } from "../../config/langgraph";
 
 export const appendHumanMessage = async ({
   conversation,
@@ -8,7 +8,7 @@ export const appendHumanMessage = async ({
   conversation: {
     threadId: string;
     workspaceId: string;
-    customerId: string;
+    conversationId: string;
   };
   content: string;
 }) =>{
@@ -18,7 +18,7 @@ export const appendHumanMessage = async ({
     configurable: {
       thread_id: conversation.threadId,
       workspaceId: conversation.workspaceId,
-      customerId: conversation.customerId,
+      conversationId: conversation.conversationId,
     },
   };
 

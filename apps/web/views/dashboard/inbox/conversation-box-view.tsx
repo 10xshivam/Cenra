@@ -1,12 +1,12 @@
 "use client";
 
-import { useGetAllMessages } from "@/hooks/useMessages";
+import { useCreateMessage, useGetAllMessages } from "@/hooks/useMessages";
 import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@workspace/ui/components/button";
 import { Field } from "@workspace/ui/components/field";
-import { Forward, MoreHorizontal, User } from "lucide-react";
-import { useEffect, useState } from "react";
+import { Forward, RotateCw, Trash2, User } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import {
@@ -14,6 +14,23 @@ import {
   MessageContent,
   MessageResponse,
 } from "@workspace/ui/components/ai-elements/message";
+import {
+  useConversationStatus,
+  useDeleteConversation,
+  useUpdateConversationStatus,
+} from "@/hooks/useConversation";
+import { ConversationStatusButton } from "@/components/dashboard/inbox/conversation-status-button";
+import { Hint } from "@workspace/ui/components/hint";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@workspace/ui/components/dialog";
 
 interface ChatMessage {
   from: "user" | "assistant";
@@ -33,12 +50,36 @@ export const ConversationBoxView = ({
   conversationId: string;
 }) => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [open, setOpen] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement | null>(null);
   const { workspace } = useWorkspaceStore();
   const {
     data: historyData,
     isLoading: historyLoading,
     isError: historyError,
   } = useGetAllMessages(workspace?.id || "", conversationId);
+  const { data: conversationStatus } = useConversationStatus(conversationId);
+  const updateConversationStatusMutation = useUpdateConversationStatus();
+  const sendMessageMutation = useCreateMessage();
+  const isSendingMessage = sendMessageMutation.isPending;
+  const deleteMutation = useDeleteConversation();
+
+  console.log("Conversation Status:", conversationStatus);
+
+  const scrollToBottom = () => {
+    if (!scrollContainerRef.current) return;
+    setTimeout(() => {
+      if (!scrollContainerRef.current) return;
+      scrollContainerRef.current.scrollTo({
+        top: scrollContainerRef.current.scrollHeight,
+        behavior: "smooth",
+      });
+    }, 50);
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages, isSendingMessage]);
 
   useEffect(() => {
     if (historyError) {
@@ -66,53 +107,144 @@ export const ConversationBoxView = ({
     },
   });
 
-  const onSubmit = (data: ChatInputData) => {
-    // handleSendMessage(data);
+  const pushMessage = (from: "user" | "assistant", content: string) => {
+    setMessages((prev) => [
+      ...prev,
+      { from, content, id: Date.now().toString() },
+    ]);
+  };
+
+  const handleSendMessage = async (data: ChatInputData) => {
+    if (!workspace?.id) return;
+
+    const text = data.message.trim();
+    pushMessage("assistant", text);
+
+    await sendMessageMutation.mutateAsync({
+      workspaceId: workspace.id,
+      conversationId,
+      message: text,
+    });
     form.reset();
+  };
+
+  const handleStatusChange = async () => {
+    if (!conversationId) return;
+
+    let newStatus: "unresolved" | "resolved" | "escalated";
+
+    if (conversationStatus?.status === "unresolved") {
+      newStatus = "escalated";
+    } else if (conversationStatus?.status === "escalated") {
+      newStatus = "resolved";
+    } else {
+      newStatus = "unresolved";
+    }
+
+    await updateConversationStatusMutation.mutateAsync({
+      conversationId,
+      status: newStatus,
+    });
+  };
+
+  const handleDeleteConversation = async () => {
+    if (!conversationId) return;
+    await deleteMutation.mutateAsync(conversationId);
+    setOpen(false);
   };
 
   return (
     <div className="w-full h-full flex flex-col">
       <div className="h-14 w-full border-b flex items-center justify-between px-4">
-        <MoreHorizontal
-          size={20}
-          strokeWidth={3}
-          className="text-neutral-600"
-        />
-        <Button className="bg-green-600 rounded-lg">Resolved</Button>
-      </div>
-      <div className="max-h-[calc(100vh-240px)] h-full overflow-y-auto p-4">
-        {messages.map((m) =>
-        m.from === "user" ? (
-          <div key={m.id} className="flex items-end gap-1.5 mb-4 mt-4">
-            <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 bg-neutral-100 border border-neutral-300">
-              <User size={12} className="text-neutral-600" />
+        <Dialog open={open} onOpenChange={setOpen}>
+          <Hint text="Delete Conversation">
+            <DialogTrigger asChild>
+              <Button
+                variant={"outline"}
+                className=" bg-red-200/10 hover:bg-red-200/20 rounded-lg h-7 border border-red-300"
+              >
+                <Trash2 size={16} strokeWidth={2} className="text-red-600" />
+              </Button>
+            </DialogTrigger>
+          </Hint>
+
+          <DialogContent
+            className="max-w-2xl rounded-2xl p-1.5 pb-5 bg-neutral-300"
+            showCloseButton={false}
+          >
+            <div className="flex flex-col gap-4 relative w-full rounded-xl p-5 border border-neutral-400 bg-neutral-50">
+              <DialogHeader>
+                <DialogTitle className="text-neutral-600 tracking-tight font-medium">
+                  Delete this conversation?
+                </DialogTitle>
+                <DialogDescription className=" text-neutral-500 text-sm tracking-tight">
+                  This will permanently remove the conversation and its AI
+                  memory. The customer can start a new chat later, but past
+                  messages will be lost.
+                </DialogDescription>
+              </DialogHeader>
+              <DialogFooter>
+                <DialogClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DialogClose>
+                <Button
+                  onClick={handleDeleteConversation}
+                  variant="destructive"
+                  type="submit"
+                  disabled={deleteMutation.isPending}
+                >
+                  {deleteMutation.isPending ? (
+                    <RotateCw className="size-3.5 animate-spin" />
+                  ) : (
+                    <Trash2 className="size-3.5" />
+                  )}
+                  Yes, Delete Conversation
+                </Button>
+              </DialogFooter>
             </div>
+          </DialogContent>
+        </Dialog>
+        <ConversationStatusButton
+          status={conversationStatus?.status}
+          onClick={handleStatusChange}
+          disabled={updateConversationStatusMutation.isPending}
+        />
+      </div>
+      <div
+        ref={scrollContainerRef}
+        className="max-h-[calc(100vh-231px)] h-full overflow-y-auto p-4"
+      >
+        {messages.map((m) =>
+          m.from === "user" ? (
+            <div key={m.id} className="flex items-end gap-1.5 mb-4">
+              <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 bg-neutral-100 border border-neutral-300">
+                <User size={12} className="text-neutral-600" />
+              </div>
+              <UiMessage
+                from="assistant"
+                className="border max-w-[75%] w-fit px-3.5 py-2.5 rounded-xl bg-white rounded-bl-none text-neutral-600"
+              >
+                <MessageContent>
+                  <MessageResponse>{m.content}</MessageResponse>
+                </MessageContent>
+              </UiMessage>
+            </div>
+          ) : (
             <UiMessage
-              from="assistant"
-              className="border max-w-[75%] w-fit px-3.5 py-2.5 rounded-xl bg-white rounded-bl-none text-neutral-600"
+              key={m.id}
+              from="user"
+              className="border max-w-[75%] w-fit px-3.5 py-2.5 mb-4 rounded-xl bg-emerald-800 text-white rounded-br-none border-none ml-auto"
             >
               <MessageContent>
                 <MessageResponse>{m.content}</MessageResponse>
               </MessageContent>
             </UiMessage>
-          </div>
-        ) : (
-          <UiMessage
-            key={m.id}
-            from="user"
-            className="border max-w-[75%] w-fit px-3.5 py-2.5 rounded-xl bg-emerald-800 text-white rounded-br-none border-none ml-auto"
-          >
-            <MessageContent>
-              <MessageResponse>{m.content}</MessageResponse>
-            </MessageContent>
-          </UiMessage>
-        )
-      )}
+          )
+        )}
       </div>
-      <div className="w-full p-2">
+      <div className="w-full p-2 pt-0">
         <div className="border rounded-2xl bg-white">
-          <form onSubmit={form.handleSubmit(onSubmit)}>
+          <form onSubmit={form.handleSubmit(handleSendMessage)}>
             <Controller
               name="message"
               control={form.control}
@@ -126,7 +258,7 @@ export const ConversationBoxView = ({
                     onKeyDown={(e) => {
                       if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault();
-                        form.handleSubmit(onSubmit)();
+                        form.handleSubmit(handleSendMessage)();
                       }
                     }}
                   />

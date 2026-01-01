@@ -16,7 +16,7 @@ import { Link } from "next-view-transitions";
 import { usePathname } from "next/navigation";
 import { getAvatarColors } from "@/lib/getAvatarColors";
 
-interface ConversationItems {
+export interface ConversationItems {
   id: string;
   workspaceId: string;
   customerId: string;
@@ -120,20 +120,20 @@ export const ConversationMenu = () => {
               <div
                 className={`rounded-full text-sm size-10 font-bold border ${getAvatarColors(conversation.customer.id)} flex justify-center items-center`}
               >
-                {conversation.customer.name.charAt(0).toUpperCase()}
+                {conversation.customer.name?.charAt(0).toUpperCase()}
               </div>
               <div className="flex flex-col justify-between flex-1">
                 <span className="font-semibold text-sm tracking-tight text-neutral-700">
                   {conversation.customer.name}
                 </span>
                 <span className="tracking-tight text-xs line-clamp-1 text-neutral-600">
-                  {conversation.lastMessage.content}
+                  {conversation.lastMessage?.content}
                 </span>
               </div>
             </div>
             <div className="flex flex-col justify-between items-end h-full min-w-10">
               <span className="text-xs font-medium text-neutral-500 tracking-tight">
-                {formatTime(conversation.lastMessage.createdAt)}
+                {formatTime(conversation.lastMessage?.createdAt)}
               </span>
               {conversation.status === "resolved" && (
                 <CheckIcon

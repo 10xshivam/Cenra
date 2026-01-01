@@ -4,6 +4,7 @@ import { v4 as uuidv4 } from "uuid";
 import { getChatbot } from "../config/langgraph";
 import { BaseMessage, HumanMessage } from "langchain";
 import { simplifyMessage } from "../utils/messages/simplifyMessages";
+import { deleteLangGraphThread } from "../utils/messages/deleteLangGraphThread";
 
 export const createConversation = async (req: Request, res: Response) => {
   try {
@@ -90,7 +91,7 @@ export const startConversation = async (req: Request, res: Response) => {
       configurable: {
         thread_id: conversation.threadId,
         workspaceId,
-        customerId: conversation.customerId,
+        conversationId: conversation.id,
       },
     };
 
@@ -204,6 +205,80 @@ export const getConversations = async (req: Request, res: Response) => {
       .json({ conversations: conversationsWithLastMessage });
   } catch (error) {
     console.error("Error getting conversations:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getConversationStatus = async (req: Request, res: Response) => {
+  try {
+    const { conversationId } = req.params;
+    if (!conversationId) {
+      return res.status(400).json({ message: "Conversation ID is required" });
+    }
+    const conversation = await prisma.conversation.findUnique({
+      where: { id: conversationId },
+    });
+    if (!conversation) {
+      return res.status(404).json({ message: "Conversation not found" });
+    }
+    return res.json({ status: conversation.status });
+  } catch (error) {
+    console.error("Error fetching conversation status:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const updateConversationStatus = async (req: Request, res: Response) => {
+  try {
+    const { conversationId } = req.params;
+    const { status } = req.body;
+
+    if (!conversationId) {
+      return res.status(400).json({ message: "Conversation ID is required" });
+    }
+
+    if (!status) {
+      return res.status(400).json({ message: "Status is required" });
+    }
+    const conversation = await prisma.conversation.update({
+      where: { id: conversationId },
+      data: { status },
+    });
+
+    return res
+      .status(200)
+      .json({ message: "Conversation status updated", conversation });
+  } catch (error) {
+    console.error("Error updating conversation status:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const deleteConversation = async (req: Request, res: Response) => {
+  try {
+    const { conversationId } = req.params;
+    if (!conversationId) {
+      return res.status(400).json({ message: "Conversation ID is required" });
+    }
+    const conversation = await prisma.conversation.findUnique({
+      where: { id: conversationId },
+    });
+
+    if (!conversation) {
+      return res.status(404).json({ message: "Conversation not found" });
+    }
+    await deleteLangGraphThread(conversation.threadId);
+    await prisma.conversation.delete({
+      where: { id: conversationId },
+    });
+    await prisma.customer.delete({
+      where: { id: conversation.customerId },
+    });
+    return res
+      .status(200)
+      .json({ message: "Conversation deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting conversation:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };

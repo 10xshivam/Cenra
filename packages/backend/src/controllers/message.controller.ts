@@ -45,7 +45,7 @@ export const createMessage = async (req: Request, res: Response) => {
       configurable: {
         thread_id: conversation.threadId,
         workspaceId,
-        customerId: conversation.customerId,
+        conversationId: conversation.id,
       },
     };
 
@@ -108,7 +108,7 @@ export const getConversationMessagesWithIdentityCheck = async (req: Request, res
     const chatbot = getChatbot();
 
     const snapshot = await chatbot.getState({
-      configurable: { thread_id: conversation.threadId },
+      configurable: { thread_id: conversation.threadId, workspaceId, conversationId },
     });
 
     const values = snapshot.values as { messages: BaseMessage[] };
@@ -164,7 +164,7 @@ export const getLastMessage = async (req: Request, res: Response) => {
     const chatbot = getChatbot();
 
     const snapshot = await chatbot.getState({
-      configurable: { thread_id: conversation.threadId },
+      configurable: { thread_id: conversation.threadId, workspaceId, conversationId },
     });
 
     const values = snapshot.values as { messages?: BaseMessage[] };
@@ -230,7 +230,7 @@ export const getAllMessages = async (req: Request, res: Response) => {
     const chatbot = getChatbot();
 
     const snapshot = await chatbot.getState({
-      configurable: { thread_id: conversation.threadId },
+      configurable: { thread_id: conversation.threadId, workspaceId, conversationId },
     }); 
 
     const values = snapshot.values as { messages?: BaseMessage[] };
@@ -273,7 +273,7 @@ export const sendHumanReply = async (req: Request, res: Response) => {
       conversation: {
         threadId: conversation.threadId,
         workspaceId: conversation.workspaceId,
-        customerId: conversation.customerId,
+        conversationId: conversation.id,
       },
       content: message,
     });
