@@ -45,8 +45,11 @@ export const ChatScreen = () => {
   const sendMessageMutation = useSendMessage();
   const identifyCustomerMutation = useIdentifyCustomer();
 
-  const isSendingMessage = startConversationMutation.isPending || sendMessageMutation.isPending;
+  const isSendingMessage =
+    startConversationMutation.isPending || sendMessageMutation.isPending;
   const isIdentifying = identifyCustomerMutation.isPending;
+  const timezoneOffset = new Date().getTimezoneOffset();
+  const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
   const scrollToBottom = () => {
     if (!scrollContainerRef.current) return;
@@ -59,37 +62,28 @@ export const ChatScreen = () => {
     }, 50);
   };
 
-  const streamAssistantReply = useCallback(
-    (fullText: string) => {
-      const id = crypto.randomUUID();
-      setMessages((prev) => [
-        ...prev,
-        { from: "assistant", content: "", id },
-      ]);
+  const streamAssistantReply = useCallback((fullText: string) => {
+    const id = crypto.randomUUID();
+    setMessages((prev) => [...prev, { from: "assistant", content: "", id }]);
 
-      let index = 0;
-      const chunkSize = 3; 
+    let index = 0;
+    const chunkSize = 3;
 
-      const step = () => {
-        index += chunkSize;
-        const nextContent = fullText.slice(0, index);
+    const step = () => {
+      index += chunkSize;
+      const nextContent = fullText.slice(0, index);
 
-        setMessages((prev) =>
-          prev.map((m) =>
-            m.id === id ? { ...m, content: nextContent } : m
-          )
-        );
+      setMessages((prev) =>
+        prev.map((m) => (m.id === id ? { ...m, content: nextContent } : m))
+      );
 
-        if (index < fullText.length) {
-          requestAnimationFrame(step);
-        }
-      };
+      if (index < fullText.length) {
+        requestAnimationFrame(step);
+      }
+    };
 
-      requestAnimationFrame(step);
-    },
-    []
-  );
-
+    requestAnimationFrame(step);
+  }, []);
 
   useEffect(() => {
     scrollToBottom();
@@ -166,7 +160,7 @@ export const ChatScreen = () => {
 
       if (res?.status === "ok" && res.reply) {
         // pushMessage("assistant", res.reply);
-          streamAssistantReply(res.reply);
+        streamAssistantReply(res.reply);
       } else if (res?.status === "expired") {
         setSession({ customerId: null, conversationId: null });
         pushMessage("assistant", "Your session expired. Starting a new chat.");
@@ -189,6 +183,12 @@ export const ChatScreen = () => {
           name: data.name.trim(),
           email: data.email.trim(),
           conversationId,
+          metadata: {
+            language: navigator.language,
+            currentUrl: window.location.href,
+            timezone,
+            timezoneOffset,
+          },
         },
       });
 

@@ -52,6 +52,7 @@ export const useIdentifyCustomer = () => {
         name?: string;
         email?: string;
         conversationId: string;
+        metadata?: Record<string, any>;
       };
     }) => identifyWidgetCustomer(workspaceId, customerInfo),
   });
