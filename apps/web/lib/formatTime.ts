@@ -53,3 +53,24 @@ export const formatTime = (dateString: string) => {
 
   return formatted;
 };
+
+export const formatExpiryTime = (expiresAt: string) => {
+  if (!expiresAt) return "Expires in —";
+
+  const now = Date.now();
+  const expires = new Date(expiresAt).getTime();
+  if (Number.isNaN(expires)) return "Expires in —";
+
+  const diffMs = expires - now;
+  if (diffMs <= 0) return "Expired";
+
+  const minutes = Math.floor(diffMs / (1000 * 60));
+  const hours = Math.floor(diffMs / (1000 * 60 * 60));
+  const days = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+
+  if (days >= 1) return `Expires in ${days} day${days === 1 ? "" : "s"}`;
+  if (hours >= 1) return `Expires in ${hours} hr${hours === 1 ? "" : "s"}`;
+
+  const mins = Math.max(1, minutes);
+  return `Expires in ${mins} min${mins === 1 ? "" : "s"}`;
+};

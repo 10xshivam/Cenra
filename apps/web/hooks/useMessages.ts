@@ -12,8 +12,6 @@ export const useGetAllMessages = (
     enabled: !!workspaceId && !!conversationId,
     retry: false,
     gcTime: 5 * 60 * 1000,
-    refetchInterval: !!workspaceId && !!conversationId ? 3000 : false,
-    refetchIntervalInBackground: true,
   });
 };
 

@@ -23,7 +23,9 @@ export const getMetadata = async (
     const ua = UAParser(req.headers["user-agent"]);
 
     const browser = ua.browser.name
-      ? `${ua.browser.name} ${ua.browser.version}`
+      ? `${ua.browser.name} ${
+        ua.browser.version ? ua.browser.version.split(".")[0] : ""
+      }`.trim()
       : null;
 
     const os = ua.os.name ?? null;

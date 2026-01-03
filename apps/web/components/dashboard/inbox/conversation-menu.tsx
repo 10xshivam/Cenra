@@ -118,7 +118,7 @@ export const ConversationMenu = () => {
             )}
             <div className="flex items-center gap-3">
               <div
-                className={`rounded-full text-sm size-10 font-bold border ${getAvatarColors(conversation.customer.id)} flex justify-center items-center`}
+                className={`rounded-full text-sm size-10 font-bold border ${getAvatarColors(conversation.id)} flex justify-center items-center`}
               >
                 {conversation.customer.name?.charAt(0).toUpperCase()}
               </div>

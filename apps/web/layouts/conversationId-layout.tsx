@@ -8,9 +8,9 @@ import {
 export const ConversationIdLayout = ({children}: {children: React.ReactNode}) => {
   return (
     <ResizablePanelGroup direction="horizontal" className="h-full w-full">
-      <ResizablePanel defaultSize={70}>{children}</ResizablePanel>
+      <ResizablePanel defaultSize={65}>{children}</ResizablePanel>
       <ResizableHandle />
-      <ResizablePanel defaultSize={30} minSize={25} maxSize={30}>
+      <ResizablePanel defaultSize={30} minSize={30} maxSize={35}>
         <CustomerInfo />
       </ResizablePanel>
     </ResizablePanelGroup>
