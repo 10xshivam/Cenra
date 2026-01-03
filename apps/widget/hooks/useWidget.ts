@@ -83,9 +83,11 @@ export const useConversationMessages = (
   conversationId: string
 ) =>
   useQuery({
-    queryKey: ["conversation-messages", workspaceId, conversationId],
+    queryKey: ["conversationMessages", conversationId],
     queryFn: () => getConversationMessages(workspaceId, conversationId),
     enabled: !!workspaceId && !!conversationId,
+    staleTime:Infinity,
+    gcTime:Infinity,
   });
 
 export const useLastMessage = (workspaceId: string, conversationId: string) =>

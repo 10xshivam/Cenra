@@ -26,16 +26,24 @@ function isToolName(name: string): name is ToolName {
 // 1) LLM node
 async function llmCall(state: GraphState, config?: RunnableConfig) {
   const threadId = (config?.configurable as any)?.thread_id;
-
-  if (!threadId) {
-    return { messages: [] };
-  }
+  if (!threadId) return { messages: [] };
 
   const conversation = await prisma.conversation.findUnique({
     where: { threadId },
   });
 
-  if (conversation?.status === "escalated") {
+  if (conversation?.status === "resolved") {
+    await prisma.conversation.update({
+      where: { id: conversation.id },
+      data: { status: "unresolved" },
+    });
+  }
+
+  const lastHumanMessage = [...state.messages]
+    .reverse()
+    .find((m) => m._getType() === "human");
+
+  if (conversation?.status === "escalated" && lastHumanMessage) {
     return { messages: [] };
   }
 
@@ -43,12 +51,10 @@ async function llmCall(state: GraphState, config?: RunnableConfig) {
     new SystemMessage(
       [
         "You are a customer support assistant.",
-        "You can answer questions using the workspace knowledge base.",
-        "If the user asks for a human, is frustrated, or explicitly requests escalation, you MUST call `escalate_conversation`.",
-        "When a conversation is escalated, you must stop replying.",
-        "After helping, ask the user if their issue is resolved.",
-        "If the user confirms the issue is resolved, call `resolve_conversation`.",
-        "Never pretend a conversation is escalated or resolved without using tools.",
+        "If the user asks for a human or is frustrated, politely explain escalation and call `escalate_conversation`.",
+        "When escalating, ALWAYS send a confirmation message before stopping.",
+        "After helping, ask if the issue is resolved.",
+        "If resolved, call `resolve_conversation`.",
       ].join(" ")
     ),
     ...state.messages,
@@ -61,9 +67,7 @@ async function llmCall(state: GraphState, config?: RunnableConfig) {
     timestamp: Date.now(),
   };
 
-  return {
-    messages: [response],
-  };
+  return { messages: [response] };
 }
 
 // 2) Tool node
@@ -76,8 +80,7 @@ async function toolNode(state: GraphState, config?: RunnableConfig) {
 
   const results: ToolMessage[] = [];
 
-  const { workspaceId, conversationId } =
-    (config?.configurable as any) ?? {};
+  const { workspaceId, conversationId } = (config?.configurable as any) ?? {};
 
   for (const toolCall of lastMessage.tool_calls ?? []) {
     if (!isToolName(toolCall.name)) continue;
@@ -104,7 +107,7 @@ async function toolNode(state: GraphState, config?: RunnableConfig) {
   };
 }
 
-// 3) Routing: tools call karna hai ya end?
+// 3) Routing
 async function shouldContinue(state: GraphState) {
   const lastMessage = state.messages[state.messages.length - 1];
   if (!lastMessage || !isAIMessage(lastMessage)) return END;

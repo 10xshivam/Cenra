@@ -39,7 +39,7 @@ interface ChatMessage {
 }
 
 export const ChatInputSchema = z.object({
-  message: z.string().min(1, "Message cannot be empty"),
+  message: z.string().trim().min(1, "Message cannot be empty"),
 });
 
 export type ChatInputData = z.infer<typeof ChatInputSchema>;
@@ -63,8 +63,6 @@ export const ConversationBoxView = ({
   const sendMessageMutation = useCreateMessage();
   const isSendingMessage = sendMessageMutation.isPending;
   const deleteMutation = useDeleteConversation();
-
-  console.log("Conversation Status:", conversationStatus);
 
   const scrollToBottom = () => {
     if (!scrollContainerRef.current) return;
@@ -119,13 +117,13 @@ export const ConversationBoxView = ({
 
     const text = data.message.trim();
     pushMessage("assistant", text);
-
+    
+    form.reset();
     await sendMessageMutation.mutateAsync({
       workspaceId: workspace.id,
       conversationId,
       message: text,
     });
-    form.reset();
   };
 
   const handleStatusChange = async () => {
@@ -152,6 +150,8 @@ export const ConversationBoxView = ({
     await deleteMutation.mutateAsync(conversationId);
     setOpen(false);
   };
+
+  const isInputEmpty = form.watch("message").trim() === "";
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -259,6 +259,7 @@ export const ConversationBoxView = ({
                       if (e.key === "Enter" && !e.shiftKey) {
                         e.preventDefault();
                         form.handleSubmit(handleSendMessage)();
+                        form.reset();
                       }
                     }}
                   />
@@ -268,7 +269,7 @@ export const ConversationBoxView = ({
             <div className="w-full pb-1.5 px-1.5 flex justify-end">
               <button
                 type="submit"
-                // disabled={isInputEmpty || isSendingMessage || showIdentityForm}
+                disabled={isInputEmpty || isSendingMessage}
                 className="rounded-full disabled:bg-neutral-300/50 bg-emerald-800 hover:bg-emerald-800 disabled:text-neutral-600 text-white p-2"
               >
                 <Forward size={14} strokeWidth={3} />

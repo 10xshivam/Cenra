@@ -135,7 +135,7 @@ export const getConversationMessagesWithIdentityCheck = async (req: Request, res
       messages = messages.filter((m) => m.role === "user");
     }
 
-    return res.json({ messages, isIdentified });
+    return res.json({ messages, isIdentified, status: conversation.status });
   } catch (error) {
     console.error("Error fetching conversation messages:", error);
     return res.status(500).json({ message: "Internal server error" });

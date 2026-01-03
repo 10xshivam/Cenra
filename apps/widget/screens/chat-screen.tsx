@@ -41,6 +41,9 @@ export const ChatScreen = () => {
     isError: historyError,
   } = useConversationMessages(workspace?.id || "", conversationId || "");
 
+  const isEscalated = historyData?.status === "escalated";
+  const isResolved = historyData?.status === "resolved";
+
   const startConversationMutation = useStartConversation();
   const sendMessageMutation = useSendMessage();
   const identifyCustomerMutation = useIdentifyCustomer();
@@ -124,6 +127,16 @@ export const ChatScreen = () => {
     if (showIdentityForm) return;
     pushMessage("user", text);
 
+    if (isEscalated && conversationId) {
+      await sendMessageMutation.mutateAsync({
+        workspaceId: workspace.id,
+        conversationId,
+        message: text,
+      });
+
+      return;
+    }
+
     try {
       if (!customerId || !conversationId) {
         const data = await startConversationMutation.mutateAsync({
@@ -159,7 +172,6 @@ export const ChatScreen = () => {
       });
 
       if (res?.status === "ok" && res.reply) {
-        // pushMessage("assistant", res.reply);
         streamAssistantReply(res.reply);
       } else if (res?.status === "expired") {
         setSession({ customerId: null, conversationId: null });
@@ -210,9 +222,19 @@ export const ChatScreen = () => {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col relative">
       <ChatHeader setCurrentScreen={setCurrentScreen} workspace={workspace} />
 
+      {isEscalated && (
+        <div className="m-1.5 mb-0 text-xs text-center font-medium border bg-yellow-100 text-yellow-700 border-yellow-400 px-3 py-2.5">
+          A human agent will reply shortly. You can continue typing.
+        </div>
+      )}
+      {isResolved && (
+        <div className="m-1.5 mb-0 text-xs text-center border bg-green-100 text-green-700 border-green-400 px-3 py-2.5">
+          This conversation was marked as resolved. <br/>Send a message to reopen it.
+        </div>
+      )}
       <div
         ref={scrollContainerRef}
         className="h-[calc(100vh-410px)] pt-4 overflow-y-auto px-3 space-y-2 scrollbar-w-1 scrollbar scrollbar-thumb-neutral-300 scrollbar-track-transparent"
@@ -225,7 +247,9 @@ export const ChatScreen = () => {
 
         <MessageList messages={messages} />
 
-        {isSendingMessage && !showIdentityForm && <MessageLoader />}
+        {isSendingMessage && !showIdentityForm && !isEscalated && (
+          <MessageLoader />
+        )}
 
         {showIdentityForm && (
           <IdentityForm
