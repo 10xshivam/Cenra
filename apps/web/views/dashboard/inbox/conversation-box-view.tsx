@@ -87,15 +87,7 @@ export const ConversationBoxView = ({
 
     if (historyLoading || !historyData) return;
 
-    const mapped: ChatMessage[] = (historyData.messages || []).map(
-      (m: { role: string; content: string }) => ({
-        id: crypto.randomUUID(),
-        from: m.role === "user" ? "user" : "assistant",
-        content: m.content,
-      })
-    );
-
-    setMessages(mapped);
+    setMessages(historyData.messages);
   }, [historyLoading, historyError, historyData]);
 
   const form = useForm<z.infer<typeof ChatInputSchema>>({

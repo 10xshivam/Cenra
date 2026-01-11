@@ -149,6 +149,12 @@ export const getConversations = async (req: Request, res: Response) => {
       where: {
         workspaceId,
         ...(status ? { status: status as ConversationStatus } : {}),
+        customer: {
+          AND: [
+            { email: { not: null } },
+            { name: { not: null } },
+          ],
+        },
       },
       include: {
         customer: true,
@@ -183,7 +189,8 @@ export const getConversations = async (req: Request, res: Response) => {
             (
               m
             ): m is {
-              role: string;
+              id: string;
+              from: string;
               content: string;
               createdAt: number | null;
             } => !!m

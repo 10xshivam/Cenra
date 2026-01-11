@@ -125,14 +125,14 @@ export const getConversationMessagesWithIdentityCheck = async (req: Request, res
         );
       })
       .filter(
-        (m): m is { role: string; content: string; createdAt: string } => !!m
+        (m): m is {id: string; from: string; content: string; createdAt: string } => !!m
       );
 
     const isIdentified =
       !!conversation.customer?.name && !!conversation.customer?.email;
 
     if (!isIdentified) {
-      messages = messages.filter((m) => m.role === "user");
+      messages = messages.filter((m) => m.from === "user");
     }
 
     return res.json({ messages, isIdentified, status: conversation.status });
@@ -184,7 +184,7 @@ export const getLastMessage = async (req: Request, res: Response) => {
       .filter(
         (
           m
-        ): m is { role: string; content: string; createdAt: number | null } =>
+        ): m is { id: string; from: string; content: string; createdAt: number | null } =>
           !!m
       );
 
@@ -192,7 +192,7 @@ export const getLastMessage = async (req: Request, res: Response) => {
       !!conversation.customer?.name && !!conversation.customer?.email;
 
     if (!isIdentified) {
-      messages = messages.filter((m) => m.role === "user");
+      messages = messages.filter((m) => m.from === "user");
     }
 
     const lastMessage = messages.length ? messages[messages.length - 1] : null;
@@ -246,7 +246,7 @@ export const getAllMessages = async (req: Request, res: Response) => {
         );
       })
       .filter(
-        (m): m is { role: string; content: string; createdAt: string } => !!m
+        (m): m is {id: string; from: string; content: string; createdAt: string } => !!m
       );
 
     return res.json({ messages });
