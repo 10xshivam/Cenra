@@ -1,6 +1,7 @@
 import {
   BarsIcon,
   BookOpenIcon,
+  FolderIcon,
   InboxIcon,
   IntegrationIcon,
   PluginsIcon,
@@ -10,6 +11,7 @@ import {
   SparklesIcon,
   SupportIcon,
   UsersIcon,
+  WebIcon,
 } from "@workspace/ui/components/icons";
 
 export const SIDEBAR_ITEMS = {
@@ -37,26 +39,16 @@ export const SIDEBAR_ITEMS = {
       icon: BarsIcon,
     },
   ],
-  automation: [
+  sources: [
     {
-      title: "AI Automations",
-      url: "/automations",
-      icon: SparklesIcon,
+      title: "Web Content",
+      url: "/web-content",
+      icon: WebIcon,
     },
     {
-      title: "Knowledge Sources",
-      url: "#",
-      icon: BookOpenIcon,
-      items: [
-        {
-          title: "Web Content",
-          url: "/knowledge-sources/web-content",
-        },
-        {
-          title: "Data Importer",
-          url: "/knowledge-sources/data-importer",
-        },
-      ],
+      title: "Data Importer",
+      url: "/data-importer",
+      icon: FolderIcon,
     },
   ],
   configuration: [

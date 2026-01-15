@@ -53,45 +53,24 @@ export const DashboardSidebar = () => {
           </SidebarMenu>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Automation</SidebarGroupLabel>
+          <SidebarGroupLabel className="-ml-1.5">Sources</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {SIDEBAR_ITEMS.automation.map((item) => {
-                const isActive =
-                  pathname === item.url ||
-                  item.items?.some((sub) => pathname === sub.url);
-
-                return (
-                  <SidebarMenuItem key={item.title}>
-                    <SidebarMenuButton asChild isActive={isActive}>
-                      <Link href={item.url}>
-                        <item.icon />
-                        <span>{item.title}</span>
-                      </Link>
-                    </SidebarMenuButton>
-
-                    {item.items?.length ? (
-                      <SidebarMenuSub>
-                        {item.items.map((item) => (
-                          <SidebarMenuSubItem key={item.title}>
-                            <SidebarMenuSubButton
-                              asChild
-                              isActive={pathname === item.url}
-                            >
-                              <Link href={item.url}>{item.title}</Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    ) : null}
-                  </SidebarMenuItem>
-                );
-              })}
+              {SIDEBAR_ITEMS.sources.map((item) => (
+                <SidebarMenuItem key={item.title}>
+                  <SidebarMenuButton asChild isActive={pathname === item.url}>
+                    <Link href={item.url}>
+                      <item.icon />
+                      <span>{item.title}</span>
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              ))}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Configuration</SidebarGroupLabel>
+          <SidebarGroupLabel className="-ml-1.5">Configuration</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {SIDEBAR_ITEMS.configuration.map((item) => (
@@ -108,7 +87,7 @@ export const DashboardSidebar = () => {
           </SidebarGroupContent>
         </SidebarGroup>
         <SidebarGroup>
-          <SidebarGroupLabel>Insights</SidebarGroupLabel>
+          <SidebarGroupLabel className="-ml-1.5">Insights</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
               {SIDEBAR_ITEMS.insights.map((item) => (
