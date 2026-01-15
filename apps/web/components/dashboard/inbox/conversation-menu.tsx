@@ -15,6 +15,8 @@ import { formatTime } from "@/lib/formatTime";
 import { Link } from "next-view-transitions";
 import { usePathname } from "next/navigation";
 import { getAvatarColors } from "@/lib/getAvatarColors";
+import { ConversationSkeleton } from "@/skeletons/conversationSkeleton";
+import { EmptyConversations } from "./empty-conversations";
 
 export interface ConversationItems {
   id: string;
@@ -41,7 +43,10 @@ export interface ConversationItems {
 export const ConversationMenu = () => {
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const { workspace } = useWorkspaceStore();
-  const { data } = useGetConversations(workspace?.id ?? "", selectedStatus);
+  const { data, isLoading } = useGetConversations(
+    workspace?.id ?? "",
+    selectedStatus
+  );
   const pathname = usePathname();
   const conversations: ConversationItems[] = data?.conversations ?? [];
 
@@ -107,58 +112,68 @@ export const ConversationMenu = () => {
         </Select>
       </div>
       <div className="flex-1 flex w-full flex-col overflow-y-auto gap-1.5 p-1.5">
-        {conversations.map((conversation: ConversationItems) => (
-          <Link
-            href={`/inbox/${conversation.id}`}
-            key={conversation.id}
-            className={`h-[4.3rem] relative w-full flex items-center p-4 gap-2 justify-between bg-neutral-400/5  rounded-xl border  hover:border-neutral-300 cursor-pointer ${pathname === `/inbox/${conversation.id}` ? "border-neutral-300" : "border-neutral-300/15"}`}
-          >
-            {pathname === `/inbox/${conversation.id}` && (
-              <div className="absolute inset-y-3 left-0 w-1 h-2/3 bg-neutral-300 rounded-e-sm" />
-            )}
-            <div className="flex items-center gap-3">
-              <div
-                className={`rounded-full text-sm size-10 font-bold border ${getAvatarColors(conversation.id)} flex justify-center items-center`}
-              >
-                {conversation.customer.name?.charAt(0).toUpperCase()}
+        {isLoading ? (
+          <div className="flex flex-col gap-2">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <ConversationSkeleton key={i} />
+            ))}
+          </div>
+        ) : conversations.length > 0 ? (
+          conversations.map((conversation: ConversationItems) => (
+            <Link
+              href={`/inbox/${conversation.id}`}
+              key={conversation.id}
+              className={`h-[4.3rem] relative w-full flex items-center p-4 gap-2 justify-between bg-neutral-400/5  rounded-xl border  hover:border-neutral-300 cursor-pointer ${pathname === `/inbox/${conversation.id}` ? "border-neutral-300" : "border-neutral-300/15"}`}
+            >
+              {pathname === `/inbox/${conversation.id}` && (
+                <div className="absolute inset-y-3 left-0 w-1 h-2/3 bg-neutral-300 rounded-e-sm" />
+              )}
+              <div className="flex items-center gap-3">
+                <div
+                  className={`rounded-full text-sm size-10 font-bold border ${getAvatarColors(conversation.id)} flex justify-center items-center`}
+                >
+                  {conversation.customer.name?.charAt(0).toUpperCase()}
+                </div>
+                <div className="flex flex-col justify-between flex-1">
+                  <span className="font-semibold text-sm tracking-tight text-neutral-700">
+                    {conversation.customer.name}
+                  </span>
+                  <span className="tracking-tight text-xs line-clamp-1 text-neutral-600">
+                    {conversation.lastMessage?.content}
+                  </span>
+                </div>
               </div>
-              <div className="flex flex-col justify-between flex-1">
-                <span className="font-semibold text-sm tracking-tight text-neutral-700">
-                  {conversation.customer.name}
+              <div className="flex flex-col justify-between items-end h-full min-w-10">
+                <span className="text-xs font-medium text-neutral-500 tracking-tight">
+                  {formatTime(conversation.lastMessage?.createdAt)}
                 </span>
-                <span className="tracking-tight text-xs line-clamp-1 text-neutral-600">
-                  {conversation.lastMessage?.content}
-                </span>
+                {conversation.status === "resolved" && (
+                  <CheckIcon
+                    size={17}
+                    strokeWidth={3.5}
+                    className="text-green-600"
+                  />
+                )}
+                {conversation.status === "escalated" && (
+                  <ArrowUpIcon
+                    size={17}
+                    strokeWidth={3.5}
+                    className="text-yellow-600"
+                  />
+                )}
+                {conversation.status === "unresolved" && (
+                  <ArrowRightIcon
+                    size={17}
+                    strokeWidth={3.5}
+                    className="text-red-600"
+                  />
+                )}
               </div>
-            </div>
-            <div className="flex flex-col justify-between items-end h-full min-w-10">
-              <span className="text-xs font-medium text-neutral-500 tracking-tight">
-                {formatTime(conversation.lastMessage?.createdAt)}
-              </span>
-              {conversation.status === "resolved" && (
-                <CheckIcon
-                  size={17}
-                  strokeWidth={3.5}
-                  className="text-green-600"
-                />
-              )}
-              {conversation.status === "escalated" && (
-                <ArrowUpIcon
-                  size={17}
-                  strokeWidth={3.5}
-                  className="text-yellow-600"
-                />
-              )}
-              {conversation.status === "unresolved" && (
-                <ArrowRightIcon
-                  size={17}
-                  strokeWidth={3.5}
-                  className="text-red-600"
-                />
-              )}
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))
+        ) : (
+          <EmptyConversations />
+        )}
       </div>
     </div>
   );
