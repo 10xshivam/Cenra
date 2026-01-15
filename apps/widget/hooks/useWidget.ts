@@ -86,8 +86,11 @@ export const useConversationMessages = (
     queryKey: ["conversationMessages", conversationId],
     queryFn: () => getConversationMessages(workspaceId, conversationId),
     enabled: !!workspaceId && !!conversationId,
-    staleTime:Infinity,
-    gcTime:Infinity,
+    // staleTime:Infinity,
+    // gcTime:Infinity,
+    refetchInterval: (query) => {
+      return query.state.data?.status === "escalated" ? 10000 : false;
+    },
   });
 
 export const useLastMessage = (workspaceId: string, conversationId: string) =>

@@ -91,6 +91,7 @@ export const ChatScreen = () => {
     scrollToBottom();
   }, [messages, showIdentityForm, isSendingMessage]);
 
+  
   useEffect(() => {
     if (historyError) {
       console.error("Error fetching messages");
@@ -100,14 +101,38 @@ export const ChatScreen = () => {
 
     if (historyLoading || !historyData) return;
 
-    setMessages(historyData.messages);
+    const serverMessages: ChatMessage[] = historyData.messages || [];
+
+   setMessages((prev) => {
+    if (prev.length > 0 && serverMessages.length === prev.filter(m => !m.id.startsWith("temp-")).length) {
+       const lastServerMsg = serverMessages[serverMessages.length - 1];
+       const lastLocalRealMsg = [...prev].reverse().find(m => !m.id.startsWith("temp-"));
+       
+       if (lastServerMsg && lastLocalRealMsg && lastServerMsg.id === lastLocalRealMsg.id) {
+         return prev; 
+       }
+    }
+    const nextMessages = [...serverMessages];
+    const serverContentSet = new Set(serverMessages.map((m) => m.content));
+
+    const pendingLocalMessages = prev.filter(
+      (m) => m.id.startsWith("temp-") && !serverContentSet.has(m.content)
+    );
+
+    return [...nextMessages, ...pendingLocalMessages];
+  });
+
+    if (historyData.isIdentified === false) {
+      setShowIdentityForm((prev) => prev || false);
+    }
+
     setShowIdentityForm(historyData.isIdentified === false);
-  }, [historyLoading, historyError, historyData, setCurrentScreen]);
+  }, [historyError, historyData, setCurrentScreen]);
 
   const pushMessage = (from: "user" | "assistant", content: string) => {
     setMessages((prev) => [
       ...prev,
-      { from, content, id: Date.now().toString() },
+      { from, content, id: `temp-${Date.now()}` },
     ]);
   };
 
@@ -116,7 +141,12 @@ export const ChatScreen = () => {
 
     const text = data.message.trim();
     if (showIdentityForm) return;
-    pushMessage("user", text);
+
+    const tempId = "temp-" + Date.now();
+    setMessages((prev) => [
+      ...prev,
+      { from: "user", content: text, id: tempId },
+    ]);
 
     if (isEscalated && conversationId) {
       await sendMessageMutation.mutateAsync({
@@ -217,6 +247,7 @@ export const ChatScreen = () => {
       <ChatHeader setCurrentScreen={setCurrentScreen} workspace={workspace} />
       <div
         ref={scrollContainerRef}
+        style={{ overflowAnchor: "none" }}
         className="h-[calc(100vh-410px)] pt-4 overflow-y-auto px-3 space-y-2 scrollbar-w-1 scrollbar scrollbar-thumb-neutral-300 scrollbar-track-transparent"
       >
         {workspace.greetMessage && !historyLoading && (
