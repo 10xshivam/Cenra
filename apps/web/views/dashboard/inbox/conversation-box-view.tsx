@@ -31,6 +31,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@workspace/ui/components/dialog";
+import { ChatMessagesSkeleton } from "@/skeletons/chatMessagesSkeleton";
 
 interface ChatMessage {
   from: "user" | "assistant";
@@ -57,6 +58,7 @@ export const ConversationBoxView = ({
     data: historyData,
     isLoading: historyLoading,
     isError: historyError,
+    // error: historyErrorDetails,
   } = useGetAllMessages(workspace?.id || "", conversationId);
   const { data: conversationStatus } = useConversationStatus(conversationId);
   const updateConversationStatusMutation = useUpdateConversationStatus();
@@ -80,10 +82,10 @@ export const ConversationBoxView = ({
   }, [messages, isSendingMessage]);
 
   useEffect(() => {
-    if (historyError) {
-      console.error("Error fetching messages");
-      return;
-    }
+    // if (historyError) {
+    //   console.error("Error fetching messages:", historyErrorDetails);
+    //   return;
+    // }
 
     if (historyLoading || !historyData) return;
 
@@ -109,7 +111,7 @@ export const ConversationBoxView = ({
 
     const text = data.message.trim();
     pushMessage("assistant", text);
-    
+
     form.reset();
     await sendMessageMutation.mutateAsync({
       workspaceId: workspace.id,
@@ -144,6 +146,8 @@ export const ConversationBoxView = ({
   };
 
   const isInputEmpty = form.watch("message").trim() === "";
+
+  const loading = true;
 
   return (
     <div className="w-full h-full flex flex-col">
@@ -206,31 +210,35 @@ export const ConversationBoxView = ({
         ref={scrollContainerRef}
         className="max-h-[calc(100vh-231px)] h-full overflow-y-auto p-4"
       >
-        {messages.map((m) =>
-          m.from === "user" ? (
-            <div key={m.id} className="flex items-end gap-1.5 mb-4">
-              <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 bg-neutral-100 border border-neutral-300">
-                <User size={12} className="text-neutral-600" />
+        {historyLoading ? (
+          <ChatMessagesSkeleton />
+        ) : (
+          messages.map((m) =>
+            m.from === "user" ? (
+              <div key={m.id} className="flex items-end gap-1.5 mb-4">
+                <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 bg-neutral-100 border border-neutral-300">
+                  <User size={12} className="text-neutral-600" />
+                </div>
+                <UiMessage
+                  from="assistant"
+                  className="border max-w-[75%] w-fit px-3.5 py-2.5 rounded-xl bg-white rounded-bl-none text-neutral-600"
+                >
+                  <MessageContent>
+                    <MessageResponse>{m.content}</MessageResponse>
+                  </MessageContent>
+                </UiMessage>
               </div>
+            ) : (
               <UiMessage
-                from="assistant"
-                className="border max-w-[75%] w-fit px-3.5 py-2.5 rounded-xl bg-white rounded-bl-none text-neutral-600"
+                key={m.id}
+                from="user"
+                className="border max-w-[75%] w-fit px-3.5 py-2.5 mb-4 rounded-xl bg-emerald-800 text-white rounded-br-none border-none ml-auto"
               >
                 <MessageContent>
                   <MessageResponse>{m.content}</MessageResponse>
                 </MessageContent>
               </UiMessage>
-            </div>
-          ) : (
-            <UiMessage
-              key={m.id}
-              from="user"
-              className="border max-w-[75%] w-fit px-3.5 py-2.5 mb-4 rounded-xl bg-emerald-800 text-white rounded-br-none border-none ml-auto"
-            >
-              <MessageContent>
-                <MessageResponse>{m.content}</MessageResponse>
-              </MessageContent>
-            </UiMessage>
+            )
           )
         )}
       </div>
