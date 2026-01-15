@@ -21,6 +21,7 @@ import {
   AccordionTrigger,
 } from "@workspace/ui/components/accordion";
 import { formatExpiryTime, formatTime } from "@/lib/formatTime";
+import { CustomerDetailsSkeleton } from "@/skeletons/customerDetailsSkeleton";
 
 export type CustomerInfo = {
   id: string;
@@ -47,10 +48,12 @@ export const CustomerInfo = () => {
   const params = useParams();
   const { workspace } = useWorkspaceStore();
   const conversationId = params.conversationId as string;
-  console.log("Conversation ID:", conversationId);
-  console.log("Workspace ID:", workspace?.id);
-  const { data } = useCustomerInfo(workspace?.id as string, conversationId);
+  const { data, isLoading } = useCustomerInfo(workspace?.id as string, conversationId);
   const customer: CustomerInfo = data?.customer ?? {};
+
+  if (isLoading) {
+    return <CustomerDetailsSkeleton />;
+  }
 
   return (
     <div className="w-full h-full flex flex-col p-4 gap-4">
