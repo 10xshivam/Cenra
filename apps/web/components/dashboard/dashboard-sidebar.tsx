@@ -14,9 +14,6 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
 } from "@workspace/ui/components/sidebar";
 import { Link } from "next-view-transitions";
 import { usePathname } from "next/navigation";
