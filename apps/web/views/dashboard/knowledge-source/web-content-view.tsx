@@ -48,6 +48,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@workspace/ui/components/collapsible";
+import { handleTimeSince } from "@/lib/formatTime";
 
 const webContentSchema = z.object({
   domain: z.string().url("Invalid URL"),
@@ -112,21 +113,6 @@ export const WebContentView = () => {
         },
       }
     );
-  };
-
-  const handleTimeSince = (dateString: string) => {
-    const date = new Date(dateString);
-    const now = new Date();
-    const diffMs = now.getTime() - date.getTime();
-    const diffMinutes = Math.floor(diffMs / (1000 * 60));
-    const diffHours = Math.floor(diffMinutes / 60);
-    if (diffMinutes === 0) {
-      return "Up-to-date (now)";
-    } else if (diffMinutes < 60) {
-      return `Up-to-date (${diffMinutes}m)`;
-    } else {
-      return `Up-to-date (${diffHours}h)`;
-    }
   };
   return (
     <div className="w-full h-full flex items-center p-16 flex-col gap-20">

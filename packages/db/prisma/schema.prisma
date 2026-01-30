@@ -56,7 +56,9 @@ model Customer {
   name          String?
   email         String?
   conversations Conversation[]
+  metadata      Json?
   expiresAt     DateTime?
+  createdAt     DateTime       @default(now())
 }
 
 enum ConversationStatus {

@@ -2,6 +2,8 @@ import { prisma } from "@workspace/db";
 import { Request, Response } from "express";
 import { getChatbot } from "../config/langgraph";
 import { BaseMessage } from "langchain";
+import { getMetadata } from "../utils/widget/getMetadata";
+import { v4 as uuidv4 } from "uuid";
 
 const SESSION_DURATION_MS = 48 * 60 * 60 * 1000; // 48 hours in milliseconds
 const SESSION_EXTENSION_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
@@ -96,7 +98,7 @@ export const identifyCustomer = async (req: Request, res: Response) => {
     if (!workspaceId) {
       return res.status(400).json({ message: "Workspace ID is required" });
     }
-    const { customerId, name, email, conversationId } = req.body;
+    const { customerId, name, email, conversationId, metadata } = req.body;
     if (!name || !email) {
       return res.status(400).json({ message: "Name and email are required" });
     }
@@ -116,12 +118,15 @@ export const identifyCustomer = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Customer not found" });
     }
 
-    await prisma.customer.update({
+    const metadataToUpdate = await getMetadata(req,metadata);
+
+    const updatedCustomer = await prisma.customer.update({
       where: { id: customer.id },
       data: {
         name,
         email,
         expiresAt: new Date(Date.now() + SESSION_DURATION_MS),
+        metadata: { ...(customer.metadata as object), ...metadataToUpdate },
       },
     });
 
@@ -137,15 +142,11 @@ export const identifyCustomer = async (req: Request, res: Response) => {
     });
 
     const values = state.values as { messages: BaseMessage[] };
-    console.log("State Values:", values);
     const all = values.messages ?? [];
 
-    // 🔍 get latest AI response
     const lastAIMessage = [...all]
       .reverse()
       .find((m: any) => m._getType && m._getType() === "ai");
-
-      console.log("Last AI Message:", lastAIMessage);
 
     let replyText: string | null = null;
 
@@ -163,9 +164,11 @@ export const identifyCustomer = async (req: Request, res: Response) => {
     return res.status(200).json({
       message: "Customer identified successfully",
       agentMessage: {
-        role: "assistant",
+        id: uuidv4(),
+        from: "assistant",
         content: replyText,
       },
+      updatedCustomer
     });
   } catch (error) {
     console.error("Error identifying customer:", error);

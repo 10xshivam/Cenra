@@ -3,6 +3,7 @@ import { prisma } from "@workspace/db";
 import { getChatbot } from "../config/langgraph";
 import { HumanMessage, AIMessage, BaseMessage } from "@langchain/core/messages";
 import { simplifyMessage } from "../utils/messages/simplifyMessages";
+import { appendHumanMessage } from "../utils/messages/appendHumanMessage";
 
 export const createMessage = async (req: Request, res: Response) => {
   try {
@@ -44,7 +45,7 @@ export const createMessage = async (req: Request, res: Response) => {
       configurable: {
         thread_id: conversation.threadId,
         workspaceId,
-        customerId: conversation.customerId,
+        conversationId: conversation.id,
       },
     };
 
@@ -85,7 +86,7 @@ export const createMessage = async (req: Request, res: Response) => {
   }
 };
 
-export const getConversationMessages = async (req: Request, res: Response) => {
+export const getConversationMessagesWithIdentityCheck = async (req: Request, res: Response) => {
   try {
     const { workspaceId, conversationId } = req.params;
 
@@ -107,7 +108,7 @@ export const getConversationMessages = async (req: Request, res: Response) => {
     const chatbot = getChatbot();
 
     const snapshot = await chatbot.getState({
-      configurable: { thread_id: conversation.threadId },
+      configurable: { thread_id: conversation.threadId, workspaceId, conversationId },
     });
 
     const values = snapshot.values as { messages: BaseMessage[] };
@@ -124,17 +125,17 @@ export const getConversationMessages = async (req: Request, res: Response) => {
         );
       })
       .filter(
-        (m): m is { role: string; content: string; createdAt: string } => !!m
+        (m): m is {id: string; from: string; content: string; createdAt: string } => !!m
       );
 
     const isIdentified =
       !!conversation.customer?.name && !!conversation.customer?.email;
 
     if (!isIdentified) {
-      messages = messages.filter((m) => m.role === "user");
+      messages = messages.filter((m) => m.from === "user");
     }
 
-    return res.json({ messages, isIdentified });
+    return res.json({ messages, isIdentified, status: conversation.status });
   } catch (error) {
     console.error("Error fetching conversation messages:", error);
     return res.status(500).json({ message: "Internal server error" });
@@ -163,7 +164,7 @@ export const getLastMessage = async (req: Request, res: Response) => {
     const chatbot = getChatbot();
 
     const snapshot = await chatbot.getState({
-      configurable: { thread_id: conversation.threadId },
+      configurable: { thread_id: conversation.threadId, workspaceId, conversationId },
     });
 
     const values = snapshot.values as { messages?: BaseMessage[] };
@@ -183,7 +184,7 @@ export const getLastMessage = async (req: Request, res: Response) => {
       .filter(
         (
           m
-        ): m is { role: string; content: string; createdAt: number | null } =>
+        ): m is { id: string; from: string; content: string; createdAt: number | null } =>
           !!m
       );
 
@@ -191,7 +192,7 @@ export const getLastMessage = async (req: Request, res: Response) => {
       !!conversation.customer?.name && !!conversation.customer?.email;
 
     if (!isIdentified) {
-      messages = messages.filter((m) => m.role === "user");
+      messages = messages.filter((m) => m.from === "user");
     }
 
     const lastMessage = messages.length ? messages[messages.length - 1] : null;
@@ -205,6 +206,84 @@ export const getLastMessage = async (req: Request, res: Response) => {
     );
   } catch (error) {
     console.error("Error fetching last message:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const getAllMessages = async (req: Request, res: Response) => {
+  try {
+    const { workspaceId, conversationId } = req.params;
+    if (!workspaceId || !conversationId) {
+      return res
+        .status(400)
+        .json({ message: "Workspace ID and Conversation ID are required" });
+    }
+
+    const conversation = await prisma.conversation.findUnique({
+      where: { id: conversationId },
+    });
+
+    if (!conversation || conversation.workspaceId !== workspaceId) {
+      return res.status(404).json({ message: "Conversation not found" });
+    }
+
+    const chatbot = getChatbot();
+
+    const snapshot = await chatbot.getState({
+      configurable: { thread_id: conversation.threadId, workspaceId, conversationId },
+    }); 
+
+    const values = snapshot.values as { messages?: BaseMessage[] };
+    const all = values.messages ?? [];
+    let messages = all
+      .map((m) => {
+        const simplified = simplifyMessage(m);
+        return (
+          simplified && {
+            ...simplified,
+            createdAt: m.additional_kwargs?.timestamp ?? null,
+          }
+        );
+      })
+      .filter(
+        (m): m is {id: string; from: string; content: string; createdAt: string } => !!m
+      );
+
+    return res.json({ messages });
+  } catch (error) {
+    console.error("Error fetching all messages:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const sendHumanReply = async (req: Request, res: Response) => {
+  try {
+    const { conversationId } = req.params;
+    const { message } = req.body;
+  
+    const conversation = await prisma.conversation.findUnique({
+      where: { id: conversationId },
+    });
+  
+    if (!conversation) {
+      return res.status(404).json({ message: "Conversation not found" });
+    }
+  
+    await appendHumanMessage({
+      conversation: {
+        threadId: conversation.threadId,
+        workspaceId: conversation.workspaceId,
+        conversationId: conversation.id,
+      },
+      content: message,
+    });
+  
+    return res.json({
+      success: true,
+      message: "Human message saved to conversation",
+    });
+  } catch (error) {
+    console.error("Error sending human reply:", error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };

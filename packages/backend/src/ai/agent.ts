@@ -13,21 +13,48 @@ import {
 import { RunnableConfig } from "@langchain/core/runnables";
 import { model } from "../config/model";
 import { toolsByName } from "./tools";
+import { prisma } from "@workspace/db";
 
 export type GraphState = typeof MessagesAnnotation.State;
 
+type ToolName = keyof typeof toolsByName;
+
+function isToolName(name: string): name is ToolName {
+  return Object.prototype.hasOwnProperty.call(toolsByName, name);
+}
+
 // 1) LLM node
-async function llmCall(state: GraphState) {
-  console.log("llmCall history length:", state.messages.length);
+async function llmCall(state: GraphState, config?: RunnableConfig) {
+  const threadId = (config?.configurable as any)?.thread_id;
+  if (!threadId) return { messages: [] };
+
+  const conversation = await prisma.conversation.findUnique({
+    where: { threadId },
+  });
+
+  if (conversation?.status === "resolved") {
+    await prisma.conversation.update({
+      where: { id: conversation.id },
+      data: { status: "unresolved" },
+    });
+  }
+
+  const lastHumanMessage = [...state.messages]
+    .reverse()
+    .find((m) => m._getType() === "human");
+
+  if (conversation?.status === "escalated" && lastHumanMessage) {
+    return { messages: [] };
+  }
 
   const messages: BaseMessage[] = [
     new SystemMessage(
       [
-        "You are a helpful support assistant.",
-        "You have access to a `vector_search` tool for searching the workspace knowledge base.",
-        "ONLY call `vector_search` when the user is asking about product/company/workspace-specific information.",
-        "For greetings (like 'hi', 'hello') or generic chit-chat, reply directly WITHOUT using any tools.",
-        "If the user shares personal details like their name, remember them during this conversation and use them when relevant.",
+        "You are a customer support assistant.",
+        "If the user asks for a human or is frustrated, politely explain escalation and call `escalate_conversation`.",
+        "When escalating, ALWAYS send a confirmation message before stopping.",
+        "After helping, ask if the issue is resolved.",
+        "If resolved, call `resolve_conversation`.",
       ].join(" ")
     ),
     ...state.messages,
@@ -35,14 +62,12 @@ async function llmCall(state: GraphState) {
 
   const response = await model.invoke(messages);
 
-   response.additional_kwargs = {
+  response.additional_kwargs = {
     ...(response.additional_kwargs ?? {}),
     timestamp: Date.now(),
   };
 
-  return {
-    messages: [response],
-  };
+  return { messages: [response] };
 }
 
 // 2) Tool node
@@ -55,18 +80,19 @@ async function toolNode(state: GraphState, config?: RunnableConfig) {
 
   const results: ToolMessage[] = [];
 
-  const workspaceId = (config?.configurable as any)?.workspaceId ?? undefined;
+  const { workspaceId, conversationId } = (config?.configurable as any) ?? {};
 
   for (const toolCall of lastMessage.tool_calls ?? []) {
+    if (!isToolName(toolCall.name)) continue;
     const tool = toolsByName[toolCall.name];
-    if (!tool) continue;
 
     const args = {
       ...toolCall.args,
       workspaceId,
+      conversationId,
     };
 
-    const observation = await tool.invoke({
+    const observation = await (tool as any).invoke({
       ...toolCall,
       args,
     } as any);
@@ -81,7 +107,7 @@ async function toolNode(state: GraphState, config?: RunnableConfig) {
   };
 }
 
-// 3) Routing: tools call karna hai ya end?
+// 3) Routing
 async function shouldContinue(state: GraphState) {
   const lastMessage = state.messages[state.messages.length - 1];
   if (!lastMessage || !isAIMessage(lastMessage)) return END;

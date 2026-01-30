@@ -52,6 +52,7 @@ export const useIdentifyCustomer = () => {
         name?: string;
         email?: string;
         conversationId: string;
+        metadata?: Record<string, any>;
       };
     }) => identifyWidgetCustomer(workspaceId, customerInfo),
   });
@@ -82,9 +83,14 @@ export const useConversationMessages = (
   conversationId: string
 ) =>
   useQuery({
-    queryKey: ["conversation-messages", workspaceId, conversationId],
+    queryKey: ["conversationMessages", conversationId],
     queryFn: () => getConversationMessages(workspaceId, conversationId),
     enabled: !!workspaceId && !!conversationId,
+    // staleTime:Infinity,
+    // gcTime:Infinity,
+    refetchInterval: (query) => {
+      return query.state.data?.status === "escalated" ? 10000 : false;
+    },
   });
 
 export const useLastMessage = (workspaceId: string, conversationId: string) =>

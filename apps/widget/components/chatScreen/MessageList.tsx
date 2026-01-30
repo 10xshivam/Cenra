@@ -18,9 +18,9 @@ interface MessageListProps {
 export const MessageList = ({ messages }: MessageListProps) => {
   return (
     <>
-      {messages.map((m) =>
+      {messages.map((m,index) =>
         m.from === "assistant" ? (
-          <div key={m.id} className="flex items-end gap-1.5 mb-4 mt-4">
+          <div key={m.id} className="flex items-end gap-1.5 mb-4">
             <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 bg-neutral-100 border border-neutral-300">
               <Sparkles size={12} className="text-neutral-600" />
             </div>
@@ -35,9 +35,9 @@ export const MessageList = ({ messages }: MessageListProps) => {
           </div>
         ) : (
           <UiMessage
-            key={m.id}
+            key={index}
             from="user"
-            className="border max-w-[75%] w-fit px-3.5 py-2.5 rounded-xl bg-emerald-800 text-white rounded-br-none border-none ml-auto"
+            className="border max-w-[75%] w-fit px-3.5 py-2.5 rounded-xl mb-4 bg-emerald-800 text-white rounded-br-none border-none ml-auto"
           >
             <MessageContent>
               <MessageResponse>{m.content}</MessageResponse>
