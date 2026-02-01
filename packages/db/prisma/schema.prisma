@@ -7,13 +7,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum ResourceSourceType {
+  WEB
+  FILE
+}
+
+enum WorkspacePlan {
+  STARTER
+  PRO
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  PAST_DUE
+  CANCELLED
+}
+
 model User {
   id        String     @id @default(uuid())
   firstName String
   lastName  String
   email     String     @unique
   password  String
-  workspace Workspace?
+  workspaces    Workspace[]
+  subscriptions Subscription[]
 }
 
 model Workspace {
@@ -22,6 +39,7 @@ model Workspace {
   website        String?
   userId         String          @unique
   user           User            @relation(fields: [userId], references: [id])
+  plan           WorkspacePlan   @default(STARTER)
   resources      Resource[]
   customers      Customer[]
   conversations  Conversation[]
@@ -42,11 +60,6 @@ model Resource {
   active      Boolean            @default(true)
   updatedAt   DateTime           @default(now())
   createdAt   DateTime           @default(now())
-}
-
-enum ResourceSourceType {
-  WEB
-  FILE
 }
 
 model Customer {
@@ -89,4 +102,22 @@ model WidgetSettings {
   updatedAt          DateTime  @updatedAt
 
   @@unique([workspaceId])
+}
+
+model Subscription {
+  id        String @id @default(uuid())
+
+  userId    String
+  user      User   @relation(fields: [userId], references: [id])
+
+  plan      WorkspacePlan
+  status    SubscriptionStatus
+
+  startedAt DateTime
+  endsAt    DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
 }
