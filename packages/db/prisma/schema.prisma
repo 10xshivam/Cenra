@@ -24,11 +24,11 @@ enum SubscriptionStatus {
 }
 
 model User {
-  id        String     @id @default(uuid())
-  firstName String
-  lastName  String
-  email     String     @unique
-  password  String
+  id            String         @id @default(uuid())
+  firstName     String
+  lastName      String
+  email         String         @unique
+  password      String
   workspaces    Workspace[]
   subscriptions Subscription[]
 }
@@ -105,19 +105,15 @@ model WidgetSettings {
 }
 
 model Subscription {
-  id        String @id @default(uuid())
-
+  id        String             @id @default(uuid())
   userId    String
-  user      User   @relation(fields: [userId], references: [id])
-
+  user      User               @relation(fields: [userId], references: [id])
   plan      WorkspacePlan
   status    SubscriptionStatus
-
   startedAt DateTime
   endsAt    DateTime
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
 
   @@index([userId])
 }
