@@ -5,27 +5,17 @@ import { getChatbot } from "../config/langgraph";
 import { BaseMessage, HumanMessage } from "langchain";
 import { simplifyMessage } from "../utils/messages/simplifyMessages";
 import { deleteLangGraphThread } from "../utils/messages/deleteLangGraphThread";
+import { getCustomersCount } from "../utils/subscriptions/getCustomersCount";
+import { PLAN_FEATURES } from "../constants/plans";
 
 export const createConversation = async (req: Request, res: Response) => {
   try {
-    const { workspaceId } = req.params;
-
-    if (!workspaceId) {
-      return res.status(400).json({ message: "Workspace ID is required" });
-    }
-
-    const workspace = await prisma.workspace.findUnique({
-      where: { id: workspaceId },
-    });
-
-    if (!workspace) {
-      return res.status(404).json({ message: "Workspace not found" });
-    }
+    const workspace = req.workspace!;
 
     const { customerId } = req.body;
 
     const customer = await prisma.customer.findUnique({
-      where: { id: customerId, workspaceId },
+      where: { id: customerId, workspaceId: workspace.id },
     });
 
     if (!customer) {
@@ -39,7 +29,7 @@ export const createConversation = async (req: Request, res: Response) => {
     const conversation = await prisma.conversation.create({
       data: {
         threadId,
-        workspaceId,
+        workspaceId: workspace.id,
         customerId,
       },
     });
@@ -57,11 +47,7 @@ export const createConversation = async (req: Request, res: Response) => {
 
 export const startConversation = async (req: Request, res: Response) => {
   try {
-    const { workspaceId } = req.params;
-
-    if (!workspaceId) {
-      return res.status(400).json({ message: "Workspace ID is required" });
-    }
+    const workspace = req.workspace!;
 
     const { firstMessage } = req.body;
 
@@ -69,9 +55,15 @@ export const startConversation = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "First message is required" });
     }
 
+    const { count: customersCount, plan } =
+      await getCustomersCount(workspace.id);  
+    if (customersCount >= PLAN_FEATURES[plan].maxCustomersPerMonth) {
+      return res.status(403).json({ message: "Monthly customer limit reached" });
+    }
+
     const customer = await prisma.customer.create({
       data: {
-        workspaceId,
+        workspaceId: workspace.id,
       },
     });
 
@@ -80,7 +72,7 @@ export const startConversation = async (req: Request, res: Response) => {
     const conversation = await prisma.conversation.create({
       data: {
         threadId,
-        workspaceId,
+        workspaceId: workspace.id,
         customerId: customer.id,
       },
     });
@@ -90,7 +82,7 @@ export const startConversation = async (req: Request, res: Response) => {
     const config = {
       configurable: {
         thread_id: conversation.threadId,
-        workspaceId,
+        workspaceId: workspace.id,
         conversationId: conversation.id,
       },
     };
@@ -104,7 +96,7 @@ export const startConversation = async (req: Request, res: Response) => {
           }),
         ],
       },
-      config
+      config,
     );
 
     return res.status(201).json({
@@ -126,12 +118,8 @@ export const startConversation = async (req: Request, res: Response) => {
 
 export const getConversations = async (req: Request, res: Response) => {
   try {
-    const { workspaceId } = req.params;
+    const workspace = req.workspace!;
     const { status } = req.query as { status?: ConversationStatus };
-
-    if (!workspaceId) {
-      return res.status(400).json({ message: "Workspace ID is required" });
-    }
 
     const allowedStatuses: ConversationStatus[] = [
       "unresolved",
@@ -147,13 +135,10 @@ export const getConversations = async (req: Request, res: Response) => {
 
     const conversations = await prisma.conversation.findMany({
       where: {
-        workspaceId,
+        workspaceId : workspace.id,
         ...(status ? { status: status as ConversationStatus } : {}),
         customer: {
-          AND: [
-            { email: { not: null } },
-            { name: { not: null } },
-          ],
+          AND: [{ email: { not: null } }, { name: { not: null } }],
         },
       },
       include: {
@@ -187,13 +172,13 @@ export const getConversations = async (req: Request, res: Response) => {
           })
           .filter(
             (
-              m
+              m,
             ): m is {
               id: string;
               from: string;
               content: string;
               createdAt: number | null;
-            } => !!m
+            } => !!m,
           );
 
         const lastMessage = messages.length
@@ -204,7 +189,7 @@ export const getConversations = async (req: Request, res: Response) => {
           ...conversation,
           lastMessage,
         };
-      })
+      }),
     );
 
     return res

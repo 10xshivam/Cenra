@@ -7,13 +7,14 @@ import { appendHumanMessage } from "../utils/messages/appendHumanMessage";
 
 export const createMessage = async (req: Request, res: Response) => {
   try {
-    const { workspaceId, conversationId } = req.params;
+    const workspace = req.workspace!;
+    const { conversationId } = req.params;
     const { message } = req.body;
 
-    if (!workspaceId || !conversationId) {
+    if (!conversationId) {
       return res
         .status(400)
-        .json({ message: "Workspace ID and Conversation ID are required" });
+        .json({ message: "Conversation ID is required" });
     }
     if (!message) {
       return res.status(400).json({ message: "Message content is required" });
@@ -23,14 +24,14 @@ export const createMessage = async (req: Request, res: Response) => {
       where: { id: conversationId },
     });
 
-    if (!conversation || conversation.workspaceId !== workspaceId) {
+    if (!conversation || conversation.workspaceId !== workspace.id) {
       return res
         .status(404)
         .json({ message: "Conversation not found in this workspace" });
     }
 
     const customer = await prisma.customer.findUnique({
-      where: { id: conversation.customerId, workspaceId },
+      where: { id: conversation.customerId, workspaceId: workspace.id },
     });
 
     if (customer?.expiresAt && customer.expiresAt < new Date()) {
@@ -44,7 +45,7 @@ export const createMessage = async (req: Request, res: Response) => {
     const config = {
       configurable: {
         thread_id: conversation.threadId,
-        workspaceId,
+        workspaceId: workspace.id,
         conversationId: conversation.id,
       },
     };
@@ -88,12 +89,13 @@ export const createMessage = async (req: Request, res: Response) => {
 
 export const getConversationMessagesWithIdentityCheck = async (req: Request, res: Response) => {
   try {
-    const { workspaceId, conversationId } = req.params;
+    const workspace = req.workspace!;
+    const { conversationId } = req.params;
 
-    if (!workspaceId || !conversationId) {
+    if (!conversationId) {
       return res
         .status(400)
-        .json({ message: "Workspace ID and Conversation ID are required" });
+        .json({ message: "Conversation ID is required" });
     }
 
     const conversation = await prisma.conversation.findUnique({
@@ -101,14 +103,14 @@ export const getConversationMessagesWithIdentityCheck = async (req: Request, res
       include: { customer: true },
     });
 
-    if (!conversation || conversation.workspaceId !== workspaceId) {
+    if (!conversation || conversation.workspaceId !== workspace.id) {
       return res.status(404).json({ message: "Conversation not found" });
     }
 
     const chatbot = getChatbot();
 
     const snapshot = await chatbot.getState({
-      configurable: { thread_id: conversation.threadId, workspaceId, conversationId },
+      configurable: { thread_id: conversation.threadId, workspaceId: workspace.id, conversationId },
     });
 
     const values = snapshot.values as { messages: BaseMessage[] };
@@ -144,12 +146,13 @@ export const getConversationMessagesWithIdentityCheck = async (req: Request, res
 
 export const getLastMessage = async (req: Request, res: Response) => {
   try {
-    const { workspaceId, conversationId } = req.params;
+    const workspace = req.workspace!;
+    const { conversationId } = req.params;
 
-    if (!workspaceId || !conversationId) {
+    if (!conversationId) {
       return res
         .status(400)
-        .json({ message: "Workspace ID and Conversation ID are required" });
+        .json({ message: "Conversation ID is required" });
     }
 
     const conversation = await prisma.conversation.findUnique({
@@ -157,14 +160,14 @@ export const getLastMessage = async (req: Request, res: Response) => {
       include: { customer: true },
     });
 
-    if (!conversation || conversation.workspaceId !== workspaceId) {
+    if (!conversation || conversation.workspaceId !== workspace.id) {
       return res.status(404).json({ message: "Conversation not found" });
     }
 
     const chatbot = getChatbot();
 
     const snapshot = await chatbot.getState({
-      configurable: { thread_id: conversation.threadId, workspaceId, conversationId },
+      configurable: { thread_id: conversation.threadId, workspaceId: workspace.id, conversationId },
     });
 
     const values = snapshot.values as { messages?: BaseMessage[] };

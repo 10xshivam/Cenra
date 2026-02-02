@@ -6,22 +6,18 @@ export const createOrUpdateWidgetSettings = async (
   res: Response
 ) => {
   try {
-    const { workspaceId } = req.params;
+    const workspace = req.workspace!;
     const { greetMessage, defaultSuggestions } = req.body;
 
-    if (!workspaceId) {
-      return res.status(400).json({ message: "Workspace ID is required" });
-    }
-
     const existingSettings = await prisma.widgetSettings.findUnique({
-      where: { workspaceId },
+      where: { workspaceId: workspace.id },
     });
 
     let widgetSettings;
 
     if (existingSettings) {
       widgetSettings = await prisma.widgetSettings.update({
-        where: { workspaceId },
+        where: { workspaceId: workspace.id },
         data: {
           greetMessage: greetMessage ?? existingSettings.greetMessage,
           defaultSuggestions: {
@@ -34,7 +30,7 @@ export const createOrUpdateWidgetSettings = async (
     } else {
       widgetSettings = await prisma.widgetSettings.create({
         data: {
-          workspaceId,
+          workspaceId: workspace.id,
           greetMessage: greetMessage ?? null,
           defaultSuggestions: {
             suggestion1: defaultSuggestions?.suggestion1 ?? null,
@@ -58,19 +54,7 @@ export const createOrUpdateWidgetSettings = async (
 
 export const getWidgetSettings = async (req: Request, res: Response) => {
   try {
-    const { workspaceId } = req.params;
-
-    if (!workspaceId) {
-      return res.status(400).json({ message: "Workspace ID is required" });
-    }
-
-    const workspace = await prisma.workspace.findUnique({
-      where: { id: workspaceId },
-    });
-
-    if (!workspace) {
-      return res.status(404).json({ message: "Workspace not found" });
-    }
+    const workspace = req.workspace!;
 
     const widgetSettings = await prisma.widgetSettings.findUnique({
       where: { workspaceId: workspace.id },

@@ -4,6 +4,7 @@ import bcrypt from "bcrypt";
 import { generateToken } from "../utils/auth/generateToken";
 import { getGoogleUserProfile } from "../utils/auth/googleAuth";
 import { setWorkspaceCookie } from "../utils/auth/setWorkspaceCookie";
+import { setSubscriptionCookie } from "../utils/auth/setSubscriptionCookie";
 
 export const registerUser = async (req: Request, res: Response) => {
   const { firstName, lastName, email, password } = req.body;
@@ -35,6 +36,7 @@ export const registerUser = async (req: Request, res: Response) => {
     if (user) {
       generateToken(user.id, res);
       await setWorkspaceCookie(user.id, res);
+      await setSubscriptionCookie(user.id, res);
       return res.status(201).json({
         message: "User registered successfully.",
         user: {
@@ -76,6 +78,7 @@ export  const loginUser = async (req: Request, res: Response) => {
 
     generateToken(user.id, res);
     await setWorkspaceCookie(user.id, res);
+    await setSubscriptionCookie(user.id, res);
     return res.status(200).json({
       message: "Login successful.",
       user: {
@@ -98,6 +101,11 @@ export const logoutUser = (req: Request, res: Response) => {
     sameSite: "strict",
   });
   res.clearCookie("hasWorkspace", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+  });
+  res.clearCookie("hasSubscription", {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "strict",
@@ -167,7 +175,7 @@ export const googleLogin = async (req: Request, res: Response) => {
 
     generateToken(user.id, res);
     await setWorkspaceCookie(user.id, res);
-
+    await setSubscriptionCookie(user.id, res);
     return res.status(200).json({
       message: "Login successful.",
       user: {

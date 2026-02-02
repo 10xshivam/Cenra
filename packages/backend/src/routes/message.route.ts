@@ -1,7 +1,10 @@
 import { Router } from "express";
 import { createMessage, getAllMessages, getConversationMessagesWithIdentityCheck, getLastMessage, sendHumanReply } from "../controllers/message.controller";
+import { requireWorkspaceAccess } from "../middlewares/requireWorkspace";
 
 const route: Router = Router();
+
+route.use(requireWorkspaceAccess);
 
 route.post('/:workspaceId/conversations/:conversationId/messages/create', createMessage);
 route.get('/:workspaceId/conversations/:conversationId/messages', getConversationMessagesWithIdentityCheck);

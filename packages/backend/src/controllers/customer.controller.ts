@@ -3,11 +3,7 @@ import { Request, Response } from "express";
 
 export const createCustomer = async (req: Request, res: Response) => {
   try {
-    const { workspaceId } = req.params;
-
-    if (!workspaceId) {
-      return res.status(400).json({ message: "Workspace ID is required" });
-    }
+    const workspace = req.workspace!;
 
     const { name, email } = req.body;
 
@@ -18,7 +14,7 @@ export const createCustomer = async (req: Request, res: Response) => {
     let customer = await prisma.customer.findFirst({
       where: {
         email,
-        workspaceId,
+        workspaceId: workspace.id,
       },
     });
 
@@ -27,7 +23,7 @@ export const createCustomer = async (req: Request, res: Response) => {
         data: {
           name,
           email,
-          workspaceId,
+          workspaceId: workspace.id,
         },
       });
     }
@@ -46,16 +42,17 @@ export const createCustomer = async (req: Request, res: Response) => {
 
 export const getCustomer = async (req: Request, res: Response) => {
   try {
-    const { workspaceId, conversationId } = req.params; 
-    if (!workspaceId || !conversationId) {
+    const workspace = req.workspace!;
+    const { conversationId } = req.params; 
+    if (!conversationId) {
       return res
         .status(400)
-        .json({ message: "Workspace ID and Conversation ID are required" });
+        .json({ message: "Conversation ID is required" });
     } 
     const conversation = await prisma.conversation.findFirst({
       where: {
       id: conversationId,
-      workspaceId,
+      workspaceId: workspace.id,
       },
       include: {
       customer: true,
