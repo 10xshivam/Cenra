@@ -15,6 +15,7 @@ export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const token = req.cookies.get("token")?.value;
   const hasWorkspace = req.cookies.get("hasWorkspace")?.value === "true";
+  const hasSubscription = req.cookies.get("hasSubscription")?.value === "true";
 
   if (isProtectedPath(pathname)) {
     if (!token) {
@@ -25,6 +26,9 @@ export function proxy(req: NextRequest) {
     }
     if (hasWorkspace && pathname === "/create-workspace") {
       return NextResponse.redirect(new URL("/inbox", req.url));
+    }
+    if (hasWorkspace && !hasSubscription && pathname !== "/pricing") {
+      return NextResponse.redirect(new URL("/pricing", req.url));
     }
     return NextResponse.next();
   }
