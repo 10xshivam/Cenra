@@ -2,6 +2,7 @@ import { prisma } from "@workspace/db";
 import { Request, Response } from "express";
 import { setWorkspaceCookie } from "../utils/auth/setWorkspaceCookie";
 import { createCollection } from "../utils/file-processing/createCollection";
+import { getActiveSubscription } from "../utils/subscriptions/getActiveSubscription";
 
 export const createWorkspace = async (req: Request, res: Response) => {
   try {
@@ -27,18 +28,27 @@ export const createWorkspace = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "You already have a workspace" });
     }
 
+    const subscription = await getActiveSubscription(userId);
+
+    if (!subscription) {
+      return res.status(403).json({
+        message: "Please choose a plan to create a workspace",
+      });
+    }
+
     const newWorkspace = await prisma.workspace.create({
       data: {
         name,
         website,
         userId: userId,
+        plan: subscription.plan,
       },
     });
 
     if (newWorkspace) {
       await prisma.widgetSettings.create({
         data: { workspaceId: newWorkspace.id },
-      })
+      });
       await Promise.allSettled([
         setWorkspaceCookie(userId, res),
         createCollection(newWorkspace.id),
@@ -49,6 +59,7 @@ export const createWorkspace = async (req: Request, res: Response) => {
           id: newWorkspace.id,
           name: newWorkspace.name,
           website: newWorkspace.website,
+          plan: newWorkspace.plan,
         },
       });
     } else {
@@ -79,6 +90,13 @@ export const getWorkspace = async (req: Request, res: Response) => {
           id: workspaces.id,
           name: workspaces.name,
           website: workspaces.website,
+          plan: workspaces.plan,
+        },
+      });
+    } else {
+      return res.status(404).json({
+        message: "No workspace found for this user",
+        workspace: {
         },
       });
     }

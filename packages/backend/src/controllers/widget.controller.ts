@@ -10,19 +10,11 @@ const SESSION_EXTENSION_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 
 export const initWidget = async (req: Request, res: Response) => {
   try {
-    const { workspaceId } = req.params;
+    const workspace = req.workspace!;
     const customerId = req.query.customerId as string | undefined;
 
-    if (!workspaceId) {
+    if (!workspace.id) {
       return res.status(400).json({ message: "Workspace ID is required" });
-    }
-
-    const workspace = await prisma.workspace.findUnique({
-      where: { id: workspaceId },
-    });
-
-    if (!workspace) {
-      return res.status(404).json({ message: "Invalid Workspace ID" });
     }
 
     const widgetSettings = await prisma.widgetSettings.findUnique({
@@ -94,10 +86,8 @@ export const initWidget = async (req: Request, res: Response) => {
 
 export const identifyCustomer = async (req: Request, res: Response) => {
   try {
-    const { workspaceId } = req.params;
-    if (!workspaceId) {
-      return res.status(400).json({ message: "Workspace ID is required" });
-    }
+    const workspace = req.workspace!;
+    
     const { customerId, name, email, conversationId, metadata } = req.body;
     if (!name || !email) {
       return res.status(400).json({ message: "Name and email are required" });
@@ -110,7 +100,7 @@ export const identifyCustomer = async (req: Request, res: Response) => {
     let customer = await prisma.customer.findFirst({
       where: {
         id: customerId,
-        workspaceId,
+        workspaceId: workspace.id,
       },
     });
 

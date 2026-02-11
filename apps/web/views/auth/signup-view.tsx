@@ -74,13 +74,16 @@ export const SignupView = () => {
             "Loading..."
           ) : (
             <>
-              <Image
+              {/* <Image
                 src="/google-icon.svg"
                 alt="Google Icon"
                 width={20}
                 height={20}
+                unoptimized
                 className="mr-1"
-              />
+              /> */}
+              <img src="/google-icon.svg" alt="Google Icon" width={20} height={20} className="mr-1" />
+
               Continue with Google
             </>
           )}

@@ -1,50 +1,66 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const PUBLIC_PATHS = ["/", "/login", "/signup"];
-const PROTECTED_PATHS = ["/inbox", "/create-workspace", "/get-started", "/knowledge-sources", "/automations"];
+const PUBLIC_PATHS = [
+  "/",
+  "/login",
+  "/signup",
+  "/pricing",
+  "/billing/success",
+  "/billing/cancel",
+];
 
-function isPublicPath(path: string) {
-  return PUBLIC_PATHS.includes(path);
-}
-
-function isProtectedPath(path: string) {
-  return PROTECTED_PATHS.some((protectedPath) => path.startsWith(protectedPath));
+function isPublicPath(pathname: string) {
+  return PUBLIC_PATHS.includes(pathname);
 }
 
 export function proxy(req: NextRequest) {
   const { pathname } = req.nextUrl;
+
   const token = req.cookies.get("token")?.value;
+  const hasSubscription = req.cookies.get("hasSubscription")?.value === "true";
   const hasWorkspace = req.cookies.get("hasWorkspace")?.value === "true";
 
-  if (isProtectedPath(pathname)) {
-    if (!token) {
-      return NextResponse.redirect(new URL("/login", req.url));
-    }
-    if (!hasWorkspace && pathname !== "/create-workspace") {
+  if (token && hasSubscription) {
+    if (pathname.startsWith("/billing")) {
       return NextResponse.redirect(new URL("/create-workspace", req.url));
     }
-    if (hasWorkspace && pathname === "/create-workspace") {
-      return NextResponse.redirect(new URL("/inbox", req.url));
+  }
+
+  if (isPublicPath(pathname)) {
+    if (token && (pathname === "/login" || pathname === "/signup")) {
+      return NextResponse.redirect(
+        new URL(hasSubscription ? "/inbox" : "/pricing", req.url),
+      );
     }
     return NextResponse.next();
   }
 
-  if (isPublicPath(pathname) && token) {
-    if (!hasWorkspace) {
-      if (pathname !== "/") {
-        return NextResponse.redirect(new URL("/create-workspace", req.url));
-      }
-    } else {
-      if (pathname !== "/") {
-        return NextResponse.redirect(new URL("/inbox", req.url));
-      }
+  if (!token) {
+    return NextResponse.redirect(new URL("/login", req.url));
+  }
+
+  if (!hasSubscription) {
+    if (pathname !== "/pricing") {
+      return NextResponse.redirect(new URL("/pricing", req.url));
     }
     return NextResponse.next();
+  }
+
+  if (!hasWorkspace) {
+    if (pathname !== "/create-workspace") {
+      return NextResponse.redirect(new URL("/create-workspace", req.url));
+    }
+    return NextResponse.next();
+  }
+
+  if (pathname === "/create-workspace") {
+    return NextResponse.redirect(new URL("/inbox", req.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!_next/static|_next/image|favicon.ico|api).*)"],
+  matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };
+

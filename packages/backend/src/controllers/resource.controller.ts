@@ -7,15 +7,25 @@ import { prisma } from "@workspace/db";
 import fs from "fs";
 import { client } from "../config/qdrant";
 import { crawlWebsitePages } from "../utils/resources/crawlPage";
+import { PLAN_FEATURES } from "../constants/plans";
 
 export const createFileResource = async (req: Request, res: Response) => {
   try {
-    const { workspaceId } = req.params;
+    const workspace = req.workspace!;
+    const workspaceId = workspace.id;
 
-    if (!workspaceId) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Workspace ID is required" });
+    const plan = workspace.plan as keyof typeof PLAN_FEATURES;
+    const limits = PLAN_FEATURES[plan]; 
+
+    const docCount = await prisma.resource.count({
+      where: { workspaceId, sourceType: "FILE" },
+    });
+
+    if (docCount >= limits.maxDocuments) {
+      return res.status(403).json({
+        success: false,
+        message: "Document limit reached. Upgrade your plan.",
+      });
     }
 
     const { file } = req;
@@ -56,7 +66,7 @@ export const createFileResource = async (req: Request, res: Response) => {
             workspaceId,
             resourceId: resource.id,
           },
-        })
+        }),
     );
 
     const splitter = new RecursiveCharacterTextSplitter({
@@ -88,18 +98,32 @@ export const createFileResource = async (req: Request, res: Response) => {
 
 export const createWebResource = async (req: Request, res: Response) => {
   try {
-    const { workspaceId } = req.params;
+    const workspace = req.workspace!;
     const { url, paths } = req.body as {
       url: string;
       paths?: string[];
     };
 
-    if (!workspaceId || !url) {
+    if (!url) {
       return res
         .status(400)
-        .json({ success: false, message: "Workspace ID and URL are required" });
+        .json({ success: false, message: "URL is required" });
     }
 
+    const plan = workspace.plan as keyof typeof PLAN_FEATURES;
+    const limits = PLAN_FEATURES[plan];
+
+    const webResourceCount = await prisma.resource.count({
+      where: { workspaceId: workspace.id, sourceType: "WEB" },
+    });
+
+    if (webResourceCount >= limits.maxWebResources) {
+      return res.status(403).json({
+        success: false,
+        message: "Web resource limit reached. Upgrade your plan.",
+      });
+    }
+    
     const normalizedPaths = Array.isArray(paths)
       ? paths.filter((p) => typeof p === "string" && p.trim().length > 0)
       : undefined;
@@ -114,11 +138,11 @@ export const createWebResource = async (req: Request, res: Response) => {
     const resource = await prisma.resource.create({
       data: {
         filename: url,
-        workspaceId,
+        workspaceId: workspace.id,
         url,
         webContent: crawled,
         sourceType: "WEB",
-        paths: normalizedPaths
+        paths: normalizedPaths,
       },
     });
 
@@ -126,11 +150,11 @@ export const createWebResource = async (req: Request, res: Response) => {
       return new Document({
         pageContent: content,
         metadata: {
-          workspaceId,
+          workspaceId: workspace.id,
           resourceId: resource.id,
           source: "web",
           url,
-          pagePath: page, 
+          pagePath: page,
         },
       });
     });
@@ -142,7 +166,7 @@ export const createWebResource = async (req: Request, res: Response) => {
 
     const splitDocs = await splitter.splitDocuments(docsWithMeta);
 
-    const vectorStore = await getWorkspaceVectorStore(workspaceId);
+    const vectorStore = await getWorkspaceVectorStore(workspace.id);
     if (!vectorStore) {
       return res
         .status(500)
@@ -166,7 +190,7 @@ export const createWebResource = async (req: Request, res: Response) => {
 
 export const getAllResources = async (req: Request, res: Response) => {
   try {
-    const { workspaceId } = req.params;
+    const workspace = req.workspace!;
     const { sourceType } = req.query;
 
     if (sourceType && sourceType !== "FILE" && sourceType !== "WEB") {
@@ -174,14 +198,12 @@ export const getAllResources = async (req: Request, res: Response) => {
         .status(400)
         .json({ success: false, message: "Invalid sourceType parameter" });
     }
-    
-    if (!workspaceId) {
-      return res
-        .status(400)
-        .json({ success: false, message: "Workspace ID is required" });
-    }
+
     const resources = await prisma.resource.findMany({
-      where: { workspaceId, sourceType: sourceType as "FILE" | "WEB" | undefined },
+      where: {
+        workspaceId: workspace.id,
+        sourceType: sourceType as "FILE" | "WEB" | undefined,
+      },
       orderBy: { createdAt: "desc" },
     });
     return res.json({ success: true, resources });
@@ -259,16 +281,20 @@ export const deleteResource = async (req: Request, res: Response) => {
 
 export const recrawlWebResource = async (req: Request, res: Response) => {
   try {
-    const { workspaceId, resourceId } = req.params;
+    const workspace = req.workspace!;
+    const { resourceId } = req.params;
 
-    if (!workspaceId || !resourceId) {
+    if (!resourceId) {
       return res
         .status(400)
-        .json({ success: false, message: "Workspace ID and Resource ID are required" });
+        .json({
+          success: false,
+          message: "Resource ID is required",
+        });
     }
 
     const resource = await prisma.resource.findFirst({
-      where: { id: resourceId, workspaceId },
+      where: { id: resourceId, workspaceId: workspace.id },
     });
 
     if (!resource) {
@@ -295,7 +321,7 @@ export const recrawlWebResource = async (req: Request, res: Response) => {
     const docsWithMeta = crawled.map(({ page, content }) => ({
       pageContent: content,
       metadata: {
-        workspaceId,
+        workspaceId: workspace.id,
         resourceId,
         source: "web",
         url,
@@ -309,7 +335,7 @@ export const recrawlWebResource = async (req: Request, res: Response) => {
     });
     const splitDocs = await splitter.splitDocuments(docsWithMeta);
 
-    const vectorStore = await getWorkspaceVectorStore(workspaceId);
+    const vectorStore = await getWorkspaceVectorStore(workspace.id);
     if (!vectorStore) {
       return res
         .status(500)
@@ -347,8 +373,3 @@ export const recrawlWebResource = async (req: Request, res: Response) => {
       .json({ success: false, message: "Internal server error" });
   }
 };
-
-
-
-
-

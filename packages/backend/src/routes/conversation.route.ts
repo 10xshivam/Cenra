@@ -1,7 +1,10 @@
 import { Router } from "express";
 import { createConversation, deleteConversation, getConversations, getConversationStatus, startConversation, updateConversationStatus } from "../controllers/conversation.controller";
+import { requireWorkspaceAccess } from "../middlewares/requireWorkspace";
 
 const route: Router = Router();
+
+route.use("/:workspaceId/conversations", requireWorkspaceAccess);
 
 route.post("/:workspaceId/conversations/create", createConversation);
 route.post("/:workspaceId/conversations/start", startConversation);
