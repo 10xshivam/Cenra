@@ -1,3 +1,8 @@
+"use client";
+
+import { useSubscription } from "@/hooks/useSubscription";
+import { axiosInstance } from "@/lib/axios";
+import { useUserStore } from "@/store/useUserStore";
 import React from "react";
 
 export const PricingView = () => {
@@ -7,7 +12,7 @@ export const PricingView = () => {
       price: "$19",
       cadence: "/ month",
       blurb: "Perfect for small teams getting started.",
-      cta: "Start Free",
+      cta: "Get Started",
       highlight: false,
       features: [
         "1 Workspace",
@@ -109,11 +114,26 @@ export const PricingView = () => {
     },
   ];
 
+  const subscribe = async (plan: "STARTER" | "PRO") => {
+    const { user } = useUserStore.getState();
+    const { data } = await axiosInstance.post(
+      "subscription/billing/create-checkout",
+      {
+        plan,
+        userId: user?.id,
+        email: user?.email,
+      },
+    );
+
+    window.location.href = data.checkoutUrl;
+  };
+
+  const { data: subscription } = useSubscription();
+
   return (
     <div className="relative min-h-screen overflow-hidden bg-[#f6f3f0] text-neutral-900">
       <div className="pointer-events-none absolute -top-32 -right-40 h-96 w-96 rounded-full bg-[#d6e4ff] blur-[120px]" />
       <div className="pointer-events-none absolute -bottom-40 -left-32 h-[30rem] w-[30rem] rounded-full bg-[#ffd6b0] blur-[140px]" />
-
       <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 py-16 md:px-10">
         <header className="flex flex-col gap-4">
           <span className="w-fit rounded-full border border-neutral-200 bg-white px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
@@ -164,25 +184,36 @@ export const PricingView = () => {
                 </span>
               </div>
               <button
-                className={`h-12 rounded-full px-6 text-sm font-semibold transition-colors ${
+                className={`h-12 rounded-full px-6 text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${
                   plan.highlight
                     ? "bg-white text-neutral-900 hover:bg-neutral-100"
                     : "bg-neutral-900 text-white hover:bg-neutral-800"
                 }`}
                 type="button"
+                disabled={
+                  plan.name === "Pro" ||
+                  subscription?.plan === plan.name.toUpperCase()
+                }
+                onClick={() =>
+                  subscribe(plan.name.toUpperCase() as "STARTER" | "PRO")
+                }
               >
-                {plan.cta}
+                {plan.name === "Pro"
+                  ? "Coming Soon"
+                  : subscription?.plan === plan.name.toUpperCase()
+                    ? "Current Plan"
+                    : plan.cta}
               </button>
               <div className="grid gap-2">
                 {plan.features.map((feature) => (
                   <div
                     key={feature}
-                    className={`flex items-start gap-3 text-sm ${
+                    className={`flex items-center gap-3 text-sm ${
                       plan.highlight ? "text-white/80" : "text-neutral-600"
                     }`}
                   >
                     <span
-                      className={`mt-1 h-2 w-2 rounded-full ${
+                      className={`h-2 w-2 rounded-full ${
                         plan.highlight ? "bg-white" : "bg-neutral-900"
                       }`}
                     />

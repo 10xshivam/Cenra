@@ -11,6 +11,9 @@ import messageRouter from "./routes/message.route";
 import widgetSettingRouter from "./routes/widgetSetting.route";
 import widgetRouter from "./routes/widget.routes";
 import { initLangGraph } from "./config/langgraph";
+import subscriptionRouter from "./routes/subscription.route";
+// import webhookRouter from "./routes/webhook.route";
+import { webhookController } from "./controllers/webhook.controller";
 
 dotenv.config();
 
@@ -24,6 +27,8 @@ app.use(
     credentials: true,
   })
 );
+
+app.post("/api/v1/webhook", express.raw({ type: "application/json" }), webhookController);
 
 // Middleware
 app.use(express.json({ limit: "10mb" }));
@@ -42,6 +47,7 @@ app.use("/api/v1/workspace", conversationRouter);
 app.use("/api/v1/workspace", messageRouter);
 app.use("/api/v1/workspace", widgetSettingRouter);
 app.use("/api/v1/widget", widgetRouter);
+app.use("/api/v1/subscription", subscriptionRouter);
 
 // Start the server
 initLangGraph().then(() => {

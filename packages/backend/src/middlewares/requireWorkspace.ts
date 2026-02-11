@@ -22,6 +22,8 @@ export const requireWorkspaceAccess = async (
 ) => {
   const { workspaceId } = req.params;
 
+  console.log("Checking workspace access for workspaceId:", workspaceId);
+
   if (!workspaceId) {
     return res.status(400).json({ message: "Workspace ID required" });
   }

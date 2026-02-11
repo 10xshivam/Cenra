@@ -446,19 +446,20 @@ export const WebContentView = () => {
                         </div>
                       </DialogTrigger>
                       <DialogContent
-                        className="w-full p-0 max-w-2xl h-full max-h-2/3 rounded-2xl border border-none"
+                        className="w-full p-0 max-w-2xl max-h-[85vh] flex flex-col rounded-2xl border border-neutral-300 shadow-xl overflow-hidden"
                         showCloseButton={true}
                       >
-                        <DialogHeader>
-                          <DialogTitle className="border-b border-neutral-400 text-center text-neutral-600 tracking-tight font-medium py-4 bg-neutral-300 rounded-t-2xl">
+                        <DialogHeader className="p-0 shrink-0">
+                          <DialogTitle className="border-b border-neutral-300 text-center text-neutral-600 tracking-tight font-semibold py-4 bg-neutral-100 rounded-t-2xl">
                             {content.page}
                           </DialogTitle>
-                          <div className="overflow-y-auto max-h-[60vh] scrollbar-none scrollbar-w-1 scrollbar-thumb-neutral-400">
-                            <DialogDescription className="p-5 whitespace-pre-wrap">
-                              {content.content}
-                            </DialogDescription>
-                          </div>
                         </DialogHeader>
+                        
+                        <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-neutral-300">
+                          <div className="text-sm text-neutral-600 leading-relaxed whitespace-pre-wrap">
+                            {content.content}
+                          </div>
+                        </div>
                       </DialogContent>
                     </Dialog>
                   </div>

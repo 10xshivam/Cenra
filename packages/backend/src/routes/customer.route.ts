@@ -4,7 +4,7 @@ import { requireWorkspaceAccess } from "../middlewares/requireWorkspace";
 
 const route: Router = Router();
 
-route.use(requireWorkspaceAccess);
+route.use("/:workspaceId/customers", requireWorkspaceAccess);
 
 route.post("/:workspaceId/customers/create", createCustomer);
 route.get("/:workspaceId/customers/:conversationId", getCustomer);

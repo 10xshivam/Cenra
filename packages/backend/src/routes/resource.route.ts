@@ -13,7 +13,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.use(requireWorkspaceAccess, requireActiveSubscription);
+router.use("/:workspaceId/resources", requireWorkspaceAccess, requireActiveSubscription);
 
 // File Resource Routes
 router.post("/:workspaceId/resources/file", upload.single("file"), createFileResource);

@@ -4,9 +4,11 @@ import { requireWorkspaceAccess } from "../middlewares/requireWorkspace";
 
 const route: Router = Router();
 
-route.post("/:workspaceId/conversations/create", requireWorkspaceAccess, createConversation);
-route.post("/:workspaceId/conversations/start", requireWorkspaceAccess, startConversation);
-route.get("/:workspaceId/conversations", requireWorkspaceAccess, getConversations);
+route.use("/:workspaceId/conversations", requireWorkspaceAccess);
+
+route.post("/:workspaceId/conversations/create", createConversation);
+route.post("/:workspaceId/conversations/start", startConversation);
+route.get("/:workspaceId/conversations", getConversations);
 route.get("/conversations/:conversationId/status", getConversationStatus);
 route.put("/conversations/:conversationId/status", updateConversationStatus); 
 route.delete("/conversations/:conversationId", deleteConversation);

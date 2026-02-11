@@ -30,7 +30,7 @@ model User {
   email         String         @unique
   password      String
   workspaces    Workspace[]
-  subscriptions Subscription[]
+  subscription  Subscription?
 }
 
 model Workspace {
@@ -106,7 +106,7 @@ model WidgetSettings {
 
 model Subscription {
   id        String             @id @default(uuid())
-  userId    String
+  userId    String             @unique
   user      User               @relation(fields: [userId], references: [id])
   plan      WorkspacePlan
   status    SubscriptionStatus
@@ -114,6 +114,4 @@ model Subscription {
   endsAt    DateTime
   createdAt DateTime           @default(now())
   updatedAt DateTime           @updatedAt
-
-  @@index([userId])
 }

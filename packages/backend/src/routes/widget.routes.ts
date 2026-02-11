@@ -4,10 +4,9 @@ import { requireWorkspaceAccess } from "../middlewares/requireWorkspace";
 
 const route: Router = Router();
 
-route.use(requireWorkspaceAccess);
 
-route.get("/init/:workspaceId", initWidget);
-route.post("/:workspaceId/identify", identifyCustomer);
+route.get("/init/:workspaceId", requireWorkspaceAccess, initWidget);
+route.post("/:workspaceId/identify",requireWorkspaceAccess, identifyCustomer);
 
 
 export default route;
