@@ -52,7 +52,7 @@ export const SIDEBAR_ITEMS = {
   configuration: [
     {
       title: "Widget Customization",
-      url: "#",
+      url: "/widget-customization",
       icon: Sparkles2Icon,
     },
     {
