@@ -1,5 +1,6 @@
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import { MainHeader } from "@/components/dashboard/main-header";
+import { RouteVisitTracker } from "@/components/dashboard/route-visit-tracker";
 import { SidebarProvider } from "@workspace/ui/components/sidebar";
 import { cookies } from "next/headers";
 
@@ -16,6 +17,7 @@ export const DashboardLayout = async ({
       <main className="w-full p-2 pl-0">
         <div className="bg-neutral-50 rounded-lg w-full h-full overflow-hidden border">
           <MainHeader />
+          <RouteVisitTracker />
           {children}
         </div>
       </main>

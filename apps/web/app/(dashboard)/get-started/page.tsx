@@ -1,9 +1,7 @@
-import React from 'react'
+import { GetStartedView } from "@/views/dashboard/get-started-view";
 
 const GetStarted = () => {
-  return (
-    <div className='w-full h-full flex justify-center items-center text-neutral-500'>GetStarted</div>
-  )
-}
+  return <GetStartedView />;
+};
 
-export default GetStarted
+export default GetStarted;

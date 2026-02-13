@@ -1,6 +1,5 @@
 import {
   BarsIcon,
-  BookOpenIcon,
   FolderIcon,
   InboxIcon,
   IntegrationIcon,
@@ -8,7 +7,6 @@ import {
   RocketIcon,
   SettingsIcon,
   Sparkles2Icon,
-  SparklesIcon,
   SupportIcon,
   UsersIcon,
   WebIcon,
