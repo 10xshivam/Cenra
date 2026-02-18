@@ -1,17 +1,48 @@
 import { Router } from "express";
-import { createMessage, getAllMessages, getConversationMessagesWithIdentityCheck, getLastMessage, sendHumanReply } from "../controllers/message.controller";
-import { requireWorkspaceAccess } from "../middlewares/requireWorkspace";
+import {
+  createMessage,
+  getAllMessages,
+  getConversationMessagesWithIdentityCheck,
+  getLastMessage,
+  sendHumanReply,
+} from "../controllers/message.controller";
+import {
+  requireWorkspaceAccess,
+  requireWorkspacePublic,
+} from "../middlewares/requireWorkspace";
 import { verifyAuth } from "../middlewares/auth.middleware";
-import { requireActiveSubscription } from "../middlewares/requireSubscription";
 
 const route: Router = Router();
 
-route.use('/:workspaceId/conversations', requireWorkspaceAccess);
+// Widget-facing endpoints
+route.post(
+  "/:workspaceId/conversations/:conversationId/messages/create",
+  requireWorkspacePublic,
+  createMessage
+);
+route.get(
+  "/:workspaceId/conversations/:conversationId/messages",
+  requireWorkspacePublic,
+  getConversationMessagesWithIdentityCheck
+);
+route.get(
+  "/:workspaceId/conversations/:conversationId/messages/last",
+  requireWorkspacePublic,
+  getLastMessage
+);
 
-route.post('/:workspaceId/conversations/:conversationId/messages/create', createMessage);
-route.get('/:workspaceId/conversations/:conversationId/messages', getConversationMessagesWithIdentityCheck);
-route.get('/:workspaceId/conversations/:conversationId/messages/last', getLastMessage);
-route.get('/:workspaceId/conversations/:conversationId/messages/all', getAllMessages);
-route.post('/:workspaceId/conversations/:conversationId/messages/create-human',sendHumanReply);
+// Dashboard/admin endpoints
+route.get(
+  "/:workspaceId/conversations/:conversationId/messages/all",
+  verifyAuth,
+  requireWorkspaceAccess,
+  getAllMessages
+);
+route.post(
+  "/:workspaceId/conversations/:conversationId/messages/create-human",
+  verifyAuth,
+  requireWorkspaceAccess,
+  sendHumanReply
+);
 
 export default route;

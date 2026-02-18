@@ -1,16 +1,42 @@
 import { Router } from "express";
-import { createConversation, deleteConversation, getConversations, getConversationStatus, startConversation, updateConversationStatus } from "../controllers/conversation.controller";
-import { requireWorkspaceAccess } from "../middlewares/requireWorkspace";
+import {
+  createConversation,
+  deleteConversation,
+  getConversations,
+  getConversationStatus,
+  startConversation,
+  updateConversationStatus,
+} from "../controllers/conversation.controller";
+import {
+  requireWorkspaceAccess,
+  requireWorkspacePublic,
+} from "../middlewares/requireWorkspace";
+import { verifyAuth } from "../middlewares/auth.middleware";
 
 const route: Router = Router();
 
-route.use("/:workspaceId/conversations", requireWorkspaceAccess);
+// Widget-facing endpoint
+route.post(
+  "/:workspaceId/conversations/start",
+  requireWorkspacePublic,
+  startConversation
+);
 
-route.post("/:workspaceId/conversations/create", createConversation);
-route.post("/:workspaceId/conversations/start", startConversation);
-route.get("/:workspaceId/conversations", getConversations);
-route.get("/conversations/:conversationId/status", getConversationStatus);
-route.put("/conversations/:conversationId/status", updateConversationStatus); 
-route.delete("/conversations/:conversationId", deleteConversation);
+// Dashboard/admin endpoints
+route.post(
+  "/:workspaceId/conversations/create",
+  verifyAuth,
+  requireWorkspaceAccess,
+  createConversation
+);
+route.get(
+  "/:workspaceId/conversations",
+  verifyAuth,
+  requireWorkspaceAccess,
+  getConversations
+);
+route.get("/conversations/:conversationId/status", verifyAuth, getConversationStatus);
+route.put("/conversations/:conversationId/status", verifyAuth, updateConversationStatus);
+route.delete("/conversations/:conversationId", verifyAuth, deleteConversation);
 
 export default route;
