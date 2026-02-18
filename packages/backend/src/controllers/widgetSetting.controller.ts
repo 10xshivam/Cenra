@@ -1,50 +1,49 @@
 import { Request, Response } from "express";
 import { prisma } from "@workspace/db";
+import { mergeJson, normalizeSuggestions } from "../utils/widget/widgetSettings";
 
-export const createOrUpdateWidgetSettings = async (
-  req: Request,
-  res: Response
-) => {
+export const createOrUpdateWidgetSettings = async (req: Request, res: Response) => {
   try {
     const workspace = req.workspace!;
-    const { greetMessage, defaultSuggestions } = req.body;
+    const body = req.body;
 
-    const existingSettings = await prisma.widgetSettings.findUnique({
+    const existing = await prisma.widgetSettings.findUnique({
       where: { workspaceId: workspace.id },
     });
 
-    let widgetSettings;
+    const data = {
+      brandName: body.brandName ?? existing?.brandName ?? workspace.name,
+      companyLogoUrl:
+        body.companyLogoUrl !== undefined
+          ? body.companyLogoUrl
+          : (existing?.companyLogoUrl ?? null),
+      greetMessage: body.greetMessage ?? existing?.greetMessage,
+      themeMode: body.themeMode ?? existing?.themeMode,
+      gradientFrom: body.gradientFrom ?? existing?.gradientFrom,
+      themeColor: body.themeColor ?? existing?.themeColor,
 
-    if (existingSettings) {
-      widgetSettings = await prisma.widgetSettings.update({
-        where: { workspaceId: workspace.id },
-        data: {
-          greetMessage: greetMessage ?? existingSettings.greetMessage,
-          defaultSuggestions: {
-            suggestion1: defaultSuggestions?.suggestion1 ?? null,
-            suggestion2: defaultSuggestions?.suggestion2 ?? null,
-            suggestion3: defaultSuggestions?.suggestion3 ?? null,
-          },
-        },
-      });
-    } else {
-      widgetSettings = await prisma.widgetSettings.create({
-        data: {
-          workspaceId: workspace.id,
-          greetMessage: greetMessage ?? null,
-          defaultSuggestions: {
-            suggestion1: defaultSuggestions?.suggestion1 ?? null,
-            suggestion2: defaultSuggestions?.suggestion2 ?? null,
-            suggestion3: defaultSuggestions?.suggestion3 ?? null,
-          },
-        },
-      });
-    }
+      defaultSuggestions: normalizeSuggestions(body.defaultSuggestions) ??
+        existing?.defaultSuggestions ??
+        undefined,
 
-    const { id, workspaceId: widgetWorkspaceId, ...rest } = widgetSettings;
+      whatsNewSection: mergeJson(body.whatsNewSection, existing?.whatsNewSection),
+      featuredArticlesSection: mergeJson(
+        body.featuredArticlesSection,
+        existing?.featuredArticlesSection
+      ),
+    };
+
+    await prisma.widgetSettings.upsert({
+      where: { workspaceId: workspace.id },
+      update: data,
+      create: {
+        workspaceId: workspace.id,
+        ...data,
+      },
+    });
+
     return res.status(200).json({
       message: "Widget settings saved successfully",
-      widgetSettings: rest,
     });
   } catch (error) {
     console.error("Error saving widget settings:", error);
@@ -52,25 +51,33 @@ export const createOrUpdateWidgetSettings = async (
   }
 };
 
+
 export const getWidgetSettings = async (req: Request, res: Response) => {
   try {
     const workspace = req.workspace!;
 
-    const widgetSettings = await prisma.widgetSettings.findUnique({
+    let settings = await prisma.widgetSettings.findUnique({
       where: { workspaceId: workspace.id },
     });
-    
-    if (!widgetSettings) {
-      return res.status(404).json({ message: "Widget settings not found" });
+
+    if (!settings) {
+      settings = await prisma.widgetSettings.create({
+        data: { workspaceId: workspace.id },
+      });
     }
 
     return res.status(200).json({
       message: "Widget settings retrieved successfully",
       widgetSettings: {
-        name: workspace.name,
-        website: workspace.website,
-        greetMessage: widgetSettings.greetMessage,
-        defaultSuggestions: widgetSettings.defaultSuggestions,
+        brandName: settings.brandName ?? workspace.name,
+        companyLogoUrl: settings.companyLogoUrl,
+        greetMessage: settings.greetMessage,
+        themeMode: settings.themeMode,
+        gradientFrom: settings.gradientFrom,
+        themeColor: settings.themeColor,
+        defaultSuggestions: settings.defaultSuggestions,
+        whatsNewSection: settings.whatsNewSection,
+        featuredArticlesSection: settings.featuredArticlesSection,
       },
     });
   } catch (error) {

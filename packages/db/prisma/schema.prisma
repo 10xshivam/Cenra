@@ -96,8 +96,15 @@ model WidgetSettings {
   id                 String    @id @default(uuid())
   workspaceId        String
   workspace          Workspace @relation(fields: [workspaceId], references: [id])
+  brandName          String?
+  companyLogoUrl     String?
   greetMessage       String    @default("Hi! How can I help you today?")
+  themeMode          String    @default("light")
+  gradientFrom       String    @default("#052e2b")
+  themeColor         String    @default("#047857")
   defaultSuggestions Json?
+  whatsNewSection    Json?
+  featuredArticlesSection Json?
   createdAt          DateTime  @default(now())
   updatedAt          DateTime  @updatedAt
 

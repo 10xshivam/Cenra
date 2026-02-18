@@ -3,19 +3,29 @@ import { Button } from "@workspace/ui/components/button";
 import { ErrorIcon } from "@workspace/ui/components/icons";
 
 export const ErrorScreen = () => {
-    const { setCurrentScreen } = useWidgetScreenStore();
-    const handleErrorRetry = () => {
-        window.location.reload();
-        setCurrentScreen("loading");
-    }
+  const { setCurrentScreen } = useWidgetScreenStore();
+
+  const handleErrorRetry = () => {
+    window.location.reload();
+    setCurrentScreen("loading");
+  };
+
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center h-full w-full p-7">
-      <ErrorIcon size="60" className="mb-2 text-red-700" />
-      <h2 className="text-2xl tracking-tight font-bold mb-2 text-neutral-700">Something went off track</h2>
-      <p className="text-center text-neutral-600 mb-4 font-medium">
-        I’ll try again for you, tap below.
+    <div className="absolute inset-0 flex h-full w-full flex-col items-center justify-center p-7">
+      <ErrorIcon size="60" className="mb-2 text-red-700 dark:text-red-500" />
+      <h2 className="mb-2 text-2xl font-bold tracking-tight text-neutral-700 dark:text-neutral-100">
+        Something went off track
+      </h2>
+      <p className="mb-4 text-center font-medium text-neutral-600 dark:text-neutral-300">
+        I'll try again for you, tap below.
       </p>
-      <Button className="rounded-lg" onClick={handleErrorRetry}>Try Again</Button>
+      <Button
+        variant="ghost"
+        className="rounded-lg !bg-[var(--widget-theme-color)] text-white enabled:hover:opacity-90"
+        onClick={handleErrorRetry}
+      >
+        Try Again
+      </Button>
     </div>
   );
 };

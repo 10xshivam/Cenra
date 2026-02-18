@@ -1,15 +1,29 @@
 "use client";
 
+import { useEffect } from "react";
 import { ChatScreen } from "@/screens/chat-screen";
 import { ErrorScreen } from "@/screens/error-screen";
 import { HomeScreen } from "@/screens/home-screen";
 import { LoadingScreen } from "@/screens/loading-screen";
+import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 import { useWidgetScreenStore } from "@/store/useWidgetScreenStore";
 import { WidgetScreen } from "@/types/widget";
+import { useTheme } from "next-themes";
+import { CSSProperties } from "react";
 import { JSX } from "react/jsx-dev-runtime";
 
 export const WidgetView = ({ workspaceId }: { workspaceId: string }) => {
-  const { currentScreen } = useWidgetScreenStore();
+  const { currentScreen, setCurrentScreen } = useWidgetScreenStore();
+  const { workspace } = useWorkspaceStore();
+  const { setTheme } = useTheme();
+
+  useEffect(() => {
+    setCurrentScreen("loading");
+  }, [workspaceId, setCurrentScreen]);
+
+  useEffect(() => {
+    setTheme(workspace?.themeMode === "dark" ? "dark" : "light");
+  }, [workspace?.themeMode, setTheme]);
 
   const screenComponents: Record<WidgetScreen, JSX.Element> = {
     loading: <LoadingScreen workspaceId={workspaceId} />,
@@ -18,8 +32,16 @@ export const WidgetView = ({ workspaceId }: { workspaceId: string }) => {
     error: <ErrorScreen />,
   };
 
+  const widgetAccentColor = workspace?.themeColor ?? "#047857";
+  const widgetStyles = {
+    "--widget-theme-color": widgetAccentColor,
+  } as CSSProperties;
+
   return (
-    <div className="min-h-[700px] w-[410px] rounded-3xl shadow-sm bg-neutral-50 relative">
+    <div
+      className="min-h-[700px] w-[410px] rounded-3xl shadow-sm relative bg-neutral-50 dark:bg-neutral-900 transition-colors"
+      style={widgetStyles}
+    >
       {screenComponents[currentScreen]}
     </div>
   );

@@ -21,15 +21,17 @@ export const initWidget = async (req: Request, res: Response) => {
       where: { workspaceId: workspace.id },
     });
 
-    if (!widgetSettings) {
-      return res.status(404).json({ message: "Widget settings not found" });
-    }
-
     const workspaceDetails = {
       id: workspace.id,
-      name: workspace.name,
-      greetMessage: widgetSettings.greetMessage,
-      defaultSuggestions: widgetSettings.defaultSuggestions,
+      brandName: widgetSettings?.brandName ?? workspace.name,
+      companyLogoUrl: widgetSettings?.companyLogoUrl ?? null,
+      greetMessage: widgetSettings?.greetMessage ?? null,
+      themeMode: widgetSettings?.themeMode ?? null,
+      gradientFrom: widgetSettings?.gradientFrom ?? null,
+      themeColor: widgetSettings?.themeColor ?? null,
+      defaultSuggestions: widgetSettings?.defaultSuggestions ?? null,
+      whatsNewSection: widgetSettings?.whatsNewSection ?? null,
+      featuredArticlesSection: widgetSettings?.featuredArticlesSection ?? null,
     };
 
     if (!customerId) {
@@ -87,7 +89,7 @@ export const initWidget = async (req: Request, res: Response) => {
 export const identifyCustomer = async (req: Request, res: Response) => {
   try {
     const workspace = req.workspace!;
-    
+
     const { customerId, name, email, conversationId, metadata } = req.body;
     if (!name || !email) {
       return res.status(400).json({ message: "Name and email are required" });
@@ -108,7 +110,7 @@ export const identifyCustomer = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Customer not found" });
     }
 
-    const metadataToUpdate = await getMetadata(req,metadata);
+    const metadataToUpdate = await getMetadata(req, metadata);
 
     const updatedCustomer = await prisma.customer.update({
       where: { id: customer.id },
@@ -158,7 +160,7 @@ export const identifyCustomer = async (req: Request, res: Response) => {
         from: "assistant",
         content: replyText,
       },
-      updatedCustomer
+      updatedCustomer,
     });
   } catch (error) {
     console.error("Error identifying customer:", error);

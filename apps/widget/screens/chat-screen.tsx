@@ -29,6 +29,7 @@ interface ChatMessage {
 export const ChatScreen = () => {
   const { setCurrentScreen } = useWidgetScreenStore();
   const { workspace } = useWorkspaceStore();
+  const greetingMessage = workspace?.greetMessage || "";
 
   const { customerId, conversationId, setSession } = useWidgetSessionStore();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -206,7 +207,14 @@ export const ChatScreen = () => {
   };
 
   const handleIdentitySubmit = async (data: IdentityFormData) => {
-    if (!workspace?.id || !customerId || !conversationId) return;
+    if (!workspace?.id || !customerId || !conversationId) {
+      console.error("Missing session data for identity submit", {
+        workspaceId: workspace?.id,
+        customerId,
+        conversationId,
+      });
+      return;
+    }
 
     try {
       const res = await identifyCustomerMutation.mutateAsync({
@@ -243,15 +251,15 @@ export const ChatScreen = () => {
   }
 
   return (
-    <div className="flex flex-col relative">
+    <div className="flex flex-col relative rounded-3xl bg-neutral-50 dark:bg-neutral-900 transition-colors">
       <ChatHeader setCurrentScreen={setCurrentScreen} workspace={workspace} />
       <div
         ref={scrollContainerRef}
         style={{ overflowAnchor: "none" }}
-        className="h-[calc(100vh-410px)] pt-4 overflow-y-auto px-3 space-y-2 scrollbar-w-1 scrollbar scrollbar-thumb-neutral-300 scrollbar-track-transparent"
+        className="h-[calc(100vh-410px)] pt-4 overflow-y-auto px-3 space-y-2 scrollbar-w-1 scrollbar scrollbar-thumb-neutral-300 scrollbar-track-transparent text-neutral-700 dark:text-neutral-100"
       >
-        {workspace.greetMessage && !historyLoading && (
-          <Greeting greetingMessage={workspace.greetMessage} />
+        {greetingMessage && !historyLoading && (
+          <Greeting greetingMessage={greetingMessage} />
         )}
 
         {historyLoading && <MessageLoader />}
@@ -276,10 +284,12 @@ export const ChatScreen = () => {
           isSendingMessage={isSendingMessage}
           showIdentityForm={showIdentityForm}
         />
-        <p className="text-xs text-neutral-400 my-1.5 tracking-tight">
+        <p className="text-xs my-1.5 tracking-tight text-neutral-400 dark:text-neutral-500">
           Powered by Cenra
         </p>
       </div>
     </div>
   );
 };
+
+

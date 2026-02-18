@@ -35,7 +35,7 @@ export const ChatInput = ({
 
   const isInputEmpty = form.watch("message").trim() === "";
   return (
-    <div className="relative w-[95%] border rounded-2xl bg-white">
+    <div className="relative w-[95%] border border-neutral-200 rounded-2xl bg-white dark:bg-neutral-900 dark:border-neutral-700">
       <form onSubmit={form.handleSubmit(onSubmit)}>
         <Controller
           name="message"
@@ -45,7 +45,7 @@ export const ChatInput = ({
               <textarea
                 {...field}
                 ref={field.ref}
-                className="w-full p-3 resize-none outline-none border-0 focus:ring-0 text-sm text-neutral-600 scrollbar-w-1 scrollbar scrollbar-thumb-neutral-300 scrollbar-track-transparent"
+                className="w-full p-3 resize-none outline-none border-0 focus:ring-0 text-sm bg-transparent text-neutral-700 placeholder:text-neutral-400 dark:text-neutral-100 dark:placeholder:text-neutral-500 scrollbar-w-1 scrollbar scrollbar-thumb-neutral-300 dark:scrollbar-thumb-neutral-700 scrollbar-track-transparent"
                 placeholder="Type your message..."
                 onKeyDown={(e) => {
                   if (e.key === "Enter" && !e.shiftKey) {
@@ -61,7 +61,7 @@ export const ChatInput = ({
           <button
             type="submit"
             disabled={isInputEmpty || isSendingMessage || showIdentityForm}
-            className="rounded-full disabled:bg-neutral-300/50 bg-emerald-800 hover:bg-emerald-800 disabled:text-neutral-600 text-white p-2"
+            className="rounded-full disabled:bg-neutral-300/50 disabled:text-neutral-600 dark:disabled:bg-neutral-700 dark:disabled:text-neutral-400 bg-[var(--widget-theme-color)] dark:bg-[var(--widget-theme-color)] text-white p-2 hover:opacity-90 transition-opacity"
           >
             <Forward size={14} strokeWidth={3} />
           </button>

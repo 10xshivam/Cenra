@@ -4,11 +4,31 @@ export type DefaultSuggestions = {
   suggestion3: string | null;
 };
 
+export type WidgetSectionItem = {
+  title: string;
+  description?: string;
+  linkLabel: string;
+  linkUrl: string;
+};
+
+export type WidgetSection = {
+  enabled: boolean;
+  title: string;
+  items: WidgetSectionItem[];
+};
+
 export type Workspace = {
   id: string;
-  name: string;
-  greetMessage: string;
-  defaultSuggestions: DefaultSuggestions;
+  name?: string;
+  brandName?: string | null;
+  companyLogoUrl?: string | null;
+  greetMessage?: string | null;
+  themeMode?: "light" | "dark" | null;
+  gradientFrom?: string | null;
+  themeColor?: string | null;
+  defaultSuggestions?: DefaultSuggestions | null;
+  whatsNewSection?: WidgetSection | null;
+  featuredArticlesSection?: WidgetSection | null;
 };
 
 export type WidgetSession = {
@@ -25,6 +45,6 @@ export type WidgetScreen =
   | "home"
   | "loading"
   | "chat"
-  | "error"
+  | "error";
 
 
