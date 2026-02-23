@@ -27,7 +27,7 @@ export const WhatsNewCards = ({ section }: WhatsNewCardsProps) => {
               href={href}
               target={isExternal ? "_blank" : undefined}
               rel={isExternal ? "noopener noreferrer" : undefined}
-              className="w-full min-w-0 h-fit p-3 rounded-lg flex flex-col gap-1 hover:-translate-y-0.5 transition-transform duration-300 border cursor-pointer border-neutral-200 bg-white/80 dark:border-neutral-700 dark:bg-neutral-900/80 overflow-hidden"
+              className="w-full min-w-0 h-36 p-3 rounded-lg flex flex-col gap-1 hover:-translate-y-0.5 transition-transform duration-300 border cursor-pointer border-neutral-200 bg-white/80 dark:border-neutral-700 dark:bg-neutral-900/80 overflow-hidden"
             >
               <div className="h-6 w-6 flex items-center justify-center rounded-sm text-xs mb-1 border bg-neutral-100 border-neutral-200 text-neutral-700 dark:bg-neutral-800 dark:border-neutral-600 dark:text-neutral-100">
                 {index + 1}
