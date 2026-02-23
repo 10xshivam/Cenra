@@ -38,7 +38,7 @@ export const RecentMessageCard = ({
               <img
                 src={workspace.companyLogoUrl ?? '/cenra-ai.png'}
                 alt={`${brandName} logo`}
-                className="h-[39px] w-[39px] rounded-full shadow-sm object-cover"
+                className="h-[39px] w-[39px] rounded-full shadow object-cover"
               />
             ) : (
               <Image
@@ -46,7 +46,7 @@ export const RecentMessageCard = ({
                 alt="avatar"
                 width={39}
                 height={39}
-                className="rounded-full shadow-sm"
+                className="rounded-full shadow"
               />
             )}
           </div>
