@@ -22,8 +22,11 @@ const AssistantMessageSkeleton = () => (
 // 2. User Message Skeleton
 const UserMessageSkeleton = () => (
   <div className="flex justify-end mb-4 animate-pulse">
-    <div className="max-w-[75%] w-fit px-3.5 py-2.5 rounded-xl bg-emerald-900 rounded-br-none border-none">
-      <div className="h-4 bg-emerald-700 rounded-lg w-32"></div>
+    <div
+      className="max-w-[75%] w-fit px-3.5 py-2.5 rounded-xl rounded-br-none border-none"
+      style={{ backgroundColor: "var(--widget-theme-color)" }}
+    >
+      <div className="h-4 bg-white/30 rounded-lg w-32"></div>
     </div>
   </div>
 );

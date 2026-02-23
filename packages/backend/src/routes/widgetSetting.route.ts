@@ -1,12 +1,16 @@
-import { Router } from 'express'
-import { createOrUpdateWidgetSettings, getWidgetSettings } from '../controllers/widgetSetting.controller';
-import { requireWorkspaceAccess } from '../middlewares/requireWorkspace';
+import { Router } from "express";
+import {
+  createOrUpdateWidgetSettings,
+  getWidgetSettings,
+} from "../controllers/widgetSetting.controller";
+import { requireWorkspaceAccess } from "../middlewares/requireWorkspace";
+import { verifyAuth } from "../middlewares/auth.middleware";
 
-const route: Router = Router()
+const route: Router = Router();
 
-route.use('/:workspaceId/widget-setting', requireWorkspaceAccess);
+route.use("/:workspaceId/widget-setting", verifyAuth, requireWorkspaceAccess);
 
-route.post('/:workspaceId/widget-setting', createOrUpdateWidgetSettings);
-route.get('/:workspaceId/widget-setting', getWidgetSettings);
+route.post("/:workspaceId/widget-setting", createOrUpdateWidgetSettings);
+route.get("/:workspaceId/widget-setting", getWidgetSettings);
 
 export default route;
