@@ -39,7 +39,7 @@ export const WidgetView = ({ workspaceId }: { workspaceId: string }) => {
 
   return (
     <div
-      className="min-h-[700px] w-[410px] rounded-3xl shadow-sm relative bg-neutral-50 dark:bg-neutral-900 transition-colors"
+      className="h-full w-full min-h-[700px] rounded-3xl shadow-sm relative bg-neutral-50 dark:bg-neutral-900 transition-colors"
       style={widgetStyles}
     >
       {screenComponents[currentScreen]}
