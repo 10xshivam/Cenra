@@ -106,6 +106,7 @@ export const LoginView = () => {
                     aria-invalid={fieldState.invalid}
                     placeholder="johndoe@gmail.com"
                     autoComplete="off"
+                    className="border-none"
                   />
                 </div>
                 {fieldState.invalid && (
@@ -131,6 +132,7 @@ export const LoginView = () => {
                     placeholder="Enter your password"
                     autoComplete="off"
                     type={showPassword}
+                    className="border-none"
                   />
                   {showPassword === "password" ? (
                     <ViewOffIcon
