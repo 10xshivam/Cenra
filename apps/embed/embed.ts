@@ -8,30 +8,30 @@ import { chatBubbleIcon, closeIcon } from './icons';
   let isOpen = false;
   
   // Get configuration from script tag
-  let organizationId: string | null = null;
+  let workspaceId: string | null = null;
   let position: 'bottom-right' | 'bottom-left' = EMBED_CONFIG.DEFAULT_POSITION;
   
   // Try to get the current script
   const currentScript = document.currentScript as HTMLScriptElement;
   if (currentScript) {
-    organizationId = currentScript.getAttribute('data-organization-id');
+    workspaceId = currentScript.getAttribute('data-workspace-id');
     position = (currentScript.getAttribute('data-position') as 'bottom-right' | 'bottom-left') || EMBED_CONFIG.DEFAULT_POSITION;
   } else {
     // Fallback: find script tag by src
     const scripts = document.querySelectorAll('script[src*="embed"]');
     const embedScript = Array.from(scripts).find(script => 
-      script.hasAttribute('data-organization-id')
+      script.hasAttribute('data-workspace-id')
     ) as HTMLScriptElement;
     
     if (embedScript) {
-      organizationId = embedScript.getAttribute('data-organization-id');
+      workspaceId = embedScript.getAttribute('data-workspace-id');
       position = (embedScript.getAttribute('data-position') as 'bottom-right' | 'bottom-left') || EMBED_CONFIG.DEFAULT_POSITION;
     }
   }
   
-  // Exit if no organization ID
-  if (!organizationId) {
-    console.error('Cenra Widget: data-organization-id attribute is required');
+  // Exit if no workspace ID
+  if (!workspaceId) {
+    console.error('Cenra Widget: data-workspace-id attribute is required');
     return;
   }
   
@@ -118,7 +118,7 @@ import { chatBubbleIcon, closeIcon } from './icons';
   
   function buildWidgetUrl(): string {
     const params = new URLSearchParams();
-    params.append('organizationId', organizationId!);
+    params.append('workspaceId', workspaceId!);
     return `${EMBED_CONFIG.WIDGET_URL}?${params.toString()}`;
   }
   
@@ -193,13 +193,13 @@ import { chatBubbleIcon, closeIcon } from './icons';
   }
   
   // Function to reinitialize with new config
-  function reinit(newConfig: { organizationId?: string; position?: 'bottom-right' | 'bottom-left' }) {
+  function reinit(newConfig: { workspaceId?: string; position?: 'bottom-right' | 'bottom-left' }) {
     // Destroy existing widget
     destroy();
     
     // Update config
-    if (newConfig.organizationId) {
-      organizationId = newConfig.organizationId;
+    if (newConfig.workspaceId) {
+      workspaceId = newConfig.workspaceId;
     }
     if (newConfig.position) {
       position = newConfig.position;
@@ -210,7 +210,7 @@ import { chatBubbleIcon, closeIcon } from './icons';
   }
   
   // Expose API to global scope
-  (window as any).EchoWidget = {
+  (window as any).CenraWidget = {
     init: reinit,
     show,
     hide,

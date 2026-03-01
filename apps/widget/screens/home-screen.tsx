@@ -26,18 +26,18 @@ export const HomeScreen = () => {
   const featuredArticlesSection = workspace?.featuredArticlesSection;
   const gradientFrom = workspace?.gradientFrom || "#052e2b";
   const themeSurface = workspace?.themeMode === "dark" ? "#171717" : "#fafafa";
- 
+
   const showWhatsNewSection = Boolean(
     whatsNewSection &&
-      (whatsNewSection.enabled ?? true) &&
-      Array.isArray(whatsNewSection.items) &&
-      whatsNewSection.items.length > 0
+    (whatsNewSection.enabled ?? true) &&
+    Array.isArray(whatsNewSection.items) &&
+    whatsNewSection.items.length > 0
   );
   const showFeaturedArticlesSection = Boolean(
     featuredArticlesSection &&
-      (featuredArticlesSection.enabled ?? true) &&
-      Array.isArray(featuredArticlesSection.items) &&
-      featuredArticlesSection.items.length > 0
+    (featuredArticlesSection.enabled ?? true) &&
+    Array.isArray(featuredArticlesSection.items) &&
+    featuredArticlesSection.items.length > 0
   );
   const visibleWhatsNewSection = showWhatsNewSection ? whatsNewSection! : null;
   const visibleFeaturedArticlesSection = showFeaturedArticlesSection
@@ -70,7 +70,7 @@ export const HomeScreen = () => {
   };
 
   return (
-    <div className="relative p-7 min-h-[700px] max-h-full w-full rounded-3xl bg-neutral-50 dark:bg-neutral-900 transition-colors">
+    <div className="relative p-7 min-h-full max-h-full w-full overflow-y-auto rounded-3xl bg-neutral-50 dark:bg-neutral-900 transition-colors no-scrollbar">
       <div
         className="absolute top-0 left-0 h-[52%] w-full rounded-t-3xl z-0"
         style={{
@@ -83,9 +83,9 @@ export const HomeScreen = () => {
           {brandName}
         </h3>
         <X
-          className="text-white/90 hover:text-white active:-scale-95 cursor-pointer"
+          className="text-white/90 hover:text-white cursor-pointer"
           strokeWidth={2}
-          // onClick={closeWidget} // agar close behaviour chahiye
+          onClick={() => window.parent.postMessage({ type: "close" }, "*")}
         />
       </div>
 
