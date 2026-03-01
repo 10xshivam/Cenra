@@ -57,18 +57,31 @@ export const steps: Step[] = [
     actions: [{ label: "Open Inbox", href: "/inbox" }],
   },
   {
-    id: "insights",
-    title: "Track Visitors & Analytics",
+    id: "analytics",
+    title: "Conversations Analytics",
     description: "Understand how customers interact with your support.",
     points: [
-      "View visitor details and session metadata",
       "Monitor unresolved, escalated, and resolved statuses",
       "Track engagement and optimize your knowledge base over time",
     ],
-    requiredRoutes: ["/visitors", "/analytics"],
+    requiredRoutes: ["/analytics"],
     actions: [
-      { label: "Open Visitors", href: "/visitors" },
       { label: "Open Analytics", href: "/analytics" },
     ],
   },
+  // {
+  //   id: "insights",
+  //   title: "Track Visitors & Analytics",
+  //   description: "Understand how customers interact with your support.",
+  //   points: [
+  //     "View visitor details and session metadata",
+  //     "Monitor unresolved, escalated, and resolved statuses",
+  //     "Track engagement and optimize your knowledge base over time",
+  //   ],
+  //   requiredRoutes: ["/visitors", "/analytics"],
+  //   actions: [
+  //     { label: "Open Visitors", href: "/visitors" },
+  //     { label: "Open Analytics", href: "/analytics" },
+  //   ],
+  // },
 ];

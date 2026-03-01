@@ -3,12 +3,12 @@ import {
   FolderIcon,
   InboxIcon,
   IntegrationIcon,
-  PluginsIcon,
+  // PluginsIcon,
   RocketIcon,
   SettingsIcon,
   Sparkles2Icon,
   SupportIcon,
-  UsersIcon,
+  // UsersIcon,
   WebIcon,
 } from "@workspace/ui/components/icons";
 
@@ -26,11 +26,11 @@ export const SIDEBAR_ITEMS = {
     },
   ],
   insights: [
-    {
-      title: "Visitors",
-      url: "#",
-      icon: UsersIcon,
-    },
+    // {
+    //   title: "Visitors",
+    //   url: "#",
+    //   icon: UsersIcon,
+    // },
     {
       title: "Analytics",
       url: "#",
@@ -60,11 +60,11 @@ export const SIDEBAR_ITEMS = {
       url: "/integrations",
       icon: IntegrationIcon,
     },
-    {
-      title: "Plugins",
-      url: "#",
-      icon: PluginsIcon,
-    },
+    // {
+    //   title: "Plugins",
+    //   url: "#",
+    //   icon: PluginsIcon,
+    // },
   ],
   footer: [
     {
