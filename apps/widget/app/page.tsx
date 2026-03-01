@@ -1,9 +1,18 @@
+"use client";
+
+import { use } from "react";
 import { WidgetView } from "@/views/widget-view";
 
-export default function Page() {
-  return (
-    <div className="min-h-screen w-full flex justify-center items-center bg-white  p-4">
-      <WidgetView workspaceId="9dccb986-4d25-46ab-bbd3-96818b6938c7" />
-    </div>
-  );
+interface Props {
+  searchParams: Promise<{
+    workspaceId: string;
+  }>;
 }
+
+export default function Page({ searchParams }: Props) {
+  const { workspaceId } = use(searchParams);
+
+  return (
+    <WidgetView workspaceId={workspaceId} />
+  );
+};

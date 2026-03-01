@@ -57,7 +57,7 @@ export const SIDEBAR_ITEMS = {
     },
     {
       title: "Integrations",
-      url: "#",
+      url: "/integrations",
       icon: IntegrationIcon,
     },
     {

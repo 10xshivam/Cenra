@@ -25,6 +25,15 @@ export const WidgetView = ({ workspaceId }: { workspaceId: string }) => {
     setTheme(workspace?.themeMode === "dark" ? "dark" : "light");
   }, [workspace?.themeMode, setTheme]);
 
+  useEffect(() => {
+    if (workspace?.themeColor) {
+      window.parent.postMessage(
+        { type: "theme_update", payload: { color: workspace.themeColor } },
+        "*"
+      );
+    }
+  }, [workspace?.themeColor]);
+
   const screenComponents: Record<WidgetScreen, JSX.Element> = {
     loading: <LoadingScreen workspaceId={workspaceId} />,
     home: <HomeScreen />,
@@ -39,7 +48,7 @@ export const WidgetView = ({ workspaceId }: { workspaceId: string }) => {
 
   return (
     <div
-      className="min-h-[700px] w-[410px] rounded-3xl shadow-sm relative bg-neutral-50 dark:bg-neutral-900 transition-colors"
+      className="h-full w-full rounded-3xl shadow-sm relative bg-neutral-50 dark:bg-neutral-900 transition-colors"
       style={widgetStyles}
     >
       {screenComponents[currentScreen]}

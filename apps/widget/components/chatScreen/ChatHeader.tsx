@@ -47,8 +47,8 @@ export const ChatHeader = ({
         </div>
       </div>
       <div className="flex gap-5 mr-1.5 text-neutral-500 dark:text-neutral-300">
-        <Ellipsis size={20} className="hover:text-[var(--widget-theme-color)] cursor-pointer"/>
-        <X size={20} className="hover:text-[var(--widget-theme-color)] cursor-pointer"/>
+        {/* <Ellipsis size={20} className="hover:text-[var(--widget-theme-color)] cursor-pointer" /> */}
+        <X size={20} className="hover:text-[var(--widget-theme-color)] cursor-pointer" onClick={() => window.parent.postMessage({ type: "close" }, "*")} />
       </div>
     </div>
   );

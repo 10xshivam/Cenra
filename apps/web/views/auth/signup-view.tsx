@@ -113,6 +113,7 @@ export const SignupView = () => {
                       aria-invalid={fieldState.invalid}
                       placeholder="John"
                       autoComplete="off"
+                      className="border-none"
                     />
                   </div>
                   {fieldState.invalid && (
@@ -134,6 +135,7 @@ export const SignupView = () => {
                       aria-invalid={fieldState.invalid}
                       placeholder="Doe"
                       autoComplete="off"
+                      className="border-none"
                     />
                   </div>
                   {fieldState.invalid && (
@@ -159,6 +161,7 @@ export const SignupView = () => {
                     aria-invalid={fieldState.invalid}
                     placeholder="johndoe@gmail.com"
                     autoComplete="off"
+                    className="border-none"
                   />
                 </div>
                 {fieldState.invalid && (
@@ -184,6 +187,7 @@ export const SignupView = () => {
                     placeholder="Enter your password"
                     autoComplete="off"
                     type={showPassword}
+                    className="border-none"
                   />
                   {showPassword === "password" ? (
                     <ViewOffIcon
