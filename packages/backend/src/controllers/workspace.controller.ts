@@ -47,7 +47,7 @@ export const createWorkspace = async (req: Request, res: Response) => {
 
     if (newWorkspace) {
       await prisma.widgetSettings.create({
-        data: { 
+        data: {
           workspaceId: newWorkspace.id,
           brandName: newWorkspace.name,
         },
@@ -107,3 +107,47 @@ export const getWorkspace = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Internal server error" });
   }
 };
+
+export const updateWorkspace = async (req: Request, res: Response) => {
+  try {
+    const userId = req.userId;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const { name, website } = req.body;
+
+    if (!name) {
+      return res.status(400).json({ message: "Workspace name is required" });
+    }
+
+    const workspace = await prisma.workspace.findFirst({ where: { userId } });
+
+    if (!workspace) {
+      return res.status(404).json({ message: "Workspace not found" });
+    }
+
+    const updated = await prisma.workspace.update({
+      where: { id: workspace.id },
+      data: {
+        name: name.trim(),
+        ...(website !== undefined && { website: website.trim() || null }),
+      },
+    });
+
+    return res.status(200).json({
+      message: "Workspace updated successfully",
+      workspace: {
+        id: updated.id,
+        name: updated.name,
+        website: updated.website,
+        plan: updated.plan,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating workspace:", error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
