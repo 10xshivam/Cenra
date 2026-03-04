@@ -1,6 +1,6 @@
 import { ConversationStatus, prisma } from "@workspace/db";
 import { Request, Response } from "express";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "crypto";
 import { getChatbot } from "../config/langgraph";
 import { BaseMessage, HumanMessage } from "langchain";
 import { simplifyMessage } from "../utils/messages/simplifyMessages";
@@ -24,7 +24,7 @@ export const createConversation = async (req: Request, res: Response) => {
         .json({ message: "Customer not found in this workspace" });
     }
 
-    const threadId = uuidv4();
+    const threadId = randomUUID();
 
     const conversation = await prisma.conversation.create({
       data: {
@@ -56,7 +56,7 @@ export const startConversation = async (req: Request, res: Response) => {
     }
 
     const { count: customersCount, plan } =
-      await getCustomersCount(workspace.id);  
+      await getCustomersCount(workspace.id);
     if (customersCount >= PLAN_FEATURES[plan].maxCustomersPerMonth) {
       return res.status(403).json({ message: "Monthly customer limit reached" });
     }
@@ -67,7 +67,7 @@ export const startConversation = async (req: Request, res: Response) => {
       },
     });
 
-    const threadId = uuidv4();
+    const threadId = randomUUID();
 
     const conversation = await prisma.conversation.create({
       data: {
@@ -135,7 +135,7 @@ export const getConversations = async (req: Request, res: Response) => {
 
     const conversations = await prisma.conversation.findMany({
       where: {
-        workspaceId : workspace.id,
+        workspaceId: workspace.id,
         ...(status ? { status: status as ConversationStatus } : {}),
         customer: {
           AND: [{ email: { not: null } }, { name: { not: null } }],

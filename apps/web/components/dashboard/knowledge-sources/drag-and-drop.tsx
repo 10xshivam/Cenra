@@ -90,15 +90,14 @@ export const DragAndDrop = () => {
       ) : (
         <div
           {...getRootProps()}
-          className={`w-full h-full border-2 border-dashed p-6 rounded-lg transition-all duration-300 flex flex-col justify-center items-center ${
-            isUploading
-              ? "bg-neutral-100 border-neutral-300 cursor-not-allowed"
-              : isDragReject
-                ? "border-red-500 bg-neutral-100 cursor-pointer"
-                : isDragActive
-                  ? "border-emerald-500 bg-neutral-100/30 hover:bg-neutral-100 cursor-pointer"
-                  : "border-neutral-300 bg-neutral-100/30 hover:bg-neutral-100 cursor-pointer"
-          }`}
+          className={`w-full h-full border-2 border-dashed p-6 rounded-lg transition-all duration-300 flex flex-col justify-center items-center ${isUploading
+            ? "bg-neutral-100 border-neutral-300 cursor-not-allowed"
+            : isDragReject
+              ? "border-red-500 bg-neutral-100 cursor-pointer"
+              : isDragActive
+                ? "border-emerald-500 bg-neutral-100/30 hover:bg-neutral-100 cursor-pointer"
+                : "border-neutral-300 bg-neutral-100/30 hover:bg-neutral-100 cursor-pointer"
+            }`}
         >
           <input {...getInputProps()} />
           {isUploading ? (

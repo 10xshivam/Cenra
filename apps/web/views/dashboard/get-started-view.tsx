@@ -1,6 +1,9 @@
 "use client";
 
-import { steps, VISITED_ROUTES_STORAGE_KEY } from "@/constants/getStarted.constants";
+import {
+  steps,
+  VISITED_ROUTES_STORAGE_KEY,
+} from "@/constants/getStarted.constants";
 import { Button } from "@workspace/ui/components/button";
 import { IconRocket, IconSparkle } from "@workspace/ui/components/icons";
 import { CircleCheckBig, CircleDashed } from "lucide-react";
@@ -37,7 +40,7 @@ export const GetStartedView = () => {
   );
 
   return (
-    <div className="w-full h-full flex items-center p-16 flex-col gap-20 md:p-12">
+    <div className="w-full h-full flex items-center p-16 flex-col gap-20 md:p-12 overflow-y-auto no-scrollbar">
       <div className="flex w-full max-w-6xl flex-col gap-16">
         <section className="rounded-2xl w-full p-2 max-w-6xl h-fit bg-neutral-200 pb-6">
           <div className="flex flex-col gap-2 w-full h-full border border-neutral-400 rounded-xl p-5 bg-neutral-50">
