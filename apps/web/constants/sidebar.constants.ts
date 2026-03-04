@@ -33,7 +33,7 @@ export const SIDEBAR_ITEMS = {
     // },
     {
       title: "Analytics",
-      url: "#",
+      url: "/analytics",
       icon: BarsIcon,
     },
   ],

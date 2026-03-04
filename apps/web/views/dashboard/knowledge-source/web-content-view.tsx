@@ -80,7 +80,7 @@ export const WebContentView = () => {
   const createWebResourceMutation = useCreateWebResource();
   const { data: resources, isPending } = useGetAllResources(
     workspace?.id || "",
-    "WEB"
+    "WEB",
   );
   const toggleMutation = useToggleResource();
   const deleteMutation = useDeleteResource();
@@ -111,7 +111,7 @@ export const WebContentView = () => {
           setOpen(false);
           form.reset();
         },
-      }
+      },
     );
   };
   return (
@@ -336,7 +336,7 @@ export const WebContentView = () => {
                                       ...prev,
                                       [resource.id]: false,
                                     })),
-                                }
+                                },
                               )
                             }
                             type="submit"
@@ -454,7 +454,7 @@ export const WebContentView = () => {
                             {content.page}
                           </DialogTitle>
                         </DialogHeader>
-                        
+
                         <div className="flex-1 overflow-y-auto p-6 scrollbar-thin scrollbar-thumb-neutral-300">
                           <div className="text-sm text-neutral-600 leading-relaxed whitespace-pre-wrap">
                             {content.content}

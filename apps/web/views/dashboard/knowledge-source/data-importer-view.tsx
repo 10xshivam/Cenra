@@ -103,7 +103,7 @@ export const DataImporterView = () => {
           </span>
           <p className="tracking-tight font-medium text-sm text-neutral-400">
             <span className="text-neutral-700 font-bold">
-              {resources ? resources.length : 0} 
+              {resources ? resources.length : 0}
             </span>{" "}
             / 5 Documents
           </p>
@@ -239,7 +239,7 @@ export const DataImporterView = () => {
                             year: "numeric",
                             month: "long",
                             day: "numeric",
-                          }
+                          },
                         )}
                       </TableCell>
                       <TableCell className="w-[120px] text-neutral-600 tracking-tight">

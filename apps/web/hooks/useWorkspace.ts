@@ -26,8 +26,8 @@ export const useCreateWorkspace = () => {
         name: workspace.name,
         website: workspace.website,
       });
-      queryClient.setQueryData(['workspace'], workspace);
-      router.push('/get-started');
+      queryClient.setQueryData(["workspace"], workspace);
+      router.push("/get-started");
     },
     onError: (error) => {
       toast.error(
