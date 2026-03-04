@@ -6,6 +6,7 @@ import {
   loginWithGoogle,
   logoutUser,
   registerUser,
+  updateUser,
 } from "@/lib/api/auth";
 import { useUserStore } from "@/store/useUserStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -115,3 +116,21 @@ export const useLogout = () => {
     },
   });
 }
+
+export const useUpdateUser = () => {
+  const queryClient = useQueryClient();
+  const setUser = useUserStore((s) => s.setUser);
+
+  return useMutation({
+    mutationFn: updateUser,
+    onSuccess: (user) => {
+      if (user) {
+        setUser({ id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName });
+        queryClient.setQueryData(["user"], user);
+      }
+    },
+    onError: (error) => {
+      toast.error(`Failed to update profile: ${error instanceof Error ? error.message : String(error)}`);
+    },
+  });
+};

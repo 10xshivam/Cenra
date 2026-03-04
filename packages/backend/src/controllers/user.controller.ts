@@ -47,7 +47,7 @@ export const registerUser = async (req: Request, res: Response) => {
         },
       });
     } else {
-        return res.status(400).json({ message: "Invalid user data." });
+      return res.status(400).json({ message: "Invalid user data." });
     }
   } catch (error) {
     console.error("Error registering user:", error);
@@ -55,7 +55,7 @@ export const registerUser = async (req: Request, res: Response) => {
   }
 };
 
-export  const loginUser = async (req: Request, res: Response) => {
+export const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
 
   try {
@@ -161,7 +161,7 @@ export const googleLogin = async (req: Request, res: Response) => {
 
     const user = await prisma.user.upsert({
       where: { email },
-      update: { 
+      update: {
         firstName: given_name,
         lastName: family_name,
       },
@@ -169,7 +169,7 @@ export const googleLogin = async (req: Request, res: Response) => {
         email,
         firstName: given_name,
         lastName: family_name,
-        password: await bcrypt.hash(Math.random().toString(36), 10), 
+        password: await bcrypt.hash(Math.random().toString(36), 10),
       },
     });
 
@@ -182,7 +182,7 @@ export const googleLogin = async (req: Request, res: Response) => {
         id: user.id,
         firstName: user.firstName,
         lastName: user.lastName,
-        email: user.email, 
+        email: user.email,
       },
     });
   } catch (error) {
@@ -190,3 +190,49 @@ export const googleLogin = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Internal server error." });
   }
 };
+
+export const updateUser = async (req: Request, res: Response) => {
+  try {
+    const userId = req.userId;
+
+    if (!userId) {
+      return res.status(401).json({ message: "Unauthorized." });
+    }
+
+    const { firstName, lastName, email } = req.body;
+
+    if (!firstName || !lastName) {
+      return res.status(400).json({ message: "First name and last name are required." });
+    }
+
+    if (email) {
+      const existing = await prisma.user.findUnique({ where: { email: email.trim() } });
+      if (existing && existing.id !== userId) {
+        return res.status(409).json({ message: "This email is already in use by another account." });
+      }
+    }
+
+    const user = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
+        ...(email && { email: email.trim() }),
+      },
+    });
+
+    return res.status(200).json({
+      message: "Profile updated successfully.",
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return res.status(500).json({ message: "Internal server error." });
+  }
+};
+

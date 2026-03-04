@@ -105,7 +105,7 @@ export const DashboardSidebar = () => {
         <SidebarMenu>
           {SIDEBAR_ITEMS.footer.map((item) => (
             <SidebarMenuItem key={item.title}>
-              <SidebarMenuButton asChild>
+              <SidebarMenuButton asChild isActive={pathname === item.url}>
                 <Link href={item.url}>
                   <item.icon />
                   <span>{item.title}</span>

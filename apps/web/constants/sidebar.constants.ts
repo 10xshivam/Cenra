@@ -69,7 +69,7 @@ export const SIDEBAR_ITEMS = {
   footer: [
     {
       title: "Settings",
-      url: "#",
+      url: "/settings",
       icon: SettingsIcon,
     },
     {

@@ -19,14 +19,20 @@ export const loginUser = async (credentials: z.infer<typeof loginSchema>) => {
 };
 
 export const loginWithGoogle = async (code: string) => {
-    const {data } = await axiosInstance.post(
-      `auth/google`,
-      { code }
-    );
-    return data.user;
+  const { data } = await axiosInstance.post(
+    `auth/google`,
+    { code }
+  );
+  return data.user;
 };
 
 export const logoutUser = async () => {
   const { data } = await axiosInstance.post('/auth/logout');
-  return data.message; 
+  return data.message;
 };
+
+export const updateUser = async (payload: { firstName: string; lastName: string; email?: string }) => {
+  const { data } = await axiosInstance.patch('/auth/user', payload);
+  return data.user;
+};
+
