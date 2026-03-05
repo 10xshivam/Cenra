@@ -74,7 +74,7 @@ export const SIDEBAR_ITEMS = {
     },
     {
       title: "Help & Support",
-      url: "#",
+      url: "/help",
       icon: SupportIcon,
     },
   ],
