@@ -9,15 +9,25 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@workspace/ui/components/breadcrumb";
-import { BellIcon, UserFilledIcon } from "@workspace/ui/components/icons";
+import { LogoutIcon, UserFilledIcon } from "@workspace/ui/components/icons";
 import { Separator } from "@workspace/ui/components/separator";
 import { SidebarTrigger } from "@workspace/ui/components/sidebar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@workspace/ui/components/dropdown-menu";
+import { useLogout } from "@/hooks/useAuth";
 import { usePathname } from "next/navigation";
 import React from "react";
 
 export const MainHeader = () => {
   const pathname = usePathname();
   const { user } = useUserStore();
+  const logout = useLogout();
 
   const breadcrumbPath = findPathInSidebar(SIDEBAR_ITEMS, pathname) ?? [];
   return (
@@ -46,19 +56,38 @@ export const MainHeader = () => {
         </Breadcrumb>
       </div>
       <div className="px-4 flex items-center gap-3">
-        <BellIcon />
-        <Separator
-          orientation="vertical"
-          className=" data-[orientation=vertical]:h-4"
-        />
-        <div className="group flex items-center cursor-pointer">
-          <div className="rounded-full p-1.5  bg-neutral-500/10  text-neutral-500 group-hover:text-emerald-800 transition-colors duration-300">
-            <UserFilledIcon />
-          </div>
-          <span className="ml-2 text-sm text-neutral-500 group-hover:text-emerald-800 tracking-tight font-medium">
-            {user ? user.firstName + " " + user.lastName : "Loading..."}
-          </span>
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <div className="rounded-full p-1.5 bg-neutral-500/10 text-neutral-500 hover:text-emerald-800 transition-colors duration-300 cursor-pointer">
+              <UserFilledIcon />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-64 p-1 shadow-none rounded-xl border border-neutral-300 bg-neutral-100 ">
+            <div className="shadow-sm rounded-lg bg-white p-1">
+              <DropdownMenuLabel className="font-normal flex items-center gap-2">
+                <div className="rounded-full p-1.5 bg-neutral-500/10 text-neutral-500 hover:text-emerald-800 transition-colors duration-300 cursor-pointer">
+              <UserFilledIcon className="size-5" />
+            </div>
+                <div className="flex flex-col gap-0.5">
+                  <p className="text-sm font-medium leading-none tracking-tight text-neutral-700">
+                    {user ? `${user.firstName} ${user.lastName}` : "User"}
+                  </p>
+                  <p className="text-xs leading-none text-neutral-500">
+                    {user?.email}
+                  </p>
+                </div>
+              </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                className="text-destructive focus:text-destructive cursor-pointer flex items-center gap-1.5 justify-center"
+                onClick={() => logout.mutate()}
+              >
+                <span className="font-medium tracking-tight">Logout</span>
+                <LogoutIcon className="size-3.5 text-red-600" />
+              </DropdownMenuItem>
+            </div>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );
