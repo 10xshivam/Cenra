@@ -117,9 +117,9 @@ export const CustomerInfo = () => {
                 <Globe className="size-4 text-neutral-700" strokeWidth={2.5} />
                 {customer?.metadata?.language}
               </span>
-              <span className="flex items-center gap-1 text-xs font-medium text-neutral-600">
-                <Link className="size-4 text-neutral-700" strokeWidth={2.5} />{" "}
-                {customer?.metadata?.currentUrl}
+              <span className="flex items-center gap-1 text-xs font-medium text-neutral-600 truncate">
+                <Link className="size-4 text-neutral-700" strokeWidth={2.5} />
+                <p className="truncate max-w-60">{customer?.metadata?.currentUrl}</p>
               </span>
             </AccordionContent>
           </AccordionItem>
