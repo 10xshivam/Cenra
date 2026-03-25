@@ -1,0 +1,9 @@
+export { FeaturesSection } from "./features-section";
+export { FooterSection } from "./footer-section";
+export { HeroSection } from "./hero-section";
+export { KnowledgeSection } from "./knowledge-section";
+export { Navbar } from "./navbar";
+export { OperationsSection } from "./operations-section";
+export { PricingSection } from "./pricing-section";
+export { BuiltWithStrip } from "./stats-strip";
+export { WorkflowSection } from "./workflow-section";

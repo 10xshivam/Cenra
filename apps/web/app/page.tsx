@@ -1,14 +1,32 @@
-import { Button } from "@workspace/ui/components/button"
-import { Input } from "@workspace/ui/components/input"
+import {
+  FeaturesSection,
+  FooterSection,
+  HeroSection,
+  KnowledgeSection,
+  OperationsSection,
+  PricingSection,
+  BuiltWithStrip,
+  WorkflowSection,
+  Navbar,
+} from "@/components/landing";
 
-export default function Page() {
+const Page = () => {
   return (
-    <div className="flex items-center justify-center min-h-svh">
-      <div className="flex flex-col items-center justify-center gap-4">
-        <h1 className="text-2xl font-bold">Hello from Web</h1>
-        <Input placeholder="Type something..." />
-        <Button size="sm">Click Me</Button>
+    <main className="h-screen overflow-y-auto bg-amber-50/50 text-neutral-900 no-scrollbar">
+      <Navbar />
+      <div className="relative mx-auto flex w-full h-full max-w-7xl flex-col pb-20 pt-6 border-x overflow-y-auto no-scrollbar">
+        <HeroSection />
+        <BuiltWithStrip />
+        <WorkflowSection />
+        {/* <FeaturesSection />
+        <KnowledgeSection />
+        <OperationsSection />
+        <PricingSection />
+        <FooterSection /> */}
       </div>
-    </div>
-  )
+    </main>
+  );
 }
+
+export default Page;
+
