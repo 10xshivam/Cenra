@@ -15,22 +15,16 @@ export const Navbar = () => {
 
         <nav className="hidden items-center gap-6 text-sm text-neutral-600 md:flex">
           <a
-            href="#features"
+            href="#why-cenra"
             className="transition-colors hover:text-neutral-900"
           >
-            Features
+            Why Cenra
           </a>
           <a
-            href="#workflow"
+            href="#setup"
             className="transition-colors hover:text-neutral-900"
           >
-            Workflow
-          </a>
-          <a
-            href="#operations"
-            className="transition-colors hover:text-neutral-900"
-          >
-            Operations
+            Setup
           </a>
           <a
             href="#pricing"
@@ -59,3 +53,5 @@ export const Navbar = () => {
     </header>
   );
 };
+
+

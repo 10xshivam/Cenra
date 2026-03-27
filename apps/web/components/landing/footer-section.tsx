@@ -1,3 +1,4 @@
+import { IconCopyright } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -5,16 +6,14 @@ const footerGroups = [
   {
     title: "Product",
     links: [
-      { label: "Chat Widget", href: "#features" },
-      { label: "Knowledge Sources", href: "#workflow" },
-      { label: "Operations", href: "#operations" },
+      { label: "Why Cenra", href: "#why-cenra" },
+      { label: "Setup", href: "#setup" },
       { label: "Pricing", href: "#pricing" },
     ],
   },
   {
     title: "Resources",
     links: [
-      { label: "Pricing", href: "/pricing" },
       { label: "Get Started", href: "/signup" },
       { label: "Login", href: "/login" },
     ],
@@ -22,52 +21,58 @@ const footerGroups = [
   {
     title: "Company",
     links: [
-      { label: "About Cenra", href: "#features" },
-      { label: "Privacy", href: "#" },
-      { label: "Terms", href: "#" },
+      { label: "About", href: "#" },
+      { label: "Privacy Policy", href: "#" },
+      { label: "Terms & Conditions", href: "#" },
+    ],
+  },
+  {
+    title: "Socials",
+    links: [
+      { label: "Github", href: "#" },
+      { label: "LinkedIn", href: "#" },
+      { label: "X.com", href: "#" },
     ],
   },
 ] as const;
 
 export function FooterSection() {
   return (
-    <footer className="border-t border-neutral-300/80 py-12 md:py-16">
-      <div className="grid gap-10 lg:grid-cols-[1.1fr_0.9fr]">
-        <div className="max-w-md">
-          <div className="flex items-center gap-3">
-            <Image
-              src="/cenra-logo.svg"
-              alt="Cenra"
-              width={40}
-              height={40}
-              className="rounded-full border border-neutral-300 bg-white p-1"
-            />
-            <span className="text-2xl font-semibold tracking-tight text-emerald-900">
-              Cenra
-            </span>
-          </div>
-          <p className="mt-4 text-sm leading-6 text-neutral-600">
-            Cenra turns your docs, website content, and business knowledge into
-            an AI support agent with memory, grounded answers, and operational
-            visibility for your team.
+    <footer className="grid grid-cols-1 divide-y divide-neutral-200 divide-dashed">
+      <div className="grid grid-cols-3 divide-x divide-neutral-200 divide-dashed">
+        <div className="flex flex-col p-10">
+          <span className="text-3xl font-semibold tracking-tight text-emerald-800 font-serif mb-0.5">
+            Cenra
+          </span>
+          <p className="text-xs text-neutral-500 font-medium tracking-tight">
+            Designed & Developed by{" "}
+            <Link
+              href="https://x.com/10xshivam"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-neutral-400 font-medium"
+            >
+              @10xshivam
+            </Link>
           </p>
-          <p className="mt-6 text-xs font-medium uppercase tracking-[0.22em] text-neutral-400">
-            AI support that feels informed, fast, and human.
+          <p className="text-xs text-neutral-400 flex items-center mt-0.5 tracking-tight">
+            <IconCopyright className="size-3.5" strokeWidth={2} />
+            2026. All rights reserved.
           </p>
         </div>
 
-        <div className="grid gap-8 sm:grid-cols-3">
+        <div className="grid grid-cols-4 col-span-2 divide-x divide-neutral-200 divide-dashed">
           {footerGroups.map((group) => (
-            <div key={group.title} className="flex flex-col gap-3">
-              <h3 className="text-sm font-semibold uppercase tracking-[0.18em] text-neutral-500">
+            <div key={group.title} className="flex flex-col gap-1.5 p-10">
+              <h3 className="text-base font-semibold text-emerald-800 font-serif">
                 {group.title}
               </h3>
-              <div className="flex flex-col gap-2.5 text-sm text-neutral-600">
+              <div className="flex flex-col gap-1 text-sm text-neutral-500">
                 {group.links.map((link) => (
                   <Link
                     key={link.label}
                     href={link.href}
-                    className="transition-colors hover:text-neutral-900"
+                    className="transition-colors hover:text-neutral-900 tracking-tight"
                   >
                     {link.label}
                   </Link>
@@ -76,6 +81,18 @@ export function FooterSection() {
             </div>
           ))}
         </div>
+      </div>
+      <div className="pt-10 flex items-center justify-center grayscale opacity-10">
+        <Image
+          alt="Cenra Logo"
+          height={40}
+          width={40}
+          src="/cenra-logo.svg"
+          className=" size-80 "
+        />
+        <h4 className="font-serif text-[12rem] font-medium tracking-tight">
+          Cenra
+        </h4>
       </div>
     </footer>
   );

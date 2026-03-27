@@ -10,6 +10,60 @@ import {
   UserRoundSearch,
 } from "lucide-react";
 
+import {
+  IconDatabase,
+  IconMessageCircle,
+  IconUser,
+  IconArrowUpRight,
+  IconChartPie,
+  IconPlugConnected,
+  IconMessageCircleFilled,
+  IconUserFilled,
+  IconCircleArrowUpRightFilled,
+  IconChartPieFilled,
+  IconBookFilled,
+  IconStack2Filled,
+} from "@tabler/icons-react";
+
+export const landingFeatures = [
+  {
+    title: "Product-trained knowledge",
+    description:
+      "Train Cenra on your website, docs, and FAQs to deliver accurate, business-aligned responses.",
+    icon: IconBookFilled,
+  },
+  {
+    title: "Context-aware support",
+    description:
+      "Maintains conversation context across messages so users don’t have to repeat themselves.",
+    icon: IconMessageCircleFilled,
+  },
+  {
+    title: "Customer context",
+    description:
+      "Access customer details like email, device, location, and session data directly within conversations.",
+    icon: IconUserFilled,
+  },
+  {
+    title: "AI + human workflow",
+    description:
+      "Automatically resolve or escalate queries, with full control from a unified inbox.",
+    icon: IconCircleArrowUpRightFilled,
+  },
+  {
+    title: "Support analytics",
+    description:
+      "Track requests, resolutions, and escalations with real-time performance insights.",
+    icon: IconChartPieFilled,
+  },
+  {
+    title: "Flexible integrations",
+    description:
+      "Deploy across websites and apps with support for HTML, React, Next.js, and more.",
+    icon: IconStack2Filled,
+  },
+] as const;
+
 export const landingSteps = [
   {
     title: "Connect your knowledge",
@@ -31,32 +85,6 @@ export const landingSteps = [
   },
 ] as const;
 
-export const landingFeatures = [
-  {
-    title: "Workspace-driven knowledge",
-    description:
-      "Each workspace keeps its own content, settings, and retrieval context so answers stay accurate and brand-specific.",
-    icon: ScanSearch,
-  },
-  {
-    title: "Conversation memory",
-    description:
-      "Cenra remembers prior threads and follow-ups, helping customers continue conversations without repeating themselves.",
-    icon: MessageSquareText,
-  },
-  {
-    title: "Smart identity capture",
-    description:
-      "Collect customer details only when needed so the experience stays smooth and support teams still get the right context.",
-    icon: UserRoundSearch,
-  },
-  {
-    title: "Human handoff when needed",
-    description:
-      "Move important conversations into the inbox so your team can step in with full context and keep momentum.",
-    icon: Inbox,
-  },
-] as const;
 
 export const landingOperations = [
   {

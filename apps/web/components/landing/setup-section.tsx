@@ -7,9 +7,9 @@ import {
 import { landingSteps } from "./landing-data";
 import Image from "next/image";
 
-export function WorkflowSection() {
+export function SetupSection() {
   return (
-    <section id="workflow">
+    <section id="setup">
       <div className="flex  relative flex-col gap-3 pt-40 pb-10 pl-10">
         <Image
           alt="Cenra Logo"
@@ -19,7 +19,7 @@ export function WorkflowSection() {
           className="absolute grayscale top-5 right-8 size-50 opacity-10"
         />
         <h2 className="text-5xl font-medium tracking-tighter text-emerald-800 font-serif">
-          Get started in minutes
+          Setup in minutes
         </h2>
         <p className="text-neutral-600 tracking-tight max-w-xl">
           Set up your AI support agent by connecting your data, customizing the
@@ -79,3 +79,4 @@ export function WorkflowSection() {
     </section>
   );
 }
+

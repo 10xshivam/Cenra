@@ -3,34 +3,36 @@ import { Button } from "@workspace/ui/components/button";
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="py-16 md:py-20">
-      <div className="rounded-[2rem] border border-neutral-300 bg-neutral-900 p-8 text-white shadow-[0_30px_80px_-32px_rgba(0,0,0,0.45)] md:p-10">
-        <div className="grid gap-8 lg:grid-cols-[1fr_auto] lg:items-end">
-          <div className="max-w-2xl">
-            <span className="text-sm font-semibold uppercase tracking-[0.22em] text-emerald-300">
-              Pricing
-            </span>
-            <h2 className="mt-4 text-3xl font-semibold tracking-tight md:text-4xl">
-              Simple pricing that scales with your support team.
-            </h2>
-            <p className="mt-4 text-sm leading-6 text-neutral-300 md:text-base">
-              Everything you need to launch an AI-powered chat widget, track
-              conversations, and improve support operations as demand grows.
-            </p>
-          </div>
+    <section id="pricing" className="p-10 border-y border-neutral-200">
+      <div className="grid grid-cols-2">
+        <div className="flex relative flex-col gap-3 max-w-xl">
+          <h2 className="text-4xl font-medium tracking-tighter text-emerald-800 font-serif">
+            Pricing that scales with your business
+          </h2>
+          <p className="text-neutral-600 tracking-tight pl-1">
+            Flexible plans to build, deploy, and manage AI-powered customer
+            support, designed to grow with your team as demand increases.
+          </p>
+          <Button
+            asChild
+            size="lg"
+            className="rounded-full bg-emerald-800 px-6 border-[1.5px] border-emerald-700 hover:bg-emerald-700 w-fit mt-2"
+          >
+            <Link href="/pricing">Explore Pricing</Link>
+          </Button>
+        </div>
 
-          <div className="flex flex-col items-start gap-4 lg:items-end">
-            <div>
-              <p className="text-sm text-neutral-400">Starts from</p>
-              <p className="text-4xl font-semibold tracking-tight">$19/mo</p>
-            </div>
-            <Button
-              asChild
-              size="lg"
-              className="rounded-full bg-white px-6 text-neutral-900 hover:bg-neutral-100"
-            >
-              <Link href="/pricing">Explore Pricing</Link>
-            </Button>
+        <div className="flex flex-col gap-4 justify-center items-end">
+          <div className="">
+            <p className="text-sm text-neutral-400 tracking-tight">
+              Starts from
+            </p>
+            <p className="text-9xl font-semibold tracking-tighter font-mono opacity-10">
+              $19
+            </p>
+            <p className="text-sm text-neutral-400 text-end tracking-tight">
+              per month
+            </p>
           </div>
         </div>
       </div>
