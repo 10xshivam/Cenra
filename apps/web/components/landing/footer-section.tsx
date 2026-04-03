@@ -1,4 +1,4 @@
-import { IconCopyright } from "@tabler/icons-react";
+﻿import { IconCopyright } from "@tabler/icons-react";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -97,3 +97,4 @@ export function FooterSection() {
     </footer>
   );
 }
+

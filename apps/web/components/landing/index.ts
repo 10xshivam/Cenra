@@ -5,4 +5,5 @@ export { Navbar } from "./navbar";
 export { PricingSection } from "./pricing-section";
 export { BuiltWithStrip } from "./stats-strip";
 export { SetupSection } from "./setup-section";
+export { HeroIllustration } from "./hero-illustration";
 

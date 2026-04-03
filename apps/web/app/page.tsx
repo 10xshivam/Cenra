@@ -1,4 +1,4 @@
-import {
+﻿import {
     FooterSection,
   HeroSection,
   PricingSection,
@@ -14,7 +14,7 @@ const Page = () => {
       <Navbar />
       <div className="relative mx-auto flex w-full h-full max-w-7xl flex-col pt-6 border-x overflow-y-auto no-scrollbar">
         <HeroSection />
-        <BuiltWithStrip />
+        {/* <BuiltWithStrip /> */}
         <SetupSection />
         <WhyChooseSection />
         <PricingSection />
@@ -25,4 +25,5 @@ const Page = () => {
 };
 
 export default Page;
+
 

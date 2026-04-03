@@ -1,65 +1,53 @@
-import {
-  BarChart3,
-  Bot,
-  Globe,
-  Inbox,
-  MessageSquareText,
-  Plug,
-  ScanSearch,
-  Sparkles,
-  UserRoundSearch,
-} from "lucide-react";
+﻿import { BarChart3, Bot, Globe, Inbox, Plug, Sparkles } from "lucide-react";
 
 import {
-  IconDatabase,
-  IconMessageCircle,
-  IconUser,
-  IconArrowUpRight,
-  IconChartPie,
-  IconPlugConnected,
-  IconMessageCircleFilled,
-  IconUserFilled,
-  IconCircleArrowUpRightFilled,
-  IconChartPieFilled,
+  IconAdjustmentsFilled,
   IconBookFilled,
+  IconChartPieFilled,
+  IconCircleArrowUpRightFilled,
+  IconCodeCircleFilled,
+  IconFileUploadFilled,
+  IconMessageCircleFilled,
+  IconMessageFilled,
   IconStack2Filled,
+  IconUserFilled,
 } from "@tabler/icons-react";
 
 export const landingFeatures = [
   {
     title: "Product-trained knowledge",
     description:
-      "Train Cenra on your website, docs, and FAQs to deliver accurate, business-aligned responses.",
+      "Train Cenra on your website, docs, and FAQs to deliver accurate, context-aware, and business-aligned responses.",
     icon: IconBookFilled,
   },
   {
     title: "Context-aware support",
     description:
-      "Maintains conversation context across messages so users don’t have to repeat themselves.",
+      "Maintains conversation context across messages and follow-ups so users don't have to repeat themselves.",
     icon: IconMessageCircleFilled,
   },
   {
     title: "Customer context",
     description:
-      "Access customer details like email, device, location, and session data directly within conversations.",
+      "Access customer details like email, device, location, and session data directly within conversations for better responses.",
     icon: IconUserFilled,
   },
   {
     title: "AI + human workflow",
     description:
-      "Automatically resolve or escalate queries, with full control from a unified inbox.",
+      "Automatically resolve or escalate queries while giving your team full control from a unified inbox.",
     icon: IconCircleArrowUpRightFilled,
   },
   {
     title: "Support analytics",
     description:
-      "Track requests, resolutions, and escalations with real-time performance insights.",
+      "Track requests, resolutions, escalations, and trends with real-time insights to improve support performance.",
     icon: IconChartPieFilled,
   },
   {
     title: "Flexible integrations",
     description:
-      "Deploy across websites and apps with support for HTML, React, Next.js, and more.",
+      "Deploy across websites and apps with support for HTML, React, Next.js, and other modern platforms.",
     icon: IconStack2Filled,
   },
 ] as const;
@@ -85,6 +73,32 @@ export const landingSteps = [
   },
 ] as const;
 
+export const landingSetupItems = [
+  {
+    title: "Add your website and documents",
+    description:
+      "Enter your website URL or upload docs, FAQs, and internal content so Cenra can learn your product and answer accurately.",
+    icon: IconFileUploadFilled,
+  },
+  {
+    title: "Customize your chat widget",
+    description:
+      "Personalize the chat experience with your brand colors, greeting message, and behavior to match your product.",
+    icon: IconAdjustmentsFilled,
+  },
+  {
+    title: "Install on your website",
+    description:
+      "Copy and paste a simple script into your website or app and start assisting customers instantly.",
+    icon: IconCodeCircleFilled,
+  },
+  {
+    title: "Start assisting customers",
+    description:
+      "Handle customer queries instantly with AI, resolve conversations, and step in when human support is needed.",
+    icon: IconMessageFilled,
+  },
+] as const;
 
 export const landingOperations = [
   {
@@ -107,10 +121,4 @@ export const landingOperations = [
   },
 ] as const;
 
-export const landingIntegrations = [
-  "React",
-  "Next.js",
-  "HTML",
-  "Docs",
-  "Help Center",
-] as const;
+export const landingIntegrations = ["React", "Next.js", "HTML", "Docs", "Help Center"] as const;

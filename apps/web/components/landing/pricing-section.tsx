@@ -3,9 +3,8 @@ import { Button } from "@workspace/ui/components/button";
 
 export function PricingSection() {
   return (
-    <section id="pricing" className="p-10 border-y border-neutral-200">
-      <div className="grid grid-cols-2">
-        <div className="flex relative flex-col gap-3 max-w-xl">
+    <section id="pricing" className="p-10 border-y border-neutral-200 relative">
+        <div className="flex relative flex-col gap-3 max-w-xl pt-40">
           <h2 className="text-4xl font-medium tracking-tighter text-emerald-800 font-serif">
             Pricing that scales with your business
           </h2>
@@ -22,7 +21,7 @@ export function PricingSection() {
           </Button>
         </div>
 
-        <div className="flex flex-col gap-4 justify-center items-end">
+        <div className="absolute top-12 right-13 flex flex-col gap-4 justify-center items-end">
           <div className="">
             <p className="text-sm text-neutral-400 tracking-tight">
               Starts from
@@ -35,7 +34,6 @@ export function PricingSection() {
             </p>
           </div>
         </div>
-      </div>
     </section>
   );
 }

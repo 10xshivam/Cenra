@@ -1,6 +1,6 @@
-import Image from "next/image";
-import Link from "next/link";
+﻿import Image from "next/image";
 import { Button } from "@workspace/ui/components/button";
+import { Link } from "next-view-transitions";
 
 export const Navbar = () => {
   return (
@@ -26,12 +26,12 @@ export const Navbar = () => {
           >
             Setup
           </a>
-          <a
-            href="#pricing"
+          <Link
+            href="/pricing"
             className="transition-colors hover:text-neutral-900"
           >
             Pricing
-          </a>
+          </Link>
         </nav>
 
         <div className="flex items-center gap-2">
@@ -53,5 +53,6 @@ export const Navbar = () => {
     </header>
   );
 };
+
 
 

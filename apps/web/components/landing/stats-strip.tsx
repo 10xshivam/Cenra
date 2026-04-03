@@ -2,7 +2,7 @@ import Image from "next/image";
 
 const integrations = [
   { label: "Turborepo", src: "/turborepo.png" },
-  { label: "Next.js", src: "/nextjs.png" },
+  { label: "Next.js", src: "/nextjs.svg" },
   { label: "LangChain", src: "/langchain.svg" },
   { label: "QuadrantDB", src: "/quadrant.svg" },
   { label: "TanStack", src: "/tanstack.svg" },
@@ -19,8 +19,8 @@ export const BuiltWithStrip = () => {
             <Image
               src={item.src}
               alt={item.label}
-              width={100}
-              height={100}
+              width={130}
+              height={130}
               className="grayscale opacity-30"
             />
           </div>
