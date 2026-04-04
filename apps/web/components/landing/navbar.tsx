@@ -4,7 +4,7 @@ import { Link } from "next-view-transitions";
 
 export const Navbar = () => {
   return (
-    <header className=" border border-neutral-300/80 px-4 py-3  backdrop-blur-3xl border-b fixed top-0 left-0 right-0 z-50 ">
+    <header className="bg-amber-50 border-neutral-300 border-dashed px-2 sm:px-4 py-3  backdrop-blur-3xl border-b fixed top-0 left-0 right-0 z-50 ">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-1">
         <div className="flex items-center gap-1">
           <Image src="/cenra-logo.svg" alt="Cenra" width={36} height={36} />
@@ -14,18 +14,18 @@ export const Navbar = () => {
         </div>
 
         <nav className="hidden items-center gap-6 text-sm text-neutral-600 md:flex">
-          <a
+          <Link
             href="#why-cenra"
             className="transition-colors hover:text-neutral-900"
           >
             Why Cenra
-          </a>
-          <a
+          </Link>
+          <Link
             href="#setup"
             className="transition-colors hover:text-neutral-900"
           >
             Setup
-          </a>
+          </Link>
           <Link
             href="/pricing"
             className="transition-colors hover:text-neutral-900"
@@ -34,11 +34,11 @@ export const Navbar = () => {
           </Link>
         </nav>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <Button
             asChild
             variant="ghost"
-            className="hidden text-neutral-600 hover:bg-neutral-100 md:inline-flex"
+            className="text-neutral-600 md:inline-flex hover:bg-transparent"
           >
             <Link href="/login">Login</Link>
           </Button>

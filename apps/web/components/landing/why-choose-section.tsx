@@ -10,23 +10,23 @@ export function WhyChooseSection() {
   return (
     <section
       id="why-cenra"
-      className="pt-6 md:pt-10 relative border-t border-neutral-200"
+      className="pt-6 md:pt-10 relative border-t border-neutral-300 border-dashed"
     >
-      <IconQuestionMark className="absolute grayscale top-5 right-5 size-50 opacity-10" strokeWidth={3} />
-      <div className="flex relative flex-col gap-3 pt-40 pb-10 pl-10">
-        <h2 className="text-5xl font-medium tracking-tighter text-emerald-800 font-serif">
+      <IconQuestionMark className="absolute grayscale top-5 right-5 size-35  md:size-50 opacity-10" strokeWidth={2.5} />
+      <div className="flex relative flex-col gap-2 md:gap-3 pt-40 pb-10 px-7 md:pl-10">
+        <h2 className="text-3xl md:text-5xl font-medium tracking-tighter text-emerald-800 font-serif">
           Why choose Cenra
         </h2>
-        <p className="text-neutral-600 tracking-tight pl-1 max-w-xl">
+        <p className="text-neutral-600 text-sm md:text-base tracking-tight pl-1 max-w-xl">
           Designed for teams that need accurate, scalable, and context-aware customer support, with everything to manage and improve support operations.
         </p>
       </div>
 
-      <div className="grid md:grid-cols-1 border-dashed divide-y divide-dashed divide-neutral-200 border-t border-neutral-200">
+      <div className="grid md:grid-cols-1 border-dashed divide-y divide-dashed divide-neutral-300 border-t border-neutral-300">
         {featureRows.map((row, rowIndex) => (
           <div
             key={`feature-row-${rowIndex}`}
-            className="grid grid-cols-2 divide-x divide-neutral-200 divide-dashed"
+            className="grid grid-cols-1 md:grid-cols-2 max-md:divide-y md:divide-x divide-neutral-300 divide-dashed"
           >
             {row.map((feature) => {
               const Icon = feature.icon;

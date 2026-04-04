@@ -1,7 +1,6 @@
-﻿import Image from "next/image";
-import Link from "next/link";
+﻿import { Link } from "next-view-transitions";
 import { Button } from "@workspace/ui/components/button";
-import { ArrowRight, CheckCircle2, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { HeroIllustration } from "./hero-illustration";
 
 export const supportFlow = [
@@ -12,8 +11,7 @@ export const supportFlow = [
   },
   {
     query: "Do you offer a free trial?",
-    reply:
-      "We currently do not offer a free trial.",
+    reply: "We currently do not offer a free trial.",
   },
   {
     query: "Can I customize the chat widget?",
@@ -39,19 +37,20 @@ export const supportFlow = [
 
 export const HeroSection = () => {
   return (
-    <section className="grid grid-cols-1 divide-y divide-neutral-200 divide-dashed border-b border-neutral-200">
-      <div className="flex flex-col gap-6 items-center justify-center pt-40 pb-20">
-        <div className="flex flex-col gap-5 items-center justify-center">
-          <h1 className="max-w-5xl text-5xl text-center font-medium tracking-tight text-emerald-800 md:text-6xl font-serif leading-[1.09]">
+    <section className="grid grid-cols-1 divide-y divide-neutral-300 divide-dashed border-b border-neutral-300 border-dashed">
+      <div className="flex flex-col gap-4.5 sm:gap-6 sm:items-center justify-center pt-25 sm:pt-40 sm:pb-20 pb-10 px-7">
+        <div className="flex flex-col gap-4 sm:gap-5 sm:items-center sm:justify-center">
+          <HeroIllustration className="block sm:hidden h-auto w-full max-w-[300px] rounded-md mx-auto mb-15" />
+          <h1 className="max-w-sm sm:max-w-5xl text-[1.7rem] sm:text-5xl sm:text-center font-medium tracking-tight text-emerald-800 md:text-6xl font-serif leading-[1.09]">
             AI support agent that actually understands your business
           </h1>
-          <p className="max-w-lg text-base leading-snug text-center text-neutral-600 md:text-base tracking-tight ">
+          <p className="max-w-xs sm:max-w-lg text-xs sm:text-base leading-snug text-left sm:text-center text-neutral-600 md:text-base tracking-tight ">
             Transform your product knowledge into an AI agent that answers
             instantly and intelligently.
           </p>
         </div>
 
-        <div className="flex flex-col gap-3 sm:flex-row">
+        <div className="flex gap-3">
           <Button
             asChild
             size="lg"
@@ -66,28 +65,27 @@ export const HeroSection = () => {
             asChild
             size="lg"
             variant="outline"
-            className="rounded-full border-neutral-300 bg-white/80 px-6 text-neutral-700 hover:bg-white"
+            className="rounded-full hidden sm:flex border-neutral-300 bg-white/80 px-6 text-neutral-700 hover:bg-white"
           >
             <Link href="/pricing">View Demo</Link>
           </Button>
         </div>
       </div>
-      <div className="w-full grid grid-cols-3 divide-x divide-dashed divide-neutral-200">
+      <div className="w-full grid-cols-3 divide-x divide-dashed divide-neutral-300 hidden sm:grid">
         <div className="flex justify-center items-center flex-col gap-3">
-          
           {supportFlow.map((item, index) => (
             <div
               key={index}
-              className="flex px-3 py-2 border-[1.5px] border-neutral-200 rounded-xl font-semibold text-xs text-neutral-500"
+              className="flex px-3 py-2 border-[1.5px] border-neutral-300 bg-amber-100/20 rounded-lg font-semibold text-xs text-neutral-500"
             >
               {item.query}
             </div>
           ))}
         </div>
-        <div className="flex flex-col items-center justify-center pt-16 pb-20 px-10">
+        <div className="flex flex-col items-center justify-center pt-16 pb-21 px-10 bg-amber-50">
           <HeroIllustration className="block h-auto w-full max-w-[400px] rounded-md" />
         </div>
-         <div className="flex justify-center items-center flex-col gap-3">
+        <div className="flex justify-center items-center flex-col gap-3">
           {supportFlow.map((item, index) => (
             <div
               key={index}
