@@ -26,7 +26,7 @@ export default function RootLayout({
     <ViewTransitions>
       <html lang="en" suppressHydrationWarning>
         <body
-          className={`${fontSans.variable} ${fontSerif.variable} font-sans antialiased bg-white selection:bg-emerald-900/20 selection:text-emerald-900 box-border`}
+          className={`${fontSans.variable} ${fontSerif.variable} font-sans antialiased bg-amber-50 selection:bg-emerald-900/20 selection:text-emerald-900 box-border`}
         >
           <Providers>{children}</Providers>
           <Toaster position="top-center" />
