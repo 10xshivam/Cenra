@@ -174,6 +174,7 @@ export const WebContentView = () => {
                             aria-invalid={fieldState.invalid}
                             placeholder="https://www.yourdomain.com"
                             autoComplete="off"
+                            className="border-none"
                           />
                         </div>
                       </Field>
@@ -195,6 +196,7 @@ export const WebContentView = () => {
                             aria-invalid={fieldState.invalid}
                             placeholder="/faq, /docs, /support"
                             autoComplete="off"
+                            className="border-none"
                           />
                         </div>
                       </Field>

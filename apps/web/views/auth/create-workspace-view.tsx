@@ -54,6 +54,7 @@ export const CreateWorkspaceView = () => {
                   aria-invalid={fieldState.invalid}
                   placeholder="Company name"
                   autoComplete="off"
+                  className="border-none"
                 />
               </div>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -78,6 +79,7 @@ export const CreateWorkspaceView = () => {
                   aria-invalid={fieldState.invalid}
                   placeholder="https://www.company.com"
                   autoComplete="off"
+                  className="border-none"
                 />
               </div>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
