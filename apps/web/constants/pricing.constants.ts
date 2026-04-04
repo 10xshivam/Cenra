@@ -15,9 +15,6 @@ export const PRICING_PLANS = [
             "Real-time Visitor Info",
             "Basic Widget Customization",
             "Up to 200 Monthly Customers",
-            "Voice Features not included",
-            "Collaboration not included",
-            "Language Support not included",
         ],
     },
     {

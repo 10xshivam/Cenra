@@ -1,44 +1,23 @@
 "use client";
 
-import { useSubscription } from "@/hooks/useSubscription";
-import { axiosInstance } from "@/lib/axios";
-import { useUserStore } from "@/store/useUserStore";
 import { PRICING_PLANS, PLAN_COMPARISONS } from "@/constants/pricing.constants";
 import React from "react";
+import { useTransitionRouter } from "next-view-transitions";
+import { ArrowLeft, Check } from "lucide-react";
 
 export const PricingView = () => {
-
-  const subscribe = async (plan: "STARTER" | "PRO") => {
-    const { user } = useUserStore.getState();
-    const { data } = await axiosInstance.post(
-      "subscription/billing/create-checkout",
-      {
-        plan,
-        userId: user?.id,
-        email: user?.email,
-      },
-    );
-
-    window.location.href = data.checkoutUrl;
-  };
-
-  const { data: subscription } = useSubscription();
+  const router = useTransitionRouter();
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#f6f3f0] text-neutral-900">
-      <div className="pointer-events-none absolute -top-32 -right-40 h-96 w-96 rounded-full bg-[#d6e4ff] blur-[120px]" />
-      <div className="pointer-events-none absolute -bottom-40 -left-32 h-[30rem] w-[30rem] rounded-full bg-[#ffd6b0] blur-[140px]" />
+     <div className="relative mx-auto flex w-full h-full max-w-7xl flex-col pt-6 sm:border-x border-dashed border-neutral-300 overflow-y-auto no-scrollbar bg-white/30">
+      <ArrowLeft className="absolute size-5 left-5 top-7 md:left-5 md:top-5 cursor-pointer text-neutral-500 hover:text-neutral-700 transition-colors" onClick={() => router.back()} />
       <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 py-16 md:px-10">
         <header className="flex flex-col gap-4">
-          <span className="w-fit rounded-full border border-neutral-200 bg-white px-4 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
-            Pricing Plans
-          </span>
-          <h1 className="text-4xl font-semibold tracking-tight text-neutral-900 md:text-5xl">
-            Pick a plan that scales with your support team
-          </h1>
-          <p className="max-w-2xl text-base text-neutral-600 md:text-lg">
-            Everything you need to launch a high-converting chat widget, track
-            visitors in real time, and unlock AI-driven support automation.
+          <h2 className="text-3xl font-serif font-medium tracking-tighter text-emerald-800 md:text-5xl">
+           Plans built for modern customer support
+          </h2>
+          <p className="max-w-2xl text-sm text-neutral-600 md:text-lg tracking-tight">
+            Everything you need to run AI-powered support, from handling conversations to managing insights and workflows.
           </p>
         </header>
 
@@ -46,18 +25,13 @@ export const PricingView = () => {
           {PRICING_PLANS.map((plan) => (
             <div
               key={plan.name}
-              className={`relative flex h-full flex-col gap-6 rounded-3xl border px-6 py-8 shadow-lg transition-transform duration-300 hover:-translate-y-1 ${plan.highlight
-                ? "border-neutral-900 bg-neutral-900 text-white shadow-[0_24px_60px_-30px_rgba(0,0,0,0.6)]"
-                : "border-white/40 bg-white/80 text-neutral-900 backdrop-blur"
+              className={`relative flex h-full flex-col gap-6 border  px-6 py-8 transition-transform duration-300 hover:-translate-y-1 ${plan.highlight
+                ? "border-emerald-700 bg-emerald-900 text-white "
+                : "border-neutral-300 border-dashed bg-white/80 text-neutral-900"
                 }`}
             >
-              {plan.highlight && (
-                <span className="absolute right-6 top-6 rounded-full bg-white/15 px-3 py-1 text-xs font-semibold uppercase tracking-[0.2em] text-white">
-                  Most Popular
-                </span>
-              )}
               <div className="flex flex-col gap-2">
-                <h2 className="text-2xl font-semibold">{plan.name}</h2>
+                <h2 className="text-2xl font-medium tracking-tight font-serif">{plan.name}</h2>
                 <p
                   className={`text-sm ${plan.highlight ? "text-white/70" : "text-neutral-500"
                     }`}
@@ -77,21 +51,16 @@ export const PricingView = () => {
               <button
                 className={`h-12 rounded-full px-6 text-sm font-semibold transition-colors disabled:opacity-50 disabled:cursor-not-allowed ${plan.highlight
                   ? "bg-white text-neutral-900 hover:bg-neutral-100"
-                  : "bg-neutral-900 text-white hover:bg-neutral-800"
+                  : "bg-emerald-800 text-white hover:bg-emerald-900"
                   }`}
                 type="button"
+                onClick={() => router.push("/payment")}
                 disabled={
-                  plan.name === "Pro" ||
-                  subscription?.plan === plan.name.toUpperCase()
-                }
-                onClick={() =>
-                  subscribe(plan.name.toUpperCase() as "STARTER" | "PRO")
+                  plan.name === "Pro"
                 }
               >
                 {plan.name === "Pro"
                   ? "Coming Soon"
-                  : subscription?.plan === plan.name.toUpperCase()
-                    ? "Current Plan"
                     : plan.cta}
               </button>
               <div className="grid gap-2">
@@ -101,8 +70,9 @@ export const PricingView = () => {
                     className={`flex items-center gap-3 text-sm ${plan.highlight ? "text-white/80" : "text-neutral-600"
                       }`}
                   >
-                    <span
-                      className={`h-2 w-2 rounded-full ${plan.highlight ? "bg-white" : "bg-neutral-900"
+                    <Check
+                      strokeWidth={3}
+                      className={`size-4 ${plan.highlight ? "text-white" : "text-emerald-600"
                         }`}
                     />
                     <span>{feature}</span>
@@ -113,9 +83,9 @@ export const PricingView = () => {
           ))}
         </section>
 
-        <section className="rounded-3xl border border-neutral-200/70 bg-white/80 p-6 shadow-lg backdrop-blur">
+        <section className="border border-neutral-300 border-dashed bg-white/80 p-6">
           <div className="flex flex-col gap-2 pb-6">
-            <h3 className="text-2xl font-semibold text-neutral-900">
+            <h3 className="text-2xl font-medium font-serif text-neutral-900">
               Feature-by-feature comparison
             </h3>
             <p className="text-sm text-neutral-500">
@@ -124,13 +94,13 @@ export const PricingView = () => {
           </div>
 
           <div className="hidden grid-cols-[1.2fr_1fr_1fr] gap-4 md:grid">
-            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+            <div className="text-xs font-semibold uppercase text-neutral-500">
               Feature
             </div>
-            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+            <div className="text-xs font-semibold uppercase text-neutral-500">
               Starter
             </div>
-            <div className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+            <div className="text-xs font-semibold uppercase text-neutral-500">
               Pro
             </div>
 
@@ -153,9 +123,9 @@ export const PricingView = () => {
             {PLAN_COMPARISONS.map((row) => (
               <div
                 key={row.feature}
-                className="rounded-2xl border border-neutral-200/70 bg-white px-4 py-4 shadow-sm"
+                className="border border-neutral-200  bg-white px-4 py-4"
               >
-                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-neutral-500">
+                <p className="text-xs font-semibold uppercase text-neutral-500">
                   {row.feature}
                 </p>
                 <div className="mt-3 grid gap-3 text-sm">
