@@ -1,28 +1,58 @@
 "use client";
 
-import { PRICING_PLANS, PLAN_COMPARISONS } from "@/constants/pricing.constants";
+import { PLAN_COMPARISONS, PRICING_PLANS } from "@/constants/pricing.constants";
+import { useCreateCheckout, useSubscription } from "@/hooks/useSubscription";
+import { useUserStore } from "@/store/useUserStore";
+import { Check } from "lucide-react";
 import React from "react";
-import { useTransitionRouter } from "next-view-transitions";
-import { ArrowLeft, Check, ChevronLeft } from "lucide-react";
+import { toast } from "sonner";
 
-export const PricingView = () => {
-  const router = useTransitionRouter();
+export const PaymentView = () => {
+  const createCheckoutMutation = useCreateCheckout();
+  const { data: subscription } = useSubscription();
+  const userId = useUserStore((state) => state.user?.id);
+
+  const handleCheckout = async (planName: "Starter" | "Pro") => {
+    if (!userId) {
+      toast.error("Unable to start checkout. Please login again.");
+      return;
+    }
+
+    const plan = planName === "Starter" ? "STARTER" : "PRO";
+    const data = await createCheckoutMutation.mutateAsync({ plan, userId });
+
+    if (!data?.checkoutUrl) {
+      toast.error("Checkout link was not returned. Please try again.");
+      return;
+    }
+
+    window.location.href = data.checkoutUrl;
+  };
 
   return (
-     <div className="relative mx-auto flex w-full h-full max-w-7xl flex-col pt-6 sm:border-x border-dashed border-neutral-300 overflow-y-auto no-scrollbar bg-white/30">
-      <ArrowLeft className="md:hidden absolute size-5 left-5 top-7 md:left-5 md:top-5 cursor-pointer text-neutral-400 hover:text-neutral-700 transition-colors" onClick={() => router.back()} />
-      <div className="relative mx-auto flex w-full max-w-6xl flex-col gap-12 px-6 py-16 md:px-10">
-        <header className="flex flex-col gap-4">
-          <h2 className="text-3xl font-serif font-medium tracking-tighter text-emerald-800 md:text-5xl">
-           Plans built for modern customer support
-          </h2>
-          <p className="max-w-2xl text-sm text-neutral-600 md:text-lg tracking-tight">
-            Everything you need to run AI-powered support, from handling conversations to managing insights and workflows.
-          </p>
-        </header>
-
+    <div className="flex flex-col gap-7 py-7">
+      <div className="flex flex-col gap-1">
+        <h2 className="text-4xl font-medium tracking-tighter font-serif text-emerald-800">
+          Choose your plan
+        </h2>
+        <p className="tracking-tght text-neutral-500 text-sm">
+         Pick a plan that matches your support needs and grows with your team.
+        </p>
+      </div>
         <section className="grid gap-6 lg:grid-cols-2">
-          {PRICING_PLANS.map((plan) => (
+          {PRICING_PLANS.map((plan) => {
+            const isCurrentPlan = subscription?.plan === plan.name.toUpperCase();
+            const isDisabled =
+              plan.name === "Pro" || createCheckoutMutation.isPending || isCurrentPlan;
+            const buttonText = isCurrentPlan
+              ? "Current Plan"
+              : plan.name === "Pro"
+                ? "Coming Soon"
+                : createCheckoutMutation.isPending
+                  ? "Redirecting..."
+                  : plan.cta;
+
+            return (
             <div
               key={plan.name}
               className={`relative flex h-full flex-col gap-6 border  px-6 py-8 transition-transform duration-300 hover:-translate-y-1 ${plan.highlight
@@ -54,14 +84,10 @@ export const PricingView = () => {
                   : "bg-emerald-800 text-white hover:bg-emerald-900"
                   }`}
                 type="button"
-                onClick={() => router.push("/payment")}
-                disabled={
-                  plan.name === "Pro"
-                }
+                onClick={() => handleCheckout(plan.name)}
+                disabled={isDisabled}
               >
-                {plan.name === "Pro"
-                  ? "Coming Soon"
-                    : plan.cta}
+                {buttonText}
               </button>
               <div className="grid gap-2">
                 {plan.features.map((feature) => (
@@ -80,7 +106,8 @@ export const PricingView = () => {
                 ))}
               </div>
             </div>
-          ))}
+            );
+          })}
         </section>
 
         <section className="border border-neutral-300 border-dashed bg-white/40 p-6">
@@ -146,7 +173,6 @@ export const PricingView = () => {
             ))}
           </div>
         </section>
-      </div>
     </div>
   );
 };

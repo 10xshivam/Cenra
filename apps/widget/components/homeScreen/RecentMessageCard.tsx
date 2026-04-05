@@ -33,7 +33,7 @@ export const RecentMessageCard = ({
         className="w-full flex items-center justify-between"
       >
         <div className="flex items-center gap-2 overflow-hidden cursor-pointer">
-          <div className="h-10 w-10 rounded-full flex items-center justify-center text-xs font-semibold">
+          <div className="hidden md:flex h-10 w-10 rounded-full items-center justify-center text-xs font-semibold">
             {workspace?.companyLogoUrl ? (
               <img
                 src={workspace.companyLogoUrl ?? '/cenra-ai.png'}

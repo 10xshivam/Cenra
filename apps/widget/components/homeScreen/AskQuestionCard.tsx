@@ -34,7 +34,7 @@ export const AskQuestionCard = ({
           <img
             src={companyLogoUrl}
             alt={`${brandName} logo`}
-            className="h-[39px] w-[39px] rounded-full shadow-sm mr-1 object-cover"
+            className="hidden md:block h-[39px] w-[39px] rounded-full shadow-sm mr-1 object-cover"
           />
         ) : (
           <Image
@@ -42,7 +42,7 @@ export const AskQuestionCard = ({
             alt="avatar"
             width={39}
             height={39}
-            className="rounded-full shadow-sm mr-1"
+            className="hidden md:block rounded-full shadow-sm mr-1"
           />
         )}
       </div>

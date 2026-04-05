@@ -76,7 +76,7 @@ export const HeroSection = () => {
           {supportFlow.map((item, index) => (
             <div
               key={index}
-              className="flex px-3 py-2 border-[1.5px] border-neutral-300 bg-amber-100/20 rounded-lg font-semibold text-xs text-neutral-500"
+              className="flex px-3 py-2 border-[1.5px] border-neutral-300 bg-white/40 rounded-lg font-semibold text-xs text-neutral-500"
             >
               {item.query}
             </div>

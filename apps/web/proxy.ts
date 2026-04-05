@@ -20,16 +20,32 @@ export function proxy(req: NextRequest) {
   const hasSubscription = req.cookies.get("hasSubscription")?.value === "true";
   const hasWorkspace = req.cookies.get("hasWorkspace")?.value === "true";
 
+  if (pathname === "/pricing") {
+    if (!token) {
+      return NextResponse.next();
+    }
+
+    if (!hasSubscription) {
+      return NextResponse.redirect(new URL("/payment", req.url));
+    }
+
+    return NextResponse.redirect(new URL("/inbox", req.url));
+  }
+
   if (token && hasSubscription) {
     if (pathname.startsWith("/billing")) {
       return NextResponse.redirect(new URL("/create-workspace", req.url));
     }
   }
 
+  if (pathname === "/payment" && token && hasSubscription) {
+    return NextResponse.redirect(new URL("/inbox", req.url));
+  }
+
   if (isPublicPath(pathname)) {
     if (token && (pathname === "/login" || pathname === "/signup")) {
       return NextResponse.redirect(
-        new URL(hasSubscription ? "/inbox" : "/pricing", req.url),
+        new URL(hasSubscription ? "/inbox" : "/payment", req.url),
       );
     }
     return NextResponse.next();
@@ -40,8 +56,8 @@ export function proxy(req: NextRequest) {
   }
 
   if (!hasSubscription) {
-    if (pathname !== "/pricing") {
-      return NextResponse.redirect(new URL("/pricing", req.url));
+    if (pathname !== "/payment") {
+      return NextResponse.redirect(new URL("/payment", req.url));
     }
     return NextResponse.next();
   }

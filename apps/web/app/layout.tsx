@@ -1,6 +1,8 @@
 import "@workspace/ui/globals.css";
 import { Inter, PT_Serif } from "next/font/google";
+import type { Viewport } from "next";
 import { Providers } from "@/providers/providers";
+import { DisableZoom } from "@/components/disable-zoom";
 import { ViewTransitions } from "next-view-transitions";
 import { Toaster } from "sonner";
 
@@ -17,6 +19,13 @@ const fontSerif = PT_Serif({
   style: ["normal", "italic"],
 });
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -24,14 +33,18 @@ export default function RootLayout({
 }>) {
   return (
     <ViewTransitions>
-      <html lang="en" suppressHydrationWarning>
+      <html lang="en" suppressHydrationWarning className="light" style={{ colorScheme: "light" }}>
         <body
           className={`${fontSans.variable} ${fontSerif.variable} font-sans antialiased bg-amber-50 selection:bg-emerald-900/20 selection:text-emerald-900 box-border`}
         >
-          <Providers>{children}</Providers>
+          <Providers>
+            <DisableZoom />
+            {children}
+          </Providers>
           <Toaster position="top-center" />
         </body>
       </html>
     </ViewTransitions>
   );
 }
+

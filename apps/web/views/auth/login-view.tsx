@@ -7,14 +7,8 @@ import { Input } from "@workspace/ui/components/input";
 import { Controller, useForm } from "react-hook-form";
 import z from "zod";
 import { Separator } from "@workspace/ui/components/separator";
-import {
-  LockPasswordIcon,
-  MailIcon,
-  ViewIcon,
-  ViewOffIcon,
-} from "@workspace/ui/components/icons";
+import { ViewIcon, ViewOffIcon } from "@workspace/ui/components/icons";
 import { useState } from "react";
-import Image from "next/image";
 import { Link } from "next-view-transitions";
 import { useGoogleLoginMutation, useLogin } from "@/hooks/useAuth";
 import { useGoogleLogin } from "@react-oauth/google";
@@ -50,18 +44,18 @@ export const LoginView = () => {
   });
 
   return (
-    <div className="w-full h-full flex flex-col items-center justify-center">
-      <div className="w-full max-w-md flex flex-col">
+    <div className="w-fit h-full flex flex-col items-center justify-center border border-neutral-300 border-dashed p-7 bg-white/40">
+      <div className="w-xs md:w-md flex flex-col">
         <div className="mb-8 flex flex-col gap-1.5">
-          <h2 className="text-4xl tracking-tight font-medium text-neutral-700">
+          <h2 className="text-3xl md:text-4xl tracking-tight font-medium text-neutral-700 font-serif">
             Welcome Back
           </h2>
-          <p className="text-sm text-neutral-400 ml-0.5">
+          <p className="text-xs md:text-sm text-neutral-400 ml-0.5">
             Login to your account to continue
           </p>
         </div>
         <Button
-          className="w-full h-12 font-medium text-neutral-500 hover:text-neutral-700 transition-colors duration-300"
+          className="w-full h-12 font-medium text-neutral-500 hover:text-neutral-700 transition-colors duration-300 rounded-none shadow-none border-neutral-300 hover:bg-white/70 bg-white/60"
           variant="outline"
           onClick={() => getGoogleCode()}
           disabled={googleLoginMutation.isPending}
@@ -70,13 +64,7 @@ export const LoginView = () => {
             "Loading..."
           ) : (
             <>
-              <Image
-                src="/google-icon.svg"
-                alt="Google Icon"
-                width={20}
-                height={20}
-                className="mr-1"
-              />
+              <img src="/google-icon.svg" alt="Google Icon" width={20} height={20} className="mr-1" />
               Continue with Google
             </>
           )}
@@ -94,19 +82,18 @@ export const LoginView = () => {
             name="email"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Email</FieldLabel>
-                <div className="border px-2.5 py-2 rounded-lg flex gap-2 items-center bg-neutral-100">
-                  <span className="w-fit p-1.5 bg-white rounded-md">
-                    <MailIcon />
-                  </span>
+              <Field data-invalid={fieldState.invalid} className="gap-2">
+                <FieldLabel htmlFor={field.name} className="text-xs">
+                  Email
+                </FieldLabel>
+                <div className="border border-neutral-300 px-2.5 py-1 flex gap-2 items-center">
                   <Input
                     {...field}
                     id={field.name}
                     aria-invalid={fieldState.invalid}
                     placeholder="johndoe@gmail.com"
                     autoComplete="off"
-                    className="border-none"
+                    className="border-none bg-transparent"
                   />
                 </div>
                 {fieldState.invalid && (
@@ -119,12 +106,11 @@ export const LoginView = () => {
             name="password"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor={field.name}>Password</FieldLabel>
-                <div className="border px-2.5 py-2 rounded-lg flex gap-2 items-center bg-neutral-100">
-                  <span className="w-fit p-1.5 bg-white rounded-md">
-                    <LockPasswordIcon />
-                  </span>
+              <Field data-invalid={fieldState.invalid} className="gap-2">
+                <FieldLabel htmlFor={field.name} className="text-xs">
+                  Password
+                </FieldLabel>
+                <div className="border border-neutral-300 px-2.5 py-1 flex gap-2 items-center">
                   <Input
                     {...field}
                     id={field.name}
@@ -132,7 +118,7 @@ export const LoginView = () => {
                     placeholder="Enter your password"
                     autoComplete="off"
                     type={showPassword}
-                    className="border-none"
+                    className="border-none bg-transparent"
                   />
                   {showPassword === "password" ? (
                     <ViewOffIcon
@@ -155,14 +141,14 @@ export const LoginView = () => {
           <Button
             type="submit"
             disabled={loginMutation.isPending}
-            className="w-full h-12 mt-2 bg-emerald-800 hover:bg-emerald-900 rounded-lg shadow-inner transition-colors duration-300"
+            className="w-full h-12 mt-2 bg-emerald-800 hover:bg-emerald-900 rounded-none transition-colors duration-300"
           >
             {loginMutation.isPending ? "Logging in..." : "Login"}
           </Button>
         </form>
         <Link
           href="/signup"
-          className="mt-4 inline-block text-sm text-neutral-400 self-center "
+          className="mt-4 inline-block text-sm text-neutral-400 self-center tracking-tight"
         >
           Don't have an account?{" "}
           <span className="font-medium text-emerald-700 hover:underline hover:text-emerald-900 transition-colors duration-300">

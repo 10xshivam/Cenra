@@ -23,7 +23,7 @@ export const DashboardSidebar = () => {
   const pathname = usePathname();
 
   return (
-    <Sidebar collapsible="icon" variant="floating">
+    <Sidebar collapsible="icon" variant="floating" className="">
       <SidebarHeader className="group h-12 rounded-lg bg-neutral-500/10 hover:bg-neutral-500/10 border-b-4 border-neutral-500/15 hover:border-neutral-600/15 transition-colors duration-300 text-neutral-500 hover:text-emerald-800">
         <SidebarMenu>
           <SidebarMenuItem className="hover:bg-transparent cursor-default flex items-center justify-center pt-1 gap-1.5">
