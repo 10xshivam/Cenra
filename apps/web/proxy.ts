@@ -20,9 +20,9 @@ export function proxy(req: NextRequest) {
   const hasSubscription = req.cookies.get("hasSubscription")?.value === "true";
   const hasWorkspace = req.cookies.get("hasWorkspace")?.value === "true";
 
-  if (pathname === "/pricing") {
+  if (pathname === "/get-started") {
     if (!token) {
-      return NextResponse.next();
+      return NextResponse.redirect(new URL("/signup", req.url));
     }
 
     if (!hasSubscription) {
@@ -79,4 +79,3 @@ export function proxy(req: NextRequest) {
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico|.*\\..*).*)"],
 };
-

@@ -1,4 +1,4 @@
-﻿import {
+import {
   FooterSection,
   HeroSection,
   PricingSection,
@@ -6,12 +6,14 @@
   WhyChooseSection,
   Navbar,
 } from "@/components/landing";
+import LenisProvider from "@/components/lenis-provider";
 
 const Page = () => {
   return (
-    <main className="h-screen overflow-y-auto text-neutral-900 no-scrollbar">
+    <main className="text-neutral-900">
+      <LenisProvider />
       <Navbar />
-      <div className="relative mx-auto flex w-full h-full max-w-7xl flex-col pt-6 sm:border-x border-dashed border-neutral-300 overflow-y-auto no-scrollbar bg-white/30">
+      <div className="relative mx-auto flex w-full max-w-7xl flex-col pt-6 sm:border-x border-dashed border-neutral-300 bg-white/30">
         <HeroSection />
         <SetupSection />
         <WhyChooseSection />

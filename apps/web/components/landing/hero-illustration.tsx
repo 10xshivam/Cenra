@@ -1,110 +1,147 @@
+"use client";
+
+import { useEffect, useId } from "react";
+import { motion, useAnimationControls } from "motion/react";
+
 type HeroIllustrationProps = {
   className?: string;
 };
 
+const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
+
 export const HeroIllustration = ({ className }: HeroIllustrationProps) => {
+  const uid = useId().replace(/:/g, "");
+  const logoMaskId = `hero-logo-mask-${uid}`;
+
+  const baseControls = useAnimationControls();
+  const strokeControls = useAnimationControls();
+  const logoControls = useAnimationControls();
+
+  useEffect(() => {
+    let isActive = true;
+
+    const runSequence = async () => {
+      await sleep(900);
+      if (!isActive) return;
+
+      await baseControls.start({
+        opacity: 1,
+        y: 0,
+        transition: { duration: 0.75, ease: "easeOut" },
+      });
+
+      await sleep(140);
+      if (!isActive) return;
+
+      await strokeControls.start({
+        opacity: 1,
+        y: 0,
+        pathLength: 1,
+        transition: { duration: 0.75, ease: "easeInOut" },
+      });
+
+      await sleep(180);
+      if (!isActive) return;
+
+      await logoControls.start({
+        opacity: 1,
+        y: 0,
+        scale: 1,
+        transition: { duration: 0.6, ease: "easeOut" },
+      });
+    };
+
+    void runSequence();
+
+    return () => {
+      isActive = false;
+    };
+  }, [baseControls, strokeControls, logoControls]);
+
   return (
     <svg
-      width="608"
-      height="486"
-      viewBox="0 0 608 486"
+      width="606"
+      height="409"
+      viewBox="0 0 606 409"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      shapeRendering="geometricPrecision"
       className={className}
+      shapeRendering="geometricPrecision"
     >
-      <path
-        d="M273.803 142.5C285.76 135.596 305.147 135.596 317.104 142.5L596.352 303.724C608.309 310.627 608.309 321.82 596.352 328.723L335.199 479.5C323.242 486.404 303.855 486.404 291.898 479.5L12.6506 318.276C0.693298 311.373 0.693314 300.18 12.6506 293.277L273.803 142.5Z"
-        stroke="#D4D4D4"
-        strokeWidth="3"
-      />
-      <rect
-        width="250"
-        height="80"
-        transform="matrix(0.866025 -0.5 0 1 332.792 364.5)"
-        fill="#006045"
-        stroke="#006045"
-        strokeWidth="1"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M289.491 89.5C301.448 82.5964 320.835 82.5964 332.792 89.5L549.299 214.5C561.256 221.404 561.256 232.596 549.299 239.5L332.792 364.5C320.835 371.404 301.448 371.404 289.491 364.5L72.9848 239.5C61.0275 232.596 61.0275 221.404 72.9848 214.5L289.491 89.5Z"
-        fill="#FFFDF4"
+      <motion.g initial={{ opacity: 0, y: -80 }} animate={baseControls}>
+        <path
+          d="M271.958 65.5C283.915 58.5965 303.302 58.5964 315.259 65.5L594.506 226.724C606.464 233.627 606.464 244.82 594.506 251.723L333.354 402.5C321.396 409.404 302.01 409.404 290.052 402.5L10.8051 241.276C-1.15221 234.373 -1.1522 223.18 10.8051 216.277L271.958 65.5Z"
+          stroke="#D4D4D4"
+          strokeWidth="3"
+        />
+        <rect
+          width="250"
+          height="80"
+          transform="matrix(0.866025 -0.5 0 1 330.947 287.5)"
+          fill="#006045"
+          stroke="#006045"
+          strokeWidth="1"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M287.646 12.5C299.603 5.59644 318.99 5.59644 330.947 12.5L547.453 137.5C559.411 144.404 559.411 155.596 547.453 162.5L330.947 287.5C318.99 294.404 299.603 294.404 287.646 287.5L71.1393 162.5C59.182 155.596 59.182 144.404 71.1393 137.5L287.646 12.5Z"
+          fill="#FFFDF4"
+        />
+        <rect
+          width="250"
+          height="80"
+          transform="matrix(0.866025 0.5 0 1 71.1393 162.5)"
+          fill="#006045"
+          stroke="#006045"
+          strokeWidth="1"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M62.1713 150C62.1713 154.882 65.5984 159.301 71.1393 162.5V242.5C65.5984 239.301 62.1713 234.882 62.1713 230V150Z"
+          fill="#006045"
+          stroke="#006045"
+          strokeWidth="1"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M287.646 287.5C299.603 294.404 318.99 294.404 330.947 287.5V367.5C318.99 374.404 299.603 374.404 287.646 367.5V287.5Z"
+          fill="#006045"
+          stroke="#006045"
+          strokeWidth="1"
+          strokeLinejoin="round"
+        />
+        <path
+          d="M556.421 150C556.421 154.882 552.994 159.301 547.453 162.5V242.5C552.994 239.301 556.421 234.882 556.421 230V150Z"
+          fill="#006045"
+          stroke="#006045"
+          strokeWidth="1"
+          strokeLinejoin="round"
+        />
+      </motion.g>
+
+      <motion.path
+        d="M287.311 12.5C299.269 5.59644 318.655 5.59644 330.613 12.5L547.119 137.5C559.076 144.404 559.076 155.596 547.119 162.5L330.613 287.5C318.655 294.404 299.269 294.404 287.311 287.5L70.8051 162.5C58.8478 155.596 58.8478 144.404 70.8051 137.5L287.311 12.5Z"
         stroke="#006045"
         strokeWidth="2"
+        initial={{ opacity: 0, y: -46, pathLength: 0 }}
+        animate={strokeControls}
       />
-      <rect
-        width="250"
-        height="80"
-        transform="matrix(0.866025 0.5 0 1 72.9848 239.5)"
-        fill="#006045"
-        stroke="#006045"
-        strokeWidth="1"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M64.0168 227C64.0168 231.882 67.4439 236.301 72.9848 239.5V319.5C67.4439 316.301 64.0168 311.882 64.0168 307V227Z"
-        fill="#006045"
-        stroke="#006045"
-        strokeWidth="1"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M289.491 364.5C301.448 371.404 320.835 371.404 332.792 364.5V444.5C320.835 451.404 301.448 451.404 289.491 444.5V364.5Z"
-        fill="#006045"
-        stroke="#006045"
-        strokeWidth="1"
-        strokeLinejoin="round"
-      />
-      <path
-        d="M558.267 227C558.267 231.882 554.84 236.301 549.299 239.5V319.5C554.84 316.301 558.267 311.882 558.267 307V227Z"
-        fill="#006045"
-        stroke="#006045"
-        strokeWidth="1"
-        strokeLinejoin="round"
-      />
-      <g clipPath="url(#clip0_1_3)">
-        <mask
-          id="mask0_1_3"
-          style={{ maskType: "luminance" }}
-          maskUnits="userSpaceOnUse"
-          x="128"
-          y="117"
-          width="372"
-          height="215"
-        >
-          <path
-            d="M128 232.703L328.404 117L500 216.071L299.596 331.774L128 232.703Z"
-            fill="white"
-          />
-        </mask>
-        <g mask="url(#mask0_1_3)">
-          <path
-            fillRule="evenodd"
-            clipRule="evenodd"
-            d="M290.13 281.058C268.503 293.544 234.602 294.247 214.474 282.625C195.735 271.806 195.475 254.123 213.025 241.655C190.305 221.704 195.702 193.616 228.202 174.851C260.703 156.087 309.353 152.972 343.912 166.088C365.505 155.956 396.133 156.106 414.872 166.925C433.463 177.659 433.854 195.137 416.811 207.574C438.173 227.44 432.428 254.907 400.491 273.346C400.17 273.531 399.888 273.694 399.565 273.881L399.525 273.904C391.389 278.601 381.261 280.379 376.914 277.87C372.528 275.337 375.61 269.491 383.747 264.794C391.922 260.074 402.048 258.294 406.434 260.826C407.146 261.237 407.698 261.742 408.008 262.34C426.44 246.289 427.966 226.106 412.157 210.605L341.54 169.835C309.411 157.007 263.272 159.71 232.625 177.405C201.977 195.099 197.295 221.737 219.513 240.287L290.13 281.058ZM365.742 223.987C375.215 230.897 371.886 242.555 357.55 250.832C343.253 259.086 323.06 261.008 311.093 255.539C323.049 256.816 338.35 253.653 350.393 246.7C362.474 239.724 367.954 230.89 365.742 223.987Z"
-            fill="#006045"
-          />
-        </g>
-      </g>
-      <mask id="path-10-inside-1_1_3" fill="white">
-        <path d="M301.922 179L485.812 285.169L336.004 371.66C322.134 379.668 299.645 379.668 285.775 371.66L127 279.991L301.922 179Z" />
+
+      <mask id={logoMaskId} style={{ maskType: "luminance" }} maskUnits="userSpaceOnUse" x="125" y="43" width="373" height="215">
+        <path d="M125.154 158.703L325.558 43L497.154 142.071L296.751 257.774L125.154 158.703Z" fill="white" />
       </mask>
-      <path
-        d="M301.922 179L485.812 285.169L301.922 179M339.468 373.66C323.685 382.773 298.094 382.773 282.311 373.66L123.536 281.991L130.464 277.991L289.239 369.66C301.196 376.564 320.583 376.564 332.54 369.66L339.468 373.66ZM332.54 369.66M127 279.991L301.922 179L127 279.991M489.276 287.169L339.468 373.66C323.685 382.773 298.094 382.773 282.311 373.66L289.239 369.66C301.196 376.564 320.583 376.564 332.54 369.66L482.348 283.169L489.276 287.169Z"
-        fill="#D4D4D4"
-        mask="url(#path-10-inside-1_1_3)"
-      />
-      <defs>
-        <clipPath id="clip0_1_3">
-          <rect
-            width="359"
-            height="333"
-            fill="white"
-            transform="matrix(0.866025 -0.5 0.866025 0.5 0 179.5)"
-          />
-        </clipPath>
-      </defs>
+      <g mask={`url(#${logoMaskId})`}>
+        <motion.path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M287.284 207.058C265.658 219.544 231.757 220.247 211.628 208.625C192.889 197.806 192.63 180.123 210.18 167.655C187.46 147.704 192.856 119.616 225.357 100.851C257.857 82.0873 306.507 78.9717 341.066 92.0876C362.66 81.9565 393.288 82.1062 412.027 92.9253C430.618 103.659 431.008 121.137 413.966 133.574C435.327 153.44 429.582 180.907 397.645 199.346C397.324 199.531 397.043 199.694 396.719 199.881L396.68 199.904C388.544 204.601 378.415 206.379 374.068 203.87C369.682 201.337 372.765 195.491 380.901 190.794C389.076 186.074 399.202 184.294 403.588 186.826C404.3 187.237 404.852 187.742 405.162 188.34C423.594 172.289 425.121 152.106 409.312 136.605L338.695 95.8348C306.566 83.0069 260.427 85.7103 229.779 103.405C199.131 121.099 194.449 147.737 216.668 166.287L287.284 207.058ZM362.896 149.987C372.369 156.897 369.04 168.555 354.704 176.832C340.407 185.086 320.214 187.008 308.247 181.539C320.203 182.816 335.505 179.653 347.547 172.7C359.629 165.724 365.109 156.89 362.896 149.987Z"
+          fill="#006045"
+          style={{ transformBox: "fill-box", transformOrigin: "center" }}
+          initial={{ opacity: 0, y: -72, scale: 0.82 }}
+          animate={logoControls}
+        />
+      </g>
     </svg>
   );
 };
+

@@ -1,5 +1,26 @@
-﻿import Image from "next/image";
+"use client";
+
+import Image from "next/image";
+import { motion } from "motion/react";
 import { landingSetupItems } from "./landing-data";
+
+const revealUp = {
+  hidden: { opacity: 0, y: 36 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: "easeOut" },
+  },
+} as const;
+
+const staggerContainer = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.12,
+    },
+  },
+} as const;
 
 export function SetupSection() {
   const setupRows = Array.from(
@@ -9,7 +30,13 @@ export function SetupSection() {
 
   return (
     <section id="setup">
-      <div className="relative flex flex-col gap-2 md:gap-3 pb-10 px-7 md:pl-10 pt-40">
+      <motion.div
+        variants={revealUp}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.25 }}
+        className="relative flex flex-col gap-2 md:gap-3 pb-10 px-7 md:pl-10 pt-40"
+      >
         <Image
           alt="Cenra Logo"
           height={40}
@@ -24,9 +51,15 @@ export function SetupSection() {
           Set up your AI support agent by connecting your data, customizing the
           experience, and deploying it to your website.
         </p>
-      </div>
+      </motion.div>
 
-      <div className="grid border-t border-neutral-300 border-dashed divide-y divide-dashed divide-neutral-300 md:grid-cols-1">
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, amount: 0.18 }}
+        className="grid border-t border-neutral-300 border-dashed divide-y divide-dashed divide-neutral-300 md:grid-cols-1"
+      >
         {setupRows.map((row, rowIndex) => (
           <div
             key={`setup-row-${rowIndex}`}
@@ -36,7 +69,11 @@ export function SetupSection() {
               const Icon = item.icon;
 
               return (
-                <div key={item.title} className="flex flex-col gap-1.5 p-8">
+                <motion.div
+                  key={item.title}
+                  variants={revealUp}
+                  className="flex flex-col gap-1.5 p-8"
+                >
                   <div className="flex size-12 items-center justify-center border text-emerald-800">
                     <Icon />
                   </div>
@@ -46,12 +83,12 @@ export function SetupSection() {
                   <p className="text-sm tracking-tight text-neutral-600">
                     {item.description}
                   </p>
-                </div>
+                </motion.div>
               );
             })}
           </div>
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }

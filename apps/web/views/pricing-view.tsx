@@ -54,7 +54,7 @@ export const PricingView = () => {
                   : "bg-emerald-800 text-white hover:bg-emerald-900"
                   }`}
                 type="button"
-                onClick={() => router.push("/payment")}
+                onClick={() => router.push("/get-started")}
                 disabled={
                   plan.name === "Pro"
                 }
@@ -150,3 +150,4 @@ export const PricingView = () => {
     </div>
   );
 };
+

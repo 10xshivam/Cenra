@@ -1,6 +1,9 @@
-﻿import { Link } from "next-view-transitions";
+"use client";
+
+import { Link } from "next-view-transitions";
 import { Button } from "@workspace/ui/components/button";
 import { ArrowRight } from "lucide-react";
+import { motion } from "motion/react";
 import { HeroIllustration } from "./hero-illustration";
 
 export const supportFlow = [
@@ -35,22 +38,71 @@ export const supportFlow = [
   // },
 ];
 
+const heroContainerVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      delayChildren: 0.6,
+      staggerChildren: 0.18,
+    },
+  },
+} as const;
+
+const heroItemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.45, ease: "easeOut" },
+  },
+} as const;
+
+const lowerSectionVariants = {
+  hidden: {},
+  show: {
+    transition: {
+      delayChildren: 1.2,
+      staggerChildren: 0.2,
+    },
+  },
+} as const;
+
+const lowerColumnVariants = {
+  hidden: { opacity: 0, y: 24 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.5, ease: "easeOut" },
+  },
+} as const;
+
 export const HeroSection = () => {
   return (
     <section className="grid grid-cols-1 divide-y divide-neutral-300 divide-dashed border-b border-neutral-300 border-dashed">
-      <div className="flex flex-col gap-4.5 sm:gap-6 sm:items-center justify-center pt-25 sm:pt-40 sm:pb-20 pb-10 px-7">
+      <motion.div
+        variants={heroContainerVariants}
+        initial="hidden"
+        animate="show"
+        className="flex flex-col gap-4.5 sm:gap-6 sm:items-center justify-center pt-25 sm:pt-40 sm:pb-20 pb-10 px-7"
+      >
         <div className="flex flex-col gap-4 sm:gap-5 sm:items-center sm:justify-center">
           <HeroIllustration className="block sm:hidden h-auto w-full max-w-[300px] rounded-md mx-auto mb-15" />
-          <h1 className="max-w-sm sm:max-w-5xl text-[1.7rem] sm:text-5xl sm:text-center font-medium tracking-tight text-emerald-800 md:text-6xl font-serif leading-[1.09]">
+          <motion.h1
+            variants={heroItemVariants}
+            className="max-w-sm sm:max-w-5xl text-[1.7rem] sm:text-5xl sm:text-center font-medium tracking-tight text-emerald-800 md:text-6xl font-serif leading-[1.09]"
+          >
             AI support agent that actually understands your business
-          </h1>
-          <p className="max-w-xs sm:max-w-lg text-xs sm:text-base leading-snug text-left sm:text-center text-neutral-600 md:text-base tracking-tight ">
+          </motion.h1>
+          <motion.p
+            variants={heroItemVariants}
+            className="max-w-xs sm:max-w-lg text-xs sm:text-base leading-snug text-left sm:text-center text-neutral-600 md:text-base tracking-tight"
+          >
             Transform your product knowledge into an AI agent that answers
             instantly and intelligently.
-          </p>
+          </motion.p>
         </div>
 
-        <div className="flex gap-3">
+        <motion.div variants={heroItemVariants} className="flex gap-3">
           <Button
             asChild
             size="lg"
@@ -69,10 +121,18 @@ export const HeroSection = () => {
           >
             <Link href="/pricing">View Demo</Link>
           </Button>
-        </div>
-      </div>
-      <div className="w-full grid-cols-3 divide-x divide-dashed divide-neutral-300 hidden sm:grid">
-        <div className="flex justify-center items-center flex-col gap-3">
+        </motion.div>
+      </motion.div>
+      <motion.div
+        variants={lowerSectionVariants}
+        initial="hidden"
+        animate="show"
+        className="w-full grid-cols-3 divide-x divide-dashed divide-neutral-300 hidden sm:grid"
+      >
+        <motion.div
+          variants={lowerColumnVariants}
+          className="flex justify-center items-center flex-col gap-3"
+        >
           {supportFlow.map((item, index) => (
             <div
               key={index}
@@ -81,11 +141,17 @@ export const HeroSection = () => {
               {item.query}
             </div>
           ))}
-        </div>
-        <div className="flex flex-col items-center justify-center pt-16 pb-21 px-10 bg-amber-50">
+        </motion.div>
+        <motion.div
+          variants={lowerColumnVariants}
+          className="flex flex-col items-center justify-center pt-25 pb-21 px-10 bg-amber-50"
+        >
           <HeroIllustration className="block h-auto w-full max-w-[400px] rounded-md" />
-        </div>
-        <div className="flex justify-center items-center flex-col gap-3">
+        </motion.div>
+        <motion.div
+          variants={lowerColumnVariants}
+          className="flex justify-center items-center flex-col gap-3"
+        >
           {supportFlow.map((item, index) => (
             <div
               key={index}
@@ -94,8 +160,8 @@ export const HeroSection = () => {
               {item.reply}
             </div>
           ))}
-        </div>
-      </div>
+        </motion.div>
+      </motion.div>
     </section>
   );
 };

@@ -1,10 +1,17 @@
-﻿import Image from "next/image";
+﻿"use client";
+
+import Image from "next/image";
 import { Button } from "@workspace/ui/components/button";
 import { Link } from "next-view-transitions";
+import { motion } from "motion/react"
 
 export const Navbar = () => {
   return (
-    <header className="bg-amber-50 border-neutral-300 border-dashed px-2 sm:px-4 py-3  backdrop-blur-3xl border-b fixed top-0 left-0 right-0 z-50 ">
+    <motion.header 
+    initial={{ y: -100, opacity: 0 }}
+    animate={{ y: 0, opacity: 1 }}
+    transition={{ duration: 0.5, ease: "easeOut" }}
+     className="bg-amber-50 border-neutral-300 border-dashed px-2 sm:px-4 py-3  backdrop-blur-3xl border-b fixed top-0 left-0 right-0 z-50 ">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-1">
         <div className="flex items-center gap-1">
           <Image src="/cenra-logo.svg" alt="Cenra" width={36} height={36} />
@@ -50,7 +57,7 @@ export const Navbar = () => {
           </Button>
         </div>
       </div>
-    </header>
+    </motion.header>
   );
 };
 

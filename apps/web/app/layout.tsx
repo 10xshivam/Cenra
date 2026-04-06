@@ -33,9 +33,9 @@ export default function RootLayout({
 }>) {
   return (
     <ViewTransitions>
-      <html lang="en" suppressHydrationWarning className="light" style={{ colorScheme: "light" }}>
+      <html lang="en" suppressHydrationWarning className="light no-scrollbar" style={{ colorScheme: "light" }}>
         <body
-          className={`${fontSans.variable} ${fontSerif.variable} font-sans antialiased bg-amber-50 selection:bg-emerald-900/20 selection:text-emerald-900 box-border`}
+          className={`${fontSans.variable} ${fontSerif.variable} no-scrollbar font-sans antialiased bg-amber-50 selection:bg-emerald-800/25 selection:text-emerald-9500 box-border`}
         >
           <Providers>
             <DisableZoom />

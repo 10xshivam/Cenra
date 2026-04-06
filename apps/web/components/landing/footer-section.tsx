@@ -1,6 +1,9 @@
-﻿import { IconCopyright } from "@tabler/icons-react";
+"use client";
+
+import { IconCopyright } from "@tabler/icons-react";
 import Image from "next/image";
 import { Link } from "next-view-transitions";
+import { motion } from "motion/react";
 
 const footerGroups = [
   {
@@ -36,11 +39,43 @@ const footerGroups = [
   },
 ] as const;
 
+const revealUp = {
+  hidden: { opacity: 0, y: 36 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: "easeOut" },
+  },
+} as const;
+
+const revealUpTranslateOnly = {
+  hidden: { y: 36 },
+  show: {
+    y: 0,
+    transition: { duration: 0.55, ease: "easeOut" },
+  },
+} as const;
+
+const staggerContainer = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.1,
+    },
+  },
+} as const;
+
 export function FooterSection() {
   return (
     <footer className="grid-cols-1 divide-y divide-neutral-300 divide-dashed grid">
       <div className="grid grid-cols-1 max-md:divide-y md:grid-cols-3 md:divide-x divide-neutral-300 divide-dashed">
-        <div className="flex flex-col p-7 md:p-10">
+        <motion.div
+          variants={revealUp}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.25 }}
+          className="flex flex-col p-7 md:p-10"
+        >
           <span className="text-3xl font-semibold tracking-tight text-emerald-800 font-serif mb-0.5">
             Cenra
           </span>
@@ -49,7 +84,6 @@ export function FooterSection() {
             <Link
               href="https://x.com/in/10xshivam"
               target="_top"
-              // rel="noopener noreferrer"
               className="text-neutral-400 font-medium"
             >
               @10xshivam
@@ -59,11 +93,17 @@ export function FooterSection() {
             <IconCopyright className="size-3.5" strokeWidth={2} />
             2026. All rights reserved.
           </p>
-        </div>
+        </motion.div>
 
-        <div className="grid grid-cols-4 col-span-2 divide-x divide-neutral-300 divide-dashed">
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.18 }}
+          className="grid grid-cols-4 col-span-2 divide-x divide-neutral-300 divide-dashed"
+        >
           {footerGroups.map((group) => (
-            <div key={group.title} className="flex flex-col gap-1.5 p-4 md:p-10">
+            <motion.div key={group.title} variants={revealUp} className="flex flex-col gap-1.5 p-4 md:p-10">
               <h3 className="text-sm md:text-base font-semibold text-emerald-800 font-serif">
                 {group.title}
               </h3>
@@ -78,23 +118,31 @@ export function FooterSection() {
                   </Link>
                 ))}
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
-      <div className=" flex pt-10 items-center justify-center grayscale opacity-10">
-        <Image
-          alt="Cenra Logo"
-          height={40}
-          width={40}
-          src="/cenra-logo.svg"
-          className="size-30 md:size-80 "
-        />
-        <h4 className="font-serif text-7xl md:text-[12rem] font-medium tracking-tight">
-          Cenra
-        </h4>
+
+      <div className="flex pt-10 items-center justify-center grayscale opacity-10">
+        <motion.div
+          variants={revealUpTranslateOnly}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, amount: 0.2 }}
+          className="flex items-center justify-center"
+        >
+          <Image
+            alt="Cenra Logo"
+            height={40}
+            width={40}
+            src="/cenra-logo.svg"
+            className="size-30 md:size-80 "
+          />
+          <h4 className="font-serif text-7xl md:text-[12rem] font-medium tracking-tight">
+            Cenra
+          </h4>
+        </motion.div>
       </div>
     </footer>
   );
 }
-

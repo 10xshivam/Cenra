@@ -25,9 +25,9 @@ export const DashboardLayout = async ({
       </div>
 
       <div className="hidden lg:block">
-        <SidebarProvider defaultValue={defaultOpen ? "true" : "false"} className="bg-white/40">
+        <SidebarProvider defaultValue={defaultOpen ? "true" : "false"}>
           <DashboardSidebar />
-          <SidebarInset className="h-svh overflow-hidden flex flex-col bg-transparent">
+          <SidebarInset className="h-svh overflow-hidden flex flex-col bg-amber-50">
             <main className="flex-1 p-2 pl-0 min-h-0">
               <div className="rounded-lg w-full h-full overflow-hidden border flex flex-col bg-white/80">
                 <MainHeader />
