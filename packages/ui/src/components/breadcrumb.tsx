@@ -38,7 +38,7 @@ function BreadcrumbLink({
 }: React.ComponentProps<"a"> & {
   asChild?: boolean
 }) {
-  const Comp = asChild ? Slot : "a"
+  const Comp: React.ElementType = asChild ? Slot : "a"
 
   return (
     <Comp
@@ -107,3 +107,4 @@ export {
   BreadcrumbSeparator,
   BreadcrumbEllipsis,
 }
+
