@@ -14,15 +14,23 @@ import analyticsRouter from "./routes/analytics.route";
 import { initLangGraph } from "./config/langgraph";
 import subscriptionRouter from "./routes/subscription.route";
 import { webhookController } from "./controllers/webhook.controller";
+import { prisma } from "@workspace/db";
+import { client } from "./config/qdrant";
+import { getChatbot } from "./config/langgraph";
 
 dotenv.config();
 
 const app = express();
+const corsOrigins = (process.env.CORS_ORIGINS ??
+  "http://localhost:3000,http://localhost:3001")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
 
 // CORS Configuration
 app.use(
   cors({
-    origin: ["http://localhost:3000", "http://localhost:3001"],
+    origin: corsOrigins,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     credentials: true,
   })
@@ -37,6 +45,45 @@ app.use(cookieParser());
 
 // Server Port
 const PORT = process.env.PORT;
+
+app.get("/", async (_req, res) => {
+  let prismaUp = false;
+  let qdrantUp = false;
+  let langGraphInitialized = false;
+
+  try {
+    await prisma.$queryRawUnsafe("SELECT 1");
+    prismaUp = true;
+  } catch (error) {
+    console.error("Prisma health check failed:", error);
+  }
+
+  try {
+    await client.getCollections();
+    qdrantUp = true;
+  } catch (error) {
+    console.error("Qdrant health check failed:", error);
+  }
+
+  try {
+    getChatbot();
+    langGraphInitialized = true;
+  } catch (error) {
+    console.error("LangGraph init check failed:", error);
+  }
+
+  const allSystemsUp = prismaUp && qdrantUp && langGraphInitialized;
+
+  res.status(allSystemsUp ? 200 : 503).json({
+    message: "Welcome to Cenra backend",
+    status: allSystemsUp ? "ok" : "degraded",
+    services: {
+      prisma: prismaUp ? "up" : "down",
+      qdrant: qdrantUp ? "up" : "down",
+      langGraph: langGraphInitialized ? "initialized" : "not_initialized",
+    },
+  });
+});
 
 // Routes
 app.use("/api/v1/auth", userRouter);
