@@ -125,7 +125,7 @@ export const identifyCustomer = async (req: Request, res: Response) => {
     const conversation = await prisma.conversation.findUnique({
       where: { id: conversationId },
     });
-    const chatbot = getChatbot();
+    const chatbot = await getChatbot();
 
     const state = await chatbot.getState({
       configurable: {

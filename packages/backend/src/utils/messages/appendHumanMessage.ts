@@ -11,8 +11,8 @@ export const appendHumanMessage = async ({
     conversationId: string;
   };
   content: string;
-}) =>{
-  const chatbot = getChatbot();
+}) => {
+  const chatbot = await getChatbot();
 
   const config = {
     configurable: {
@@ -34,6 +34,6 @@ export const appendHumanMessage = async ({
         }),
       ],
     },
-    config
+    config,
   );
-}
+};

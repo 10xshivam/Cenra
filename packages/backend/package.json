@@ -2,7 +2,7 @@
   "name": "@workspace/backend",
   "scripts": {
     "dev": "tsc-watch --onSuccess \"node ./dist/index.js\"",
-    "build": "pnpm dlx turbo run db:generate && tsc -b",
+    "build": "tsc -b",
     "start": "node ./dist/index.js"
   },
   "keywords": [],

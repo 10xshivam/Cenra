@@ -38,7 +38,7 @@ export const createMessage = async (req: Request, res: Response) => {
         .json({ message: "Customer session has expired", status: "expired" });
     }
 
-    const chatbot = getChatbot();
+    const chatbot = await getChatbot();
 
     const config = {
       configurable: {
@@ -106,7 +106,7 @@ export const getConversationMessagesWithIdentityCheck = async (
       return res.status(404).json({ message: "Conversation not found" });
     }
 
-    const chatbot = getChatbot();
+    const chatbot = await getChatbot();
 
     const snapshot = await chatbot.getState({
       configurable: {
@@ -172,7 +172,7 @@ export const getLastMessage = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Conversation not found" });
     }
 
-    const chatbot = getChatbot();
+    const chatbot = await getChatbot();
 
     const snapshot = await chatbot.getState({
       configurable: {
@@ -242,7 +242,7 @@ export const getAllMessages = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Conversation not found" });
     }
 
-    const chatbot = getChatbot();
+    const chatbot = await getChatbot();
 
     const snapshot = await chatbot.getState({
       configurable: {

@@ -1,4 +1,5 @@
 import express from "express";
+import type { Express } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -20,7 +21,7 @@ import { getChatbot } from "./config/langgraph";
 
 dotenv.config();
 
-const app = express();
+const app: Express = express();
 const corsOrigins = (process.env.CORS_ORIGINS ??
   "http://localhost:3000,http://localhost:3001")
   .split(",")
@@ -66,7 +67,7 @@ app.get("/", async (_req, res) => {
   }
 
   try {
-    getChatbot();
+    await getChatbot();
     langGraphInitialized = true;
   } catch (error) {
     console.error("LangGraph init check failed:", error);
@@ -97,10 +98,15 @@ app.use("/api/v1/workspace", analyticsRouter);
 app.use("/api/v1/widget", widgetRouter);
 app.use("/api/v1/subscription", subscriptionRouter);
 
-// Start the server
-initLangGraph().then(() => {
+void initLangGraph().catch((error) => {
+  console.error("LangGraph warmup failed:", error);
+});
+
+if (!process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`Server is running on Port ${PORT}`);
     console.log(`Local: http://localhost:${PORT}`);
   });
-});
+}
+
+export default app;
