@@ -57,7 +57,12 @@ export const startConversation = async (req: Request, res: Response) => {
 
     const { count: customersCount, plan } =
       await getCustomersCount(workspace.id);
-    if (customersCount >= PLAN_FEATURES[plan].maxCustomersPerMonth) {
+    const planKey: keyof typeof PLAN_FEATURES =
+      typeof plan === "string" && plan in PLAN_FEATURES
+        ? (plan as keyof typeof PLAN_FEATURES)
+        : "STARTER";
+
+    if (customersCount >= PLAN_FEATURES[planKey].maxCustomersPerMonth) {
       return res.status(403).json({ message: "Monthly customer limit reached" });
     }
 
@@ -152,7 +157,7 @@ export const getConversations = async (req: Request, res: Response) => {
     const chatbot = getChatbot();
 
     const conversationsWithLastMessage = await Promise.all(
-      conversations.map(async (conversation) => {
+      conversations.map(async (conversation: { threadId: string } & Record<string, unknown>) => {
         const snapshot = await chatbot.getState({
           configurable: { thread_id: conversation.threadId },
         });

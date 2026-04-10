@@ -185,11 +185,12 @@ export const getAnalytics = async (
         const peakDayName = daysOfWeek[peakDay] || "Unknown";
 
         // Resources Knowledge Coverage
-        const resources = await prisma.resource.findMany({ where: { workspaceId } });
+        const resources: Array<{ active: boolean; sourceType: string }> =
+            await prisma.resource.findMany({ where: { workspaceId } });
         const totalResources = resources.length;
-        const activeResources = resources.filter(r => r.active).length;
-        const webResources = resources.filter(r => r.sourceType === "WEB").length;
-        const fileResources = resources.filter(r => r.sourceType === "FILE").length;
+        const activeResources = resources.filter((r) => r.active).length;
+        const webResources = resources.filter((r) => r.sourceType === "WEB").length;
+        const fileResources = resources.filter((r) => r.sourceType === "FILE").length;
 
         return res.status(200).json({
             metrics: {

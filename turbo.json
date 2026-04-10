@@ -1,6 +1,22 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
+  "globalEnv": [
+    "APP_URL",
+    "CORS_ORIGINS",
+    "DATABASE_URL",
+    "DODO_API_KEY",
+    "DODO_PRO_PRODUCT_ID",
+    "DODO_STARTER_PRODUCT_ID",
+    "FIRECRAWL_API_KEY",
+    "GROQ_API_KEY",
+    "JINA_API_KEY",
+    "JWT_SECRET",
+    "QDRANT_API_KEY",
+    "QDRANT_URL",
+    "THREADS_DB_URL",
+    "WEBHOOK_SECRET"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

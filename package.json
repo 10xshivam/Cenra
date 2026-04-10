@@ -5,8 +5,8 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
-    "lint": "turbo lint",
-    "format": "prettier --write \"**/*.{ts,tsx,md}\""
+    "lint": "corepack pnpm -r --if-present lint",
+    "format": "corepack pnpm exec prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css,scss,yml,yaml}\""
   },
   "devDependencies": {
     "@workspace/eslint-config": "workspace:*",
