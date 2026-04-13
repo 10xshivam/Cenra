@@ -82,7 +82,7 @@ export const startConversation = async (req: Request, res: Response) => {
       },
     });
 
-    const chatbot = getChatbot();
+    const chatbot = await getChatbot();
 
     const config = {
       configurable: {
@@ -154,7 +154,7 @@ export const getConversations = async (req: Request, res: Response) => {
       },
     });
 
-    const chatbot = getChatbot();
+    const chatbot = await getChatbot();
 
     const conversationsWithLastMessage = await Promise.all(
       conversations.map(async (conversation: { threadId: string } & Record<string, unknown>) => {

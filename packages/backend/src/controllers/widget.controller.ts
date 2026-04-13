@@ -3,7 +3,7 @@ import { Request, Response } from "express";
 import { getChatbot } from "../config/langgraph";
 import { BaseMessage } from "langchain";
 import { getMetadata } from "../utils/widget/getMetadata";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "crypto";
 
 const SESSION_DURATION_MS = 48 * 60 * 60 * 1000; // 48 hours in milliseconds
 const SESSION_EXTENSION_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
@@ -125,7 +125,7 @@ export const identifyCustomer = async (req: Request, res: Response) => {
     const conversation = await prisma.conversation.findUnique({
       where: { id: conversationId },
     });
-    const chatbot = getChatbot();
+    const chatbot = await getChatbot();
 
     const state = await chatbot.getState({
       configurable: {
@@ -156,7 +156,7 @@ export const identifyCustomer = async (req: Request, res: Response) => {
     return res.status(200).json({
       message: "Customer identified successfully",
       agentMessage: {
-        id: uuidv4(),
+        id: randomUUID(),
         from: "assistant",
         content: replyText,
       },

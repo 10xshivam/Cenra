@@ -11,7 +11,7 @@ import {
   END,
 } from "@langchain/langgraph";
 import { RunnableConfig } from "@langchain/core/runnables";
-import { model } from "../config/model";
+import { getModel } from "../config/model";
 import { toolsByName } from "./tools";
 import { prisma } from "@workspace/db";
 
@@ -60,7 +60,7 @@ async function llmCall(state: GraphState, config?: RunnableConfig) {
     ...state.messages,
   ];
 
-  const response = await model.invoke(messages);
+  const response = await getModel().invoke(messages);
 
   response.additional_kwargs = {
     ...(response.additional_kwargs ?? {}),

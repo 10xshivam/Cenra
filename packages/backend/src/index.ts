@@ -1,4 +1,5 @@
 import express from "express";
+import type { Express } from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
@@ -11,16 +12,13 @@ import messageRouter from "./routes/message.route";
 import widgetSettingRouter from "./routes/widgetSetting.route";
 import widgetRouter from "./routes/widget.routes";
 import analyticsRouter from "./routes/analytics.route";
-import { initLangGraph } from "./config/langgraph";
 import subscriptionRouter from "./routes/subscription.route";
 import { webhookController } from "./controllers/webhook.controller";
 import { prisma } from "@workspace/db";
-import { client } from "./config/qdrant";
-import { getChatbot } from "./config/langgraph";
 
 dotenv.config();
 
-const app = express();
+const app: Express = express();
 const corsOrigins = (process.env.CORS_ORIGINS ??
   "http://localhost:3000,http://localhost:3001")
   .split(",")
@@ -59,14 +57,16 @@ app.get("/", async (_req, res) => {
   }
 
   try {
-    await client.getCollections();
+    const { getQdrantClient } = await import("./config/qdrant.js");
+    await getQdrantClient().getCollections();
     qdrantUp = true;
   } catch (error) {
     console.error("Qdrant health check failed:", error);
   }
 
   try {
-    getChatbot();
+    const { getChatbot } = await import("./config/langgraph.js");
+    await getChatbot();
     langGraphInitialized = true;
   } catch (error) {
     console.error("LangGraph init check failed:", error);
@@ -97,10 +97,11 @@ app.use("/api/v1/workspace", analyticsRouter);
 app.use("/api/v1/widget", widgetRouter);
 app.use("/api/v1/subscription", subscriptionRouter);
 
-// Start the server
-initLangGraph().then(() => {
+if (!process.env.VERCEL) {
   app.listen(PORT, () => {
     console.log(`Server is running on Port ${PORT}`);
     console.log(`Local: http://localhost:${PORT}`);
   });
-});
+}
+
+export default app;
