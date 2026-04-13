@@ -10,6 +10,7 @@ const generateToken_1 = require("../utils/auth/generateToken");
 const googleAuth_1 = require("../utils/auth/googleAuth");
 const setWorkspaceCookie_1 = require("../utils/auth/setWorkspaceCookie");
 const setSubscriptionCookie_1 = require("../utils/auth/setSubscriptionCookie");
+const cookieOptions_1 = require("../utils/auth/cookieOptions");
 const registerUser = async (req, res) => {
     const { firstName, lastName, email, password } = req.body;
     try {
@@ -91,21 +92,10 @@ const loginUser = async (req, res) => {
 };
 exports.loginUser = loginUser;
 const logoutUser = (req, res) => {
-    res.clearCookie("token", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-    });
-    res.clearCookie("hasWorkspace", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-    });
-    res.clearCookie("hasSubscription", {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
-    });
+    const cookieOptions = (0, cookieOptions_1.getAuthCookieOptions)();
+    res.clearCookie("token", cookieOptions);
+    res.clearCookie("hasWorkspace", cookieOptions);
+    res.clearCookie("hasSubscription", cookieOptions);
     return res.status(200).json({ message: "Logout successful." });
 };
 exports.logoutUser = logoutUser;

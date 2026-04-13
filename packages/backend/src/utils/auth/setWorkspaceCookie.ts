@@ -1,5 +1,6 @@
 import { prisma } from "@workspace/db";
 import { Response } from "express";
+import { getAuthCookieOptions } from "./cookieOptions";
 
 export const setWorkspaceCookie = async (userId: string, res: Response) => {
   try {
@@ -10,10 +11,7 @@ export const setWorkspaceCookie = async (userId: string, res: Response) => {
     const hasWorkspace = !!workspace;
 
     res.cookie("hasWorkspace", String(hasWorkspace), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      ...getAuthCookieOptions(),
     });
 
     return hasWorkspace;

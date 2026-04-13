@@ -1,1 +1,1 @@
-{"version":3,"file":"setSubscriptionCookie.d.ts","sourceRoot":"","sources":["../../../src/utils/auth/setSubscriptionCookie.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAEnC,eAAO,MAAM,qBAAqB,GAChC,QAAQ,MAAM,EACd,KAAK,QAAQ,qBA2Bd,CAAC"}
+{"version":3,"file":"setSubscriptionCookie.d.ts","sourceRoot":"","sources":["../../../src/utils/auth/setSubscriptionCookie.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AAGnC,eAAO,MAAM,qBAAqB,GAChC,QAAQ,MAAM,EACd,KAAK,QAAQ,qBAwBd,CAAC"}

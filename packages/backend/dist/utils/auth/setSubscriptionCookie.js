@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.setSubscriptionCookie = void 0;
 const db_1 = require("@workspace/db");
+const cookieOptions_1 = require("./cookieOptions");
 const setSubscriptionCookie = async (userId, res) => {
     try {
         const subscription = await db_1.prisma.subscription.findFirst({
@@ -15,10 +16,7 @@ const setSubscriptionCookie = async (userId, res) => {
         });
         const hasSubscription = !!subscription;
         res.cookie("hasSubscription", String(hasSubscription), {
-            httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
-            sameSite: "strict",
-            maxAge: 7 * 24 * 60 * 60 * 1000,
+            ...(0, cookieOptions_1.getAuthCookieOptions)(),
         });
         return hasSubscription;
     }
