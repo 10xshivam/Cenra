@@ -11,12 +11,12 @@
   "type": "commonjs",
   "devDependencies": {
     "@types/pg": "^8.16.0",
-    "@workspace/db": "workspace:*",
     "@workspace/typescript-config": "workspace:*",
     "tsc-watch": "^7.2.0",
     "typescript": "latest"
   },
   "dependencies": {
+    "@workspace/db": "workspace:*",
     "@langchain/community": "^1.0.4",
     "@langchain/core": "^1.0.6",
     "@langchain/google-genai": "^2.0.0",

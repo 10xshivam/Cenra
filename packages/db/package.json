@@ -1,15 +1,20 @@
 {
   "name": "@workspace/db",
   "version": "1.0.0",
-  "main": "index.js",
-   "scripts": {
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "scripts": {
+    "build": "prisma generate && tsc -p tsconfig.json",
     "postinstall": "prisma generate",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --skip-generate",
     "db:deploy": "prisma migrate deploy"
   },
-  "exports":{
-    ".": "./src/index.ts"
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
   },
   "keywords": [],
   "author": "",
