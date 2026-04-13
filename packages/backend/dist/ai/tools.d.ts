@@ -3,17 +3,17 @@ export declare const vectorSearchTool: import("@langchain/core/tools").DynamicSt
     query: z.ZodString;
     workspaceId: z.ZodString;
 }, "strip", z.ZodTypeAny, {
-    query: string;
     workspaceId: string;
+    query: string;
 }, {
-    query: string;
     workspaceId: string;
+    query: string;
 }>, {
     query: string;
     workspaceId: string;
 }, {
-    query: string;
     workspaceId: string;
+    query: string;
 }, string>;
 export declare const escalateConversationTool: import("@langchain/core/tools").DynamicStructuredTool<z.ZodObject<{
     conversationId: z.ZodString;
@@ -42,17 +42,17 @@ export declare const toolsByName: {
         query: z.ZodString;
         workspaceId: z.ZodString;
     }, "strip", z.ZodTypeAny, {
-        query: string;
         workspaceId: string;
+        query: string;
     }, {
-        query: string;
         workspaceId: string;
+        query: string;
     }>, {
         query: string;
         workspaceId: string;
     }, {
-        query: string;
         workspaceId: string;
+        query: string;
     }, string>;
     escalate_conversation: import("@langchain/core/tools").DynamicStructuredTool<z.ZodObject<{
         conversationId: z.ZodString;

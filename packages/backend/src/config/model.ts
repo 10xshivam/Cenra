@@ -4,10 +4,22 @@ import { vectorSearchTool } from "../ai/tools";
 
 dotenv.config();
 
-const llm = new ChatGoogleGenerativeAI({
-  model: "gemini-2.5-flash-lite",
-  temperature: 0,
-});
+let modelInstance: ReturnType<ChatGoogleGenerativeAI["bindTools"]> | null = null;
 
-export const model = llm.bindTools([vectorSearchTool])
+export function getModel() {
+  if (!process.env.GOOGLE_API_KEY) {
+    throw new Error("GOOGLE_API_KEY is not set in environment");
+  }
+
+  if (!modelInstance) {
+    const llm = new ChatGoogleGenerativeAI({
+      model: "gemini-2.5-flash-lite",
+      temperature: 0,
+    });
+
+    modelInstance = llm.bindTools([vectorSearchTool]);
+  }
+
+  return modelInstance;
+}
 

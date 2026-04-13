@@ -39,7 +39,7 @@ async function llmCall(state, config) {
         ].join(" ")),
         ...state.messages,
     ];
-    const response = await model_1.model.invoke(messages);
+    const response = await (0, model_1.getModel)().invoke(messages);
     response.additional_kwargs = {
         ...(response.additional_kwargs ?? {}),
         timestamp: Date.now(),

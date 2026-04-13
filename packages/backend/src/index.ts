@@ -12,12 +12,9 @@ import messageRouter from "./routes/message.route";
 import widgetSettingRouter from "./routes/widgetSetting.route";
 import widgetRouter from "./routes/widget.routes";
 import analyticsRouter from "./routes/analytics.route";
-import { initLangGraph } from "./config/langgraph";
 import subscriptionRouter from "./routes/subscription.route";
 import { webhookController } from "./controllers/webhook.controller";
 import { prisma } from "@workspace/db";
-import { client } from "./config/qdrant";
-import { getChatbot } from "./config/langgraph";
 
 dotenv.config();
 
@@ -60,13 +57,15 @@ app.get("/", async (_req, res) => {
   }
 
   try {
-    await client.getCollections();
+    const { getQdrantClient } = await import("./config/qdrant.js");
+    await getQdrantClient().getCollections();
     qdrantUp = true;
   } catch (error) {
     console.error("Qdrant health check failed:", error);
   }
 
   try {
+    const { getChatbot } = await import("./config/langgraph.js");
     await getChatbot();
     langGraphInitialized = true;
   } catch (error) {
@@ -97,10 +96,6 @@ app.use("/api/v1/workspace", widgetSettingRouter);
 app.use("/api/v1/workspace", analyticsRouter);
 app.use("/api/v1/widget", widgetRouter);
 app.use("/api/v1/subscription", subscriptionRouter);
-
-void initLangGraph().catch((error) => {
-  console.error("LangGraph warmup failed:", error);
-});
 
 if (!process.env.VERCEL) {
   app.listen(PORT, () => {

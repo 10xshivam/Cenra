@@ -16,12 +16,9 @@ const message_route_1 = __importDefault(require("./routes/message.route"));
 const widgetSetting_route_1 = __importDefault(require("./routes/widgetSetting.route"));
 const widget_routes_1 = __importDefault(require("./routes/widget.routes"));
 const analytics_route_1 = __importDefault(require("./routes/analytics.route"));
-const langgraph_1 = require("./config/langgraph");
 const subscription_route_1 = __importDefault(require("./routes/subscription.route"));
 const webhook_controller_1 = require("./controllers/webhook.controller");
 const db_1 = require("@workspace/db");
-const qdrant_1 = require("./config/qdrant");
-const langgraph_2 = require("./config/langgraph");
 dotenv_1.default.config();
 const app = (0, express_1.default)();
 const corsOrigins = (process.env.CORS_ORIGINS ??
@@ -54,14 +51,16 @@ app.get("/", async (_req, res) => {
         console.error("Prisma health check failed:", error);
     }
     try {
-        await qdrant_1.client.getCollections();
+        const { getQdrantClient } = await import("./config/qdrant.js");
+        await getQdrantClient().getCollections();
         qdrantUp = true;
     }
     catch (error) {
         console.error("Qdrant health check failed:", error);
     }
     try {
-        await (0, langgraph_2.getChatbot)();
+        const { getChatbot } = await import("./config/langgraph.js");
+        await getChatbot();
         langGraphInitialized = true;
     }
     catch (error) {
@@ -89,9 +88,6 @@ app.use("/api/v1/workspace", widgetSetting_route_1.default);
 app.use("/api/v1/workspace", analytics_route_1.default);
 app.use("/api/v1/widget", widget_routes_1.default);
 app.use("/api/v1/subscription", subscription_route_1.default);
-void (0, langgraph_1.initLangGraph)().catch((error) => {
-    console.error("LangGraph warmup failed:", error);
-});
 if (!process.env.VERCEL) {
     app.listen(PORT, () => {
         console.log(`Server is running on Port ${PORT}`);

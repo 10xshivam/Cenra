@@ -3,9 +3,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.initLangGraph = initLangGraph;
 exports.getChatbot = getChatbot;
 const langgraph_checkpoint_postgres_1 = require("@langchain/langgraph-checkpoint-postgres");
-const agent_1 = require("../ai/agent");
 let chatbot = null;
 let chatbotInitPromise = null;
+async function initCompiledAgent() {
+    const { agent } = await import("../ai/agent.js");
+    return agent;
+}
 async function initLangGraph() {
     if (chatbot) {
         return chatbot;
@@ -19,8 +22,9 @@ async function initLangGraph() {
     }
     chatbotInitPromise = (async () => {
         const checkpointer = langgraph_checkpoint_postgres_1.PostgresSaver.fromConnString(dbUrl);
+        const compiledAgent = await initCompiledAgent();
         await checkpointer.setup();
-        chatbot = agent_1.agent.compile({ checkpointer });
+        chatbot = compiledAgent.compile({ checkpointer });
         console.log("Chatbot initialized with PostgresSaver");
         return chatbot;
     })().catch((error) => {

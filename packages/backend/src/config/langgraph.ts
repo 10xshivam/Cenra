@@ -1,8 +1,14 @@
 import { PostgresSaver } from "@langchain/langgraph-checkpoint-postgres";
-import { agent } from "../ai/agent";
 
-let chatbot: ReturnType<typeof agent.compile> | null = null;
-let chatbotInitPromise: Promise<ReturnType<typeof agent.compile>> | null = null;
+type Chatbot = any;
+
+let chatbot: Chatbot | null = null;
+let chatbotInitPromise: Promise<Chatbot> | null = null;
+
+async function initCompiledAgent() {
+  const { agent } = await import("../ai/agent.js");
+  return agent;
+}
 
 export async function initLangGraph() {
   if (chatbot) {
@@ -20,10 +26,11 @@ export async function initLangGraph() {
 
   chatbotInitPromise = (async () => {
     const checkpointer = PostgresSaver.fromConnString(dbUrl);
+    const compiledAgent = await initCompiledAgent();
 
     await checkpointer.setup();
 
-    chatbot = agent.compile({ checkpointer });
+    chatbot = compiledAgent.compile({ checkpointer });
 
     console.log("Chatbot initialized with PostgresSaver");
 
