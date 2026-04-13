@@ -5,6 +5,7 @@ import { generateToken } from "../utils/auth/generateToken";
 import { getGoogleUserProfile } from "../utils/auth/googleAuth";
 import { setWorkspaceCookie } from "../utils/auth/setWorkspaceCookie";
 import { setSubscriptionCookie } from "../utils/auth/setSubscriptionCookie";
+import { getAuthCookieOptions } from "../utils/auth/cookieOptions";
 
 export const registerUser = async (req: Request, res: Response) => {
   const { firstName, lastName, email, password } = req.body;
@@ -95,21 +96,10 @@ export const loginUser = async (req: Request, res: Response) => {
 };
 
 export const logoutUser = (req: Request, res: Response) => {
-  res.clearCookie("token", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-  });
-  res.clearCookie("hasWorkspace", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-  });
-  res.clearCookie("hasSubscription", {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "strict",
-  });
+  const cookieOptions = getAuthCookieOptions();
+  res.clearCookie("token", cookieOptions);
+  res.clearCookie("hasWorkspace", cookieOptions);
+  res.clearCookie("hasSubscription", cookieOptions);
   return res.status(200).json({ message: "Logout successful." });
 };
 

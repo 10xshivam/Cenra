@@ -1,5 +1,6 @@
 import { prisma } from "@workspace/db";
 import { Response } from "express";
+import { getAuthCookieOptions } from "./cookieOptions";
 
 export const setSubscriptionCookie = async (
   userId: string,
@@ -19,10 +20,7 @@ export const setSubscriptionCookie = async (
     const hasSubscription = !!subscription;
 
     res.cookie("hasSubscription", String(hasSubscription), {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      ...getAuthCookieOptions(),
     });
 
     return hasSubscription;
