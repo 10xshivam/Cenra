@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.simplifyMessage = void 0;
-const uuid_1 = require("uuid");
+const crypto_1 = require("crypto");
 const simplifyMessage = (msg) => {
     const type = msg._getType?.();
-    const id = (0, uuid_1.v4)();
+    const id = (0, crypto_1.randomUUID)();
     if (type === "human") {
         return {
             id,

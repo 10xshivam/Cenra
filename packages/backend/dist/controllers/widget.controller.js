@@ -4,7 +4,7 @@ exports.identifyCustomer = exports.initWidget = void 0;
 const db_1 = require("@workspace/db");
 const langgraph_1 = require("../config/langgraph");
 const getMetadata_1 = require("../utils/widget/getMetadata");
-const uuid_1 = require("uuid");
+const crypto_1 = require("crypto");
 const SESSION_DURATION_MS = 48 * 60 * 60 * 1000; // 48 hours in milliseconds
 const SESSION_EXTENSION_MS = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
 const initWidget = async (req, res) => {
@@ -135,7 +135,7 @@ const identifyCustomer = async (req, res) => {
         return res.status(200).json({
             message: "Customer identified successfully",
             agentMessage: {
-                id: (0, uuid_1.v4)(),
+                id: (0, crypto_1.randomUUID)(),
                 from: "assistant",
                 content: replyText,
             },
