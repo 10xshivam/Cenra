@@ -8,6 +8,8 @@ import { deleteLangGraphThread } from "../utils/messages/deleteLangGraphThread";
 import { getCustomersCount } from "../utils/subscriptions/getCustomersCount";
 import { PLAN_FEATURES } from "../constants/plans";
 
+const isDefined = <T>(value: T | null | undefined): value is T => value != null;
+
 export const createConversation = async (req: Request, res: Response) => {
   try {
     const workspace = req.workspace!;
@@ -165,7 +167,7 @@ export const getConversations = async (req: Request, res: Response) => {
         const values = snapshot.values as { messages?: BaseMessage[] };
         const all = values.messages ?? [];
 
-        let messages = all
+        const messages = all
           .map((m) => {
             const simplified = simplifyMessage(m);
             return (
@@ -175,16 +177,7 @@ export const getConversations = async (req: Request, res: Response) => {
               }
             );
           })
-          .filter(
-            (
-              m,
-            ): m is {
-              id: string;
-              from: string;
-              content: string;
-              createdAt: number | null;
-            } => !!m,
-          );
+          .filter(isDefined);
 
         const lastMessage = messages.length
           ? messages[messages.length - 1]

@@ -252,7 +252,8 @@ export const deleteResource = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Resource not found" });
     }
 
-    await getQdrantClient().delete(resource.workspaceId, {
+    const client = await getQdrantClient();
+    await client.delete(resource.workspaceId, {
       filter: {
         must: [
           {
@@ -342,7 +343,8 @@ export const recrawlWebResource = async (req: Request, res: Response) => {
         .json({ success: false, message: "Failed to access vector store" });
     }
 
-    await getQdrantClient().delete(resource.workspaceId, {
+    const client = await getQdrantClient();
+    await client.delete(resource.workspaceId, {
       filter: {
         must: [
           {

@@ -5,6 +5,8 @@ import { HumanMessage, AIMessage, BaseMessage } from "@langchain/core/messages";
 import { simplifyMessage } from "../utils/messages/simplifyMessages";
 import { appendHumanMessage } from "../utils/messages/appendHumanMessage";
 
+const isDefined = <T>(value: T | null | undefined): value is T => value != null;
+
 export const createMessage = async (req: Request, res: Response) => {
   try {
     const workspace = req.workspace!;
@@ -129,16 +131,7 @@ export const getConversationMessagesWithIdentityCheck = async (
           }
         );
       })
-      .filter(
-        (
-          m,
-        ): m is {
-          id: string;
-          from: string;
-          content: string;
-          createdAt: string;
-        } => !!m,
-      );
+      .filter(isDefined);
 
     const isIdentified =
       !!conversation.customer?.name && !!conversation.customer?.email;
@@ -195,16 +188,7 @@ export const getLastMessage = async (req: Request, res: Response) => {
           }
         );
       })
-      .filter(
-        (
-          m,
-        ): m is {
-          id: string;
-          from: string;
-          content: string;
-          createdAt: number | null;
-        } => !!m,
-      );
+      .filter(isDefined);
 
     const isIdentified =
       !!conversation.customer?.name && !!conversation.customer?.email;
@@ -254,7 +238,7 @@ export const getAllMessages = async (req: Request, res: Response) => {
 
     const values = snapshot.values as { messages?: BaseMessage[] };
     const all = values.messages ?? [];
-    let messages = all
+    const messages = all
       .map((m) => {
         const simplified = simplifyMessage(m);
         return (
@@ -264,16 +248,7 @@ export const getAllMessages = async (req: Request, res: Response) => {
           }
         );
       })
-      .filter(
-        (
-          m,
-        ): m is {
-          id: string;
-          from: string;
-          content: string;
-          createdAt: string;
-        } => !!m,
-      );
+      .filter(isDefined);
 
     return res.json({ messages });
   } catch (error) {
