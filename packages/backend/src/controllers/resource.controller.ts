@@ -5,7 +5,7 @@ import { getWorkspaceVectorStore } from "../utils/file-processing/workspaceVecto
 import { Document } from "langchain";
 import { prisma } from "@workspace/db";
 import fs from "fs";
-import { client } from "../config/qdrant";
+import { getQdrantClient } from "../config/qdrant";
 import { crawlWebsitePages } from "../utils/resources/crawlPage";
 import { PLAN_FEATURES } from "../constants/plans";
 
@@ -252,6 +252,7 @@ export const deleteResource = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Resource not found" });
     }
 
+    const client = await getQdrantClient();
     await client.delete(resource.workspaceId, {
       filter: {
         must: [
@@ -342,6 +343,7 @@ export const recrawlWebResource = async (req: Request, res: Response) => {
         .json({ success: false, message: "Failed to access vector store" });
     }
 
+    const client = await getQdrantClient();
     await client.delete(resource.workspaceId, {
       filter: {
         must: [

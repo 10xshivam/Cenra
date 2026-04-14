@@ -1,9 +1,9 @@
 import { BaseMessage } from "@langchain/core/messages";
-import { v4 as uuidv4 } from "uuid";
+import { randomUUID } from "crypto";
 
 export const simplifyMessage = (msg: BaseMessage) => {
   const type = (msg as any)._getType?.();
-  const id = uuidv4();
+  const id = randomUUID();
 
   if (type === "human") {
     return { 

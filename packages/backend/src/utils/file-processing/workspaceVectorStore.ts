@@ -1,6 +1,6 @@
 import { QdrantVectorStore } from "@langchain/qdrant";
 import { embedding } from "../../config/embedding";
-import { client } from "../../config/qdrant";
+import { getQdrantClient } from "../../config/qdrant";
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -17,7 +17,7 @@ export const getWorkspaceVectorStore = async (workspaceId: string) => {
   }
 
   const vectorStore = await QdrantVectorStore.fromExistingCollection(embedding, {
-    client,
+    client: await getQdrantClient(),
     collectionName: workspaceId,
   });
 

@@ -1,9 +1,9 @@
-import { client } from "../../config/qdrant";
-
 const EMBEDDING_DIM = 3072;
+import { getQdrantClient } from "../../config/qdrant";
 
 export const createCollection = async (workspaceId: string) => {
   try {
+    const client = await getQdrantClient();
     await client.createCollection(workspaceId, {
       vectors: {
         size: EMBEDDING_DIM,

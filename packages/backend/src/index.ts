@@ -15,7 +15,7 @@ import { initLangGraph } from "./config/langgraph";
 import subscriptionRouter from "./routes/subscription.route";
 import { webhookController } from "./controllers/webhook.controller";
 import { prisma } from "@workspace/db";
-import { client } from "./config/qdrant";
+import { getQdrantClient } from "./config/qdrant";
 import { getChatbot } from "./config/langgraph";
 
 dotenv.config();
@@ -59,6 +59,7 @@ app.get("/", async (_req, res) => {
   }
 
   try {
+    const client = await getQdrantClient();
     await client.getCollections();
     qdrantUp = true;
   } catch (error) {
