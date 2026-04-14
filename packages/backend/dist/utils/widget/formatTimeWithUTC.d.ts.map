@@ -1,1 +1,1 @@
-{"version":3,"file":"formatTimeWithUTC.d.ts","sourceRoot":"","sources":["../../../src/utils/widget/formatTimeWithUTC.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,iBAAiB,GAC5B,WAAW,MAAM,EACjB,uBAAuB,MAAM,WAkB9B,CAAA"}
+{"version":3,"file":"formatTimeWithUTC.d.ts","sourceRoot":"","sources":["../../../src/utils/widget/formatTimeWithUTC.ts"],"names":[],"mappings":"AAAA,eAAO,MAAM,iBAAiB,cACjB,MAAM,yBACM,MAAM,WAkB9B,CAAA"}

@@ -11,21 +11,42 @@ export const SuccessPageView = () => {
   const [isSyncing, setIsSyncing] = useState(true);
 
   useEffect(() => {
-    const sync = async () => {
-      try {
-        await axiosInstance.post("/subscription/sync-subscription");
-        setIsSyncing(false);
+    let isMounted = true;
 
-        setTimeout(() => {
-          router.replace("/create-workspace");
-        }, 2000);
-      } catch (err) {
-        console.error("Failed to sync session", err);
-        router.replace("/pricing");
+    const sync = async () => {
+      const maxAttempts = 12;
+      const retryDelayMs = 2500;
+
+      for (let attempt = 0; attempt < maxAttempts; attempt += 1) {
+        try {
+          const response = await axiosInstance.post("/subscription/sync-subscription");
+
+          if (response.data?.hasSubscription) {
+            if (!isMounted) return;
+
+            setIsSyncing(false);
+
+            setTimeout(() => {
+              router.replace("/create-workspace");
+            }, 2000);
+            return;
+          }
+        } catch (err) {
+          console.error("Failed to sync session", err);
+        }
+
+        await new Promise((resolve) => setTimeout(resolve, retryDelayMs));
       }
+
+      if (!isMounted) return;
+      router.replace("/pricing");
     };
 
     sync();
+
+    return () => {
+      isMounted = false;
+    };
   }, [router]);
 
   return (
