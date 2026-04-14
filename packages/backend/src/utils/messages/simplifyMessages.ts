@@ -1,7 +1,15 @@
 import { BaseMessage } from "@langchain/core/messages";
 import { randomUUID } from "crypto";
 
-export const simplifyMessage = (msg: BaseMessage) => {
+type SimplifiedMessage = {
+  id: string;
+  from: string;
+  content: string;
+};
+
+export const simplifyMessage = (
+  msg: BaseMessage,
+): SimplifiedMessage | null => {
   const type = (msg as any)._getType?.();
   const id = randomUUID();
 

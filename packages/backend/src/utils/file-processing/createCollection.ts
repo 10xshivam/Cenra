@@ -1,5 +1,5 @@
-const EMBEDDING_DIM = 3072;
 import { getQdrantClient } from "../../config/qdrant";
+const EMBEDDING_DIM = 3072;
 
 export const createCollection = async (workspaceId: string) => {
   try {

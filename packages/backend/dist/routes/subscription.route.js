@@ -1,0 +1,11 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const susbcription_controller_1 = require("../controllers/susbcription.controller");
+const auth_middleware_1 = require("../middlewares/auth.middleware");
+const route = (0, express_1.Router)();
+route.use(auth_middleware_1.verifyAuth);
+route.post('/billing/create-checkout', susbcription_controller_1.createCheckoutSession);
+route.post('/sync-subscription', susbcription_controller_1.syncSubscription);
+route.get('/details', susbcription_controller_1.getSuscriptionDetails);
+exports.default = route;

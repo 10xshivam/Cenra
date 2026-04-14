@@ -304,6 +304,9 @@ importers:
       '@types/ua-parser-js':
         specifier: ^0.7.39
         version: 0.7.39
+      '@workspace/db':
+        specifier: workspace:*
+        version: link:../db
       bcrypt:
         specifier: ^6.0.0
         version: 6.0.0
@@ -356,9 +359,6 @@ importers:
       '@types/pg':
         specifier: ^8.16.0
         version: 8.16.0
-      '@workspace/db':
-        specifier: workspace:*
-        version: link:../db
       '@workspace/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
