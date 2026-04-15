@@ -18,7 +18,7 @@ const getWorkspaceVectorStore = async (workspaceId) => {
         return storeCache.get(workspaceId);
     }
     const vectorStore = await qdrant_1.QdrantVectorStore.fromExistingCollection((0, embedding_1.getEmbedding)(), {
-        client: await (0, qdrant_2.getQdrantClient)(),
+        client: (0, qdrant_2.getQdrantClient)(),
         collectionName: workspaceId,
     });
     storeCache.set(workspaceId, vectorStore);

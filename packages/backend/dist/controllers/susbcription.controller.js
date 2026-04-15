@@ -49,14 +49,8 @@ const createCheckoutSession = async (req, res) => {
 exports.createCheckoutSession = createCheckoutSession;
 const syncSubscription = async (req, res) => {
     const userId = req.userId;
-    const hasSubscription = await (0, setSubscriptionCookie_1.setSubscriptionCookie)(userId, res);
-    return res.status(hasSubscription ? 200 : 202).json({
-        success: hasSubscription,
-        hasSubscription,
-        message: hasSubscription
-            ? "Subscription synced"
-            : "Subscription is not active yet",
-    });
+    await (0, setSubscriptionCookie_1.setSubscriptionCookie)(userId, res);
+    return res.status(200).json({ success: true });
 };
 exports.syncSubscription = syncSubscription;
 const getSuscriptionDetails = async (req, res) => {

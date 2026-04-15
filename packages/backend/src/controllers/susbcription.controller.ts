@@ -53,15 +53,8 @@ export const createCheckoutSession = async (req: Request, res: Response) => {
 
 export const syncSubscription = async (req: Request, res: Response) => {
   const userId = req.userId!;
-  const hasSubscription = await setSubscriptionCookie(userId, res);
-
-  return res.status(hasSubscription ? 200 : 202).json({
-    success: hasSubscription,
-    hasSubscription,
-    message: hasSubscription
-      ? "Subscription synced"
-      : "Subscription is not active yet",
-  });
+  await setSubscriptionCookie(userId, res);
+  return res.status(200).json({ success: true });
 };
 
 export const getSuscriptionDetails = async (req: Request, res: Response) => {

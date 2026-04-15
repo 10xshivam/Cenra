@@ -52,8 +52,7 @@ app.get("/", async (_req, res) => {
     }
     try {
         const { getQdrantClient } = await import("./config/qdrant.js");
-        const client = await getQdrantClient();
-        await client.getCollections();
+        await getQdrantClient().getCollections();
         qdrantUp = true;
     }
     catch (error) {

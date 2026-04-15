@@ -6,7 +6,6 @@ const langgraph_1 = require("../config/langgraph");
 const messages_1 = require("@langchain/core/messages");
 const simplifyMessages_1 = require("../utils/messages/simplifyMessages");
 const appendHumanMessage_1 = require("../utils/messages/appendHumanMessage");
-const isDefined = (value) => value != null;
 const createMessage = async (req, res) => {
     try {
         const workspace = req.workspace;
@@ -105,7 +104,7 @@ const getConversationMessagesWithIdentityCheck = async (req, res) => {
                 createdAt: m.additional_kwargs?.timestamp ?? null,
             });
         })
-            .filter(isDefined);
+            .filter((m) => !!m);
         const isIdentified = !!conversation.customer?.name && !!conversation.customer?.email;
         if (!isIdentified) {
             messages = messages.filter((m) => m.from === "user");
@@ -150,7 +149,7 @@ const getLastMessage = async (req, res) => {
                 createdAt: m.additional_kwargs?.timestamp ?? null,
             });
         })
-            .filter(isDefined);
+            .filter((m) => !!m);
         const isIdentified = !!conversation.customer?.name && !!conversation.customer?.email;
         if (!isIdentified) {
             messages = messages.filter((m) => m.from === "user");
@@ -191,7 +190,7 @@ const getAllMessages = async (req, res) => {
         });
         const values = snapshot.values;
         const all = values.messages ?? [];
-        const messages = all
+        let messages = all
             .map((m) => {
             const simplified = (0, simplifyMessages_1.simplifyMessage)(m);
             return (simplified && {
@@ -199,7 +198,7 @@ const getAllMessages = async (req, res) => {
                 createdAt: m.additional_kwargs?.timestamp ?? null,
             });
         })
-            .filter(isDefined);
+            .filter((m) => !!m);
         return res.json({ messages });
     }
     catch (error) {
