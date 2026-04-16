@@ -1,2 +1,0 @@
-export declare function getModel(): import("@langchain/core/runnables").Runnable<import("@langchain/core/language_models/base").BaseLanguageModelInput, import("langchain").AIMessageChunk<import("@langchain/core/messages").MessageStructure>, import("@langchain/google-genai").GoogleGenerativeAIChatCallOptions>;
-//# sourceMappingURL=model.d.ts.map
