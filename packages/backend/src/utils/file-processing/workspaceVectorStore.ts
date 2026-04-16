@@ -17,7 +17,7 @@ export const getWorkspaceVectorStore = async (workspaceId: string) => {
   }
 
   const vectorStore = await QdrantVectorStore.fromExistingCollection(getEmbedding(), {
-    client: getQdrantClient(),
+    client: await getQdrantClient(),
     collectionName: workspaceId,
   });
 

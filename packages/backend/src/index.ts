@@ -58,7 +58,8 @@ app.get("/", async (_req, res) => {
 
   try {
     const { getQdrantClient } = await import("./config/qdrant.js");
-    await getQdrantClient().getCollections();
+    const client = await getQdrantClient();
+    await client.getCollections();
     qdrantUp = true;
   } catch (error) {
     console.error("Qdrant health check failed:", error);

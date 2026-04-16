@@ -11,7 +11,7 @@ export const simplifyMessage = (
   msg: BaseMessage,
 ): SimplifiedMessage | null => {
   const type = (msg as any)._getType?.();
-  const id: string = randomUUID();
+  const id = randomUUID();
 
   if (type === "human") {
     return { 
@@ -51,4 +51,4 @@ export const simplifyMessage = (
   }
 
   return null;
-};
+}

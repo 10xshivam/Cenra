@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import { axiosInstance } from "@/lib/axios";
 import { Loader2, ArrowRight, CircleCheckBig, Check } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
-import { useTransitionRouter } from "next-view-transitions";
+import { useRouter } from "next/navigation";
 
 export const SuccessPageView = () => {
-  const router = useTransitionRouter();
+  const router = useRouter();
   const [isSyncing, setIsSyncing] = useState(true);
 
   useEffect(() => {

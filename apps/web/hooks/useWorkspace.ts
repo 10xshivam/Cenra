@@ -3,7 +3,7 @@
 import { createWorkspace, fetchWorkspace, updateWorkspace } from "@/lib/api/workspace";
 import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useTransitionRouter } from "next-view-transitions";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export const useWorkspace = () => {
@@ -17,7 +17,7 @@ export const useWorkspace = () => {
 
 export const useCreateWorkspace = () => {
   const queryClient = useQueryClient();
-  const router = useTransitionRouter();
+  const router = useRouter();
   const setWorkspace = useWorkspaceStore((s) => s.setWorkspace);
 
   return useMutation({

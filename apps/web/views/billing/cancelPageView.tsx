@@ -2,10 +2,10 @@
 
 import { AlertCircle, ArrowLeft, RefreshCcw } from "lucide-react";
 import { Button } from "@workspace/ui/components/button";
-import { useTransitionRouter } from "next-view-transitions";
+import { useRouter } from "next/navigation";
 
 export const CancelPageView = () => {
-  const router = useTransitionRouter();
+  const router = useRouter();
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-neutral-50 p-4">
       <div className="p-2.5 bg-red-800/10 rounded-2xl">

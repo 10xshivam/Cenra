@@ -29,7 +29,11 @@ export function proxy(req: NextRequest) {
       return NextResponse.redirect(new URL("/payment", req.url));
     }
 
-    return NextResponse.redirect(new URL("/inbox", req.url));
+    if (!hasWorkspace) {
+      return NextResponse.redirect(new URL("/create-workspace", req.url));
+    }
+
+    return NextResponse.next();
   }
 
   if (token && hasSubscription) {
@@ -39,13 +43,22 @@ export function proxy(req: NextRequest) {
   }
 
   if (pathname === "/payment" && token && hasSubscription) {
-    return NextResponse.redirect(new URL("/inbox", req.url));
+    return NextResponse.redirect(
+      new URL(hasWorkspace ? "/get-started" : "/create-workspace", req.url),
+    );
   }
 
   if (isPublicPath(pathname)) {
     if (token && (pathname === "/login" || pathname === "/signup")) {
       return NextResponse.redirect(
-        new URL(hasSubscription ? "/inbox" : "/payment", req.url),
+        new URL(
+          hasSubscription
+            ? hasWorkspace
+              ? "/get-started"
+              : "/create-workspace"
+            : "/payment",
+          req.url,
+        ),
       );
     }
     return NextResponse.next();

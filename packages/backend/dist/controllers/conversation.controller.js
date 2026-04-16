@@ -9,6 +9,7 @@ const simplifyMessages_1 = require("../utils/messages/simplifyMessages");
 const deleteLangGraphThread_1 = require("../utils/messages/deleteLangGraphThread");
 const getCustomersCount_1 = require("../utils/subscriptions/getCustomersCount");
 const plans_1 = require("../constants/plans");
+const isDefined = (value) => value != null;
 const createConversation = async (req, res) => {
     try {
         const workspace = req.workspace;
@@ -136,7 +137,7 @@ const getConversations = async (req, res) => {
             });
             const values = snapshot.values;
             const all = values.messages ?? [];
-            let messages = all
+            const messages = all
                 .map((m) => {
                 const simplified = (0, simplifyMessages_1.simplifyMessage)(m);
                 return (simplified && {
@@ -144,7 +145,7 @@ const getConversations = async (req, res) => {
                     createdAt: m.additional_kwargs?.timestamp ?? null,
                 });
             })
-                .filter((m) => !!m);
+                .filter(isDefined);
             const lastMessage = messages.length
                 ? messages[messages.length - 1]
                 : null;
