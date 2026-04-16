@@ -10,7 +10,7 @@ import {
 } from "@/lib/api/auth";
 import { useUserStore } from "@/store/useUserStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useTransitionRouter } from "next-view-transitions";
+import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
 export function useSession() {
@@ -24,7 +24,7 @@ export function useSession() {
 
 export const useSignupUser = () => {
   const queryClient = useQueryClient();
-  const router = useTransitionRouter();
+  const router = useRouter();
   const setUser = useUserStore((s) => s.setUser);
 
   return useMutation({
@@ -49,7 +49,7 @@ export const useSignupUser = () => {
 
 export const useLogin = () => {
   const queryClient = useQueryClient();
-  const router = useTransitionRouter();
+  const router = useRouter();
   const setUser = useUserStore((s) => s.setUser);
 
   return useMutation({
@@ -62,7 +62,7 @@ export const useLogin = () => {
         lastName: user.lastName,
       });
       queryClient.setQueryData(["user"], user);
-      router.push("/inbox");
+      router.push("/get-started");
     },
     onError: (error) => {
       toast.error(
@@ -74,7 +74,7 @@ export const useLogin = () => {
 
 export const useGoogleLoginMutation = () => {
   const queryClient = useQueryClient();
-  const router = useTransitionRouter();
+  const router = useRouter();
   const setUser = useUserStore((s) => s.setUser);
 
   return useMutation({
@@ -87,7 +87,7 @@ export const useGoogleLoginMutation = () => {
         lastName: user.lastName,
       });
       queryClient.setQueryData(["user"], user);
-      router.push("/inbox");
+      router.push("/get-started");
     },
     onError: (error) => {
       toast.error(
@@ -98,7 +98,7 @@ export const useGoogleLoginMutation = () => {
 }
 
 export const useLogout = () => {
-  const router = useTransitionRouter();
+  const router = useRouter();
   const queryClient = useQueryClient();
   const clearUser = useUserStore((s) => s.clearUser);
 

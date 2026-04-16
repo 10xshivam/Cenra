@@ -2,11 +2,11 @@
 
 import { PRICING_PLANS, PLAN_COMPARISONS } from "@/constants/pricing.constants";
 import React from "react";
-import { useTransitionRouter } from "next-view-transitions";
-import { ArrowLeft, Check, ChevronLeft } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { ArrowLeft, Check } from "lucide-react";
 
 export const PricingView = () => {
-  const router = useTransitionRouter();
+  const router = useRouter();
 
   return (
      <div className="relative mx-auto flex w-full h-full max-w-7xl flex-col pt-6 sm:border-x border-dashed border-neutral-300 overflow-y-auto no-scrollbar bg-white/30">
