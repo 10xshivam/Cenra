@@ -24,11 +24,11 @@ export const DashboardSidebar = () => {
 
   return (
     <Sidebar collapsible="icon" variant="floating" className="">
-      <SidebarHeader className="group h-12 rounded-lg bg-neutral-500/10 hover:bg-neutral-500/10 border-b-4 border-neutral-500/15 hover:border-neutral-600/15 transition-colors duration-300 text-neutral-500 hover:text-emerald-800">
-        <SidebarMenu>
-          <SidebarMenuItem className="hover:bg-transparent cursor-default flex items-center justify-center pt-1 gap-1.5">
-            <OfficeIcon2 />
-            <span className="font-bold tracking-tight group-data-[collapsible=icon]:hidden!">
+      <SidebarHeader className="group h-12 flex justify-center p-0 rounded-lg bg-neutral-500/10 hover:bg-neutral-500/10 border-b-4 border-neutral-500/15 hover:border-neutral-600/15 transition-colors duration-300 text-neutral-500 hover:text-emerald-800">
+        <SidebarMenu className="m-0 p-0 flex h-full justify-center">
+          <SidebarMenuItem className="h-full hover:bg-transparent cursor-default flex items-center justify-center gap-1.5 overflow-hidden px-4">
+            <OfficeIcon2 className="shrink-0" />
+            <span className="truncate font-bold tracking-tight group-data-[collapsible=icon]:hidden!">
               {workspace?.name || "Loading..."}
             </span>
           </SidebarMenuItem>

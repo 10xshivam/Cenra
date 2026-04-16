@@ -8,6 +8,7 @@ import {
   registerUser,
   updateUser,
 } from "@/lib/api/auth";
+import { useWorkspaceStore } from "@/store/useWorkspaceStore";
 import { useUserStore } from "@/store/useUserStore";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -26,10 +27,13 @@ export const useSignupUser = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const setUser = useUserStore((s) => s.setUser);
+  const clearWorkspace = useWorkspaceStore((s) => s.clearWorkspace);
 
   return useMutation({
     mutationFn: registerUser,
     onSuccess: (user) => {
+      clearWorkspace();
+      queryClient.removeQueries({ queryKey: ["workspace"] });
       setUser({
         id: user.id,
         email: user.email,
@@ -51,10 +55,13 @@ export const useLogin = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const setUser = useUserStore((s) => s.setUser);
+  const clearWorkspace = useWorkspaceStore((s) => s.clearWorkspace);
 
   return useMutation({
     mutationFn: loginUser,
     onSuccess: (user) => {
+      clearWorkspace();
+      queryClient.removeQueries({ queryKey: ["workspace"] });
       setUser({
         id: user.id,
         email: user.email,
@@ -76,10 +83,13 @@ export const useGoogleLoginMutation = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
   const setUser = useUserStore((s) => s.setUser);
+  const clearWorkspace = useWorkspaceStore((s) => s.clearWorkspace);
 
   return useMutation({
     mutationFn: loginWithGoogle,
     onSuccess: (user) => {
+      clearWorkspace();
+      queryClient.removeQueries({ queryKey: ["workspace"] });
       setUser({
         id: user.id,
         email: user.email,
@@ -101,12 +111,15 @@ export const useLogout = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
   const clearUser = useUserStore((s) => s.clearUser);
+  const clearWorkspace = useWorkspaceStore((s) => s.clearWorkspace);
 
   return useMutation({
     mutationFn: logoutUser,
     onSuccess: () => {
       clearUser();
+      clearWorkspace();
       queryClient.removeQueries({ queryKey: ["user"] });
+      queryClient.removeQueries({ queryKey: ["workspace"] });
       router.push("/login");
     },
     onError: (error) => {

@@ -1,6 +1,7 @@
 import { DashboardSidebar } from "@/components/dashboard/dashboard-sidebar";
 import { MainHeader } from "@/components/dashboard/main-header";
 import { RouteVisitTracker } from "@/components/dashboard/route-visit-tracker";
+import { WorkspaceSessionSync } from "@/components/dashboard/workspace-session-sync";
 import {
   SidebarInset,
   SidebarProvider,
@@ -26,6 +27,7 @@ export const DashboardLayout = async ({
 
       <div className="hidden lg:block">
         <SidebarProvider defaultValue={defaultOpen ? "true" : "false"}>
+          <WorkspaceSessionSync />
           <DashboardSidebar />
           <SidebarInset className="h-svh overflow-hidden flex flex-col bg-amber-50">
             <main className="flex-1 p-2 pl-0 min-h-0">
