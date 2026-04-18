@@ -83,6 +83,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.90.7
         version: 5.90.7(react@19.2.0)
+      '@vercel/analytics':
+        specifier: ^2.0.1
+        version: 2.0.1(next@16.2.2(@opentelemetry/api@1.9.0)(@playwright/test@1.56.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)
       '@workspace/backend':
         specifier: workspace:*
         version: link:../../packages/backend
@@ -261,7 +264,7 @@ importers:
     dependencies:
       '@langchain/community':
         specifier: ^1.0.4
-        version: 1.0.4(@browserbasehq/sdk@2.6.0)(@browserbasehq/stagehand@1.14.0(@playwright/test@1.56.1)(deepmerge@4.3.1)(dotenv@17.2.3)(openai@6.9.1(ws@8.18.3)(zod@3.25.76))(zod@3.25.76))(@ibm-cloud/watsonx-ai@1.7.4)(@langchain/core@1.0.6(@opentelemetry/api@1.9.0)(openai@6.9.1(ws@8.18.3)(zod@3.25.76)))(@opentelemetry/api@1.9.0)(@qdrant/js-client-rest@1.16.0(typescript@6.0.2))(d3-dsv@2.0.0)(html-to-text@9.0.5)(ibm-cloud-sdk-core@5.4.4)(ignore@5.3.2)(jsonwebtoken@9.0.2)(lodash@4.17.21)(openai@6.9.1(ws@8.18.3)(zod@3.25.76))(pg@8.16.3)(playwright@1.56.1)(ws@8.18.3)
+        version: 1.0.4(@browserbasehq/sdk@2.6.0)(@browserbasehq/stagehand@1.14.0(@playwright/test@1.56.1)(deepmerge@4.3.1)(dotenv@17.2.3)(openai@6.9.1(ws@8.18.3)(zod@3.25.76))(zod@3.25.76))(@ibm-cloud/watsonx-ai@1.7.4)(@langchain/core@1.0.6(@opentelemetry/api@1.9.0)(openai@6.9.1(ws@8.18.3)(zod@3.25.76)))(@opentelemetry/api@1.9.0)(@qdrant/js-client-rest@1.16.0(typescript@6.0.3))(d3-dsv@2.0.0)(html-to-text@9.0.5)(ibm-cloud-sdk-core@5.4.4)(ignore@5.3.2)(jsonwebtoken@9.0.2)(lodash@4.17.21)(openai@6.9.1(ws@8.18.3)(zod@3.25.76))(pg@8.16.3)(playwright@1.56.1)(ws@8.18.3)
       '@langchain/core':
         specifier: ^1.0.6
         version: 1.0.6(@opentelemetry/api@1.9.0)(openai@6.9.1(ws@8.18.3)(zod@3.25.76))
@@ -276,13 +279,13 @@ importers:
         version: 1.0.0(@langchain/core@1.0.6(@opentelemetry/api@1.9.0)(openai@6.9.1(ws@8.18.3)(zod@3.25.76)))(@langchain/langgraph-checkpoint@1.0.0(@langchain/core@1.0.6(@opentelemetry/api@1.9.0)(openai@6.9.1(ws@8.18.3)(zod@3.25.76))))
       '@langchain/qdrant':
         specifier: ^1.0.0
-        version: 1.0.0(@langchain/core@1.0.6(@opentelemetry/api@1.9.0)(openai@6.9.1(ws@8.18.3)(zod@3.25.76)))(typescript@6.0.2)
+        version: 1.0.0(@langchain/core@1.0.6(@opentelemetry/api@1.9.0)(openai@6.9.1(ws@8.18.3)(zod@3.25.76)))(typescript@6.0.3)
       '@langchain/textsplitters':
         specifier: ^1.0.0
         version: 1.0.0(@langchain/core@1.0.6(@opentelemetry/api@1.9.0)(openai@6.9.1(ws@8.18.3)(zod@3.25.76)))
       '@qdrant/js-client-rest':
         specifier: ^1.16.0
-        version: 1.16.0(typescript@6.0.2)
+        version: 1.16.0(typescript@6.0.3)
       '@types/bcrypt':
         specifier: ^6.0.0
         version: 6.0.0
@@ -364,23 +367,23 @@ importers:
         version: link:../typescript-config
       tsc-watch:
         specifier: ^7.2.0
-        version: 7.2.0(typescript@6.0.2)
+        version: 7.2.0(typescript@6.0.3)
       typescript:
         specifier: latest
-        version: 6.0.2
+        version: 6.0.3
 
   packages/db:
     dependencies:
       '@prisma/client':
         specifier: 6.18.0
-        version: 6.18.0(prisma@6.18.0(typescript@6.0.2))(typescript@6.0.2)
+        version: 6.18.0(prisma@6.18.0(typescript@6.0.3))(typescript@6.0.3)
     devDependencies:
       '@workspace/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       prisma:
         specifier: ^6.18.0
-        version: 6.18.0(typescript@6.0.2)
+        version: 6.18.0(typescript@6.0.3)
 
   packages/eslint-config:
     dependencies:
@@ -2392,6 +2395,7 @@ packages:
   '@react-email/components@1.0.8':
     resolution: {integrity: sha512-zY81ED6o5MWMzBkr9uZFuT24lWarT+xIbOZxI6C9dsFmCWBczM8IE1BgOI8rhpUK4JcYVDy1uKxYAFqsx2Bc4w==}
     engines: {node: '>=20.0.0'}
+    deprecated: Package no longer supported. Contact Support at https://www.npmjs.com/support for more info.
     peerDependencies:
       react: ^18.0 || ^19.0 || ^19.0.0-rc
 
@@ -3118,6 +3122,35 @@ packages:
 
   '@ungap/structured-clone@1.3.0':
     resolution: {integrity: sha512-WmoN8qaIAo7WTYWbAZuG8PYEhn5fkz7dZrqTBZ7dtt//lL2Gwms1IcnQ5yHqjDfX8Ft5j4YzDM23f87zBfDe9g==}
+
+  '@vercel/analytics@2.0.1':
+    resolution: {integrity: sha512-MTQG6V9qQrt1tsDeF+2Uoo5aPjqbVPys1xvnIftXSJYG2SrwXRHnqEvVoYID7BTruDz4lCd2Z7rM1BdkUehk2g==}
+    peerDependencies:
+      '@remix-run/react': ^2
+      '@sveltejs/kit': ^1 || ^2
+      next: '>= 13'
+      nuxt: '>= 3'
+      react: ^18 || ^19 || ^19.0.0-rc
+      svelte: '>= 4'
+      vue: ^3
+      vue-router: ^4
+    peerDependenciesMeta:
+      '@remix-run/react':
+        optional: true
+      '@sveltejs/kit':
+        optional: true
+      next:
+        optional: true
+      nuxt:
+        optional: true
+      react:
+        optional: true
+      svelte:
+        optional: true
+      vue:
+        optional: true
+      vue-router:
+        optional: true
 
   '@vercel/oidc@3.0.5':
     resolution: {integrity: sha512-fnYhv671l+eTTp48gB4zEsTW/YtRgRPnkI2nT7x6qw5rkI1Lq2hTmQIpHPgyThI0znLK+vX2n9XxKdXZ7BUbbw==}
@@ -6544,8 +6577,8 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  typescript@6.0.2:
-    resolution: {integrity: sha512-bGdAIrZ0wiGDo5l8c++HWtbaNCWTS4UTv7RaTH/ThVIgjkveJt83m74bBHMJkuCbslY8ixgLBVZJIOiQlQTjfQ==}
+  typescript@6.0.3:
+    resolution: {integrity: sha512-y2TvuxSZPDyQakkFRPZHKFm+KKVqIisdg9/CZwm9ftvKXLP8NRWj38/ODjNbr43SsoXqNuAisEf1GdCxqWcdBw==}
     engines: {node: '>=14.17'}
     hasBin: true
 
@@ -7320,7 +7353,7 @@ snapshots:
       - openai
       - ws
 
-  '@langchain/community@1.0.4(@browserbasehq/sdk@2.6.0)(@browserbasehq/stagehand@1.14.0(@playwright/test@1.56.1)(deepmerge@4.3.1)(dotenv@17.2.3)(openai@6.9.1(ws@8.18.3)(zod@3.25.76))(zod@3.25.76))(@ibm-cloud/watsonx-ai@1.7.4)(@langchain/core@1.0.6(@opentelemetry/api@1.9.0)(openai@6.9.1(ws@8.18.3)(zod@3.25.76)))(@opentelemetry/api@1.9.0)(@qdrant/js-client-rest@1.16.0(typescript@6.0.2))(d3-dsv@2.0.0)(html-to-text@9.0.5)(ibm-cloud-sdk-core@5.4.4)(ignore@5.3.2)(jsonwebtoken@9.0.2)(lodash@4.17.21)(openai@6.9.1(ws@8.18.3)(zod@3.25.76))(pg@8.16.3)(playwright@1.56.1)(ws@8.18.3)':
+  '@langchain/community@1.0.4(@browserbasehq/sdk@2.6.0)(@browserbasehq/stagehand@1.14.0(@playwright/test@1.56.1)(deepmerge@4.3.1)(dotenv@17.2.3)(openai@6.9.1(ws@8.18.3)(zod@3.25.76))(zod@3.25.76))(@ibm-cloud/watsonx-ai@1.7.4)(@langchain/core@1.0.6(@opentelemetry/api@1.9.0)(openai@6.9.1(ws@8.18.3)(zod@3.25.76)))(@opentelemetry/api@1.9.0)(@qdrant/js-client-rest@1.16.0(typescript@6.0.3))(d3-dsv@2.0.0)(html-to-text@9.0.5)(ibm-cloud-sdk-core@5.4.4)(ignore@5.3.2)(jsonwebtoken@9.0.2)(lodash@4.17.21)(openai@6.9.1(ws@8.18.3)(zod@3.25.76))(pg@8.16.3)(playwright@1.56.1)(ws@8.18.3)':
     dependencies:
       '@browserbasehq/stagehand': 1.14.0(@playwright/test@1.56.1)(deepmerge@4.3.1)(dotenv@17.2.3)(openai@6.9.1(ws@8.18.3)(zod@3.25.76))(zod@3.25.76)
       '@ibm-cloud/watsonx-ai': 1.7.4
@@ -7337,7 +7370,7 @@ snapshots:
       zod: 3.25.76
     optionalDependencies:
       '@browserbasehq/sdk': 2.6.0
-      '@qdrant/js-client-rest': 1.16.0(typescript@6.0.2)
+      '@qdrant/js-client-rest': 1.16.0(typescript@6.0.3)
       d3-dsv: 2.0.0
       html-to-text: 9.0.5
       ignore: 5.3.2
@@ -7422,10 +7455,10 @@ snapshots:
     transitivePeerDependencies:
       - ws
 
-  '@langchain/qdrant@1.0.0(@langchain/core@1.0.6(@opentelemetry/api@1.9.0)(openai@6.9.1(ws@8.18.3)(zod@3.25.76)))(typescript@6.0.2)':
+  '@langchain/qdrant@1.0.0(@langchain/core@1.0.6(@opentelemetry/api@1.9.0)(openai@6.9.1(ws@8.18.3)(zod@3.25.76)))(typescript@6.0.3)':
     dependencies:
       '@langchain/core': 1.0.6(@opentelemetry/api@1.9.0)(openai@6.9.1(ws@8.18.3)(zod@3.25.76))
-      '@qdrant/js-client-rest': 1.16.0(typescript@6.0.2)
+      '@qdrant/js-client-rest': 1.16.0(typescript@6.0.3)
       uuid: 10.0.0
     transitivePeerDependencies:
       - typescript
@@ -7531,10 +7564,10 @@ snapshots:
     dependencies:
       playwright: 1.56.1
 
-  '@prisma/client@6.18.0(prisma@6.18.0(typescript@6.0.2))(typescript@6.0.2)':
+  '@prisma/client@6.18.0(prisma@6.18.0(typescript@6.0.3))(typescript@6.0.3)':
     optionalDependencies:
-      prisma: 6.18.0(typescript@6.0.2)
-      typescript: 6.0.2
+      prisma: 6.18.0(typescript@6.0.3)
+      typescript: 6.0.3
 
   '@prisma/config@6.18.0':
     dependencies:
@@ -7566,10 +7599,10 @@ snapshots:
     dependencies:
       '@prisma/debug': 6.18.0
 
-  '@qdrant/js-client-rest@1.16.0(typescript@6.0.2)':
+  '@qdrant/js-client-rest@1.16.0(typescript@6.0.3)':
     dependencies:
       '@qdrant/openapi-typescript-fetch': 1.2.6
-      typescript: 6.0.2
+      typescript: 6.0.3
       undici: 6.22.0
 
   '@qdrant/openapi-typescript-fetch@1.2.6': {}
@@ -9824,6 +9857,11 @@ snapshots:
 
   '@ungap/structured-clone@1.3.0': {}
 
+  '@vercel/analytics@2.0.1(next@16.2.2(@opentelemetry/api@1.9.0)(@playwright/test@1.56.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0))(react@19.2.0)':
+    optionalDependencies:
+      next: 16.2.2(@opentelemetry/api@1.9.0)(@playwright/test@1.56.1)(babel-plugin-react-compiler@1.0.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      react: 19.2.0
+
   '@vercel/oidc@3.0.5': {}
 
   abort-controller@3.0.0:
@@ -11457,7 +11495,7 @@ snapshots:
       isstream: 0.1.2
       jsonwebtoken: 9.0.2
       mime-types: 2.1.35
-      retry-axios: 2.6.0(axios@1.13.1)
+      retry-axios: 2.6.0(axios@1.13.1(debug@4.4.1))
       tough-cookie: 4.1.4
     transitivePeerDependencies:
       - supports-color
@@ -12901,12 +12939,12 @@ snapshots:
       clsx: 2.1.1
       react: 19.1.1
 
-  prisma@6.18.0(typescript@6.0.2):
+  prisma@6.18.0(typescript@6.0.3):
     dependencies:
       '@prisma/config': 6.18.0
       '@prisma/engines': 6.18.0
     optionalDependencies:
-      typescript: 6.0.2
+      typescript: 6.0.3
     transitivePeerDependencies:
       - magicast
 
@@ -13441,7 +13479,7 @@ snapshots:
       onetime: 5.1.2
       signal-exit: 3.0.7
 
-  retry-axios@2.6.0(axios@1.13.1):
+  retry-axios@2.6.0(axios@1.13.1(debug@4.4.1)):
     dependencies:
       axios: 1.13.1(debug@4.4.1)
 
@@ -13999,13 +14037,13 @@ snapshots:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
 
-  tsc-watch@7.2.0(typescript@6.0.2):
+  tsc-watch@7.2.0(typescript@6.0.3):
     dependencies:
       cross-spawn: 7.0.6
       node-cleanup: 2.1.2
       ps-tree: 1.2.0
       string-argv: 0.3.2
-      typescript: 6.0.2
+      typescript: 6.0.3
 
   tslib@1.14.1: {}
 
@@ -14109,7 +14147,7 @@ snapshots:
 
   typescript@5.9.3: {}
 
-  typescript@6.0.2: {}
+  typescript@6.0.3: {}
 
   ua-is-frozen@0.1.2: {}
 

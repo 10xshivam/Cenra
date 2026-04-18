@@ -5,6 +5,7 @@ import { Providers } from "@/providers/providers";
 import { DisableZoom } from "@/components/disable-zoom";
 import { ViewTransitions } from "next-view-transitions";
 import { Toaster } from "sonner";
+import { Analytics } from "@vercel/analytics/next"
 
 const fontSans = Inter({
   subsets: ["latin"],
@@ -26,6 +27,12 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
+export const metadata = {
+  icons: {
+    icon: "/favicon.svg",
+  },
+};
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -42,6 +49,7 @@ export default function RootLayout({
             {children}
           </Providers>
           <Toaster position="top-center" />
+          <Analytics />
         </body>
       </html>
     </ViewTransitions>
