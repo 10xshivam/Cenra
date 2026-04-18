@@ -17,9 +17,9 @@ import {
 
 export const HelpAndSupportView = () => {
   return (
-    <div className="max-w-6xl mx-auto px-4 py-8 space-y-5">
-      <div className="rounded-2xl w-full p-2 pb-5 bg-neutral-200 mb-10">
-        <div className="flex flex-col gap-2 w-full border border-neutral-400 rounded-xl p-5 bg-neutral-50">
+    <div className="max-w-6xl mx-auto px-4 py-14 space-y-5">
+      <div className="rounded-2xl w-full p-2 max-w-6xl h-fit bg-neutral-500/10 pb-6">
+        <div className="flex flex-col gap-2 w-full h-full border border-neutral-300 rounded-xl p-5 bg-white/60">
           <span className="text-2xl font-semibold tracking-tight text-emerald-800">
             Help &amp; Support
           </span>

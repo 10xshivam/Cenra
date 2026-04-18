@@ -103,8 +103,8 @@ export const AnalyticsView = () => {
   return (
     <div className="w-full h-full flex flex-col gap-6 p-6 md:p-8 lg:p-12 pb-24 max-w-6xl mx-auto overflow-y-auto no-scrollbar">
       {/* Header section */}
-      <div className="rounded-2xl w-full p-2 pb-5 max-w-6xl h-fit bg-neutral-200 mb-5">
-        <div className="flex flex-col gap-3.5 w-full h-full border border-neutral-400 rounded-xl p-5 bg-neutral-50">
+     <div className="rounded-2xl w-full p-2 max-w-6xl h-fit bg-neutral-500/10 pb-6">
+        <div  className="flex flex-col gap-2 w-full h-full border border-neutral-300 rounded-xl p-5 bg-white/60">
           <span className="flex gap-1.5 text-2xl items-center text-emerald-800 font-semibold tracking-tight">
             Analytics &amp; Insights
           </span>
@@ -174,7 +174,7 @@ export const AnalyticsView = () => {
       {/* Charts Grid 1 */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Conversation Volume Over Time (Line/Area) */}
-        <div className="p-1 rounded-2xl bg-neutral-200/50">
+        <div className="p-1 rounded-2xl bg-neutral-400/10">
           <div className="p-2.5 flex flex-col">
             <span className="text-sm font-semibold text-neutral-600">
               Request Activity
@@ -183,7 +183,7 @@ export const AnalyticsView = () => {
               How demand changed during this period
             </span>
           </div>
-          <Card className="border-none shadow-sm bg-white overflow-hidden p-0 gap-0">
+          <Card className="border-none shadow-sm bg-white/80 overflow-hidden p-0 gap-0">
             <CardContent className="py-4 px-4 h-[300px]">
               {loading ? (
                 <ChartSkeleton />
@@ -252,7 +252,7 @@ export const AnalyticsView = () => {
         </div>
 
         {/* Conversation Breakdown (Donut) */}
-        <div className="p-1 rounded-2xl bg-neutral-200/50">
+        <div className="p-1 rounded-2xl bg-neutral-400/10">
           <div className="p-2.5 flex flex-col">
             <span className="text-sm font-semibold text-neutral-600">
               Current Status Overview
@@ -261,7 +261,7 @@ export const AnalyticsView = () => {
               Distribution of open and closed requests
             </span>
           </div>
-          <Card className="border-none shadow-sm bg-white overflow-hidden p-0">
+          <Card className="border-none shadow-sm bg-white/80 overflow-hidden p-0">
             <CardContent className="py-4 px-4 h-[300px] flex items-center justify-center relative">
               {loading ? (
                 <ChartSkeleton />
@@ -322,7 +322,7 @@ export const AnalyticsView = () => {
       {/* Bottom Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Resolution Performance (Bar) */}
-        <div className="p-1 rounded-2xl bg-neutral-200/50">
+        <div className="p-1 rounded-2xl bg-neutral-500/10">
           <div className="p-2.5 flex flex-col">
             <span className="text-sm font-semibold text-neutral-600">
               Handling Time
@@ -331,7 +331,7 @@ export const AnalyticsView = () => {
               Time taken to close requests
             </span>
           </div>
-          <Card className="lg:col-span-2 border-none shadow-sm bg-white overflow-hidden p-0">
+          <Card className="lg:col-span-2 border-none shadow-sm bg-white/80 overflow-hidden p-0">
             <CardContent className="py-4 px-4 h-[300px]">
               {loading ? (
                 <ChartSkeleton />
@@ -379,7 +379,7 @@ export const AnalyticsView = () => {
         </div>
 
         {/* Open Conversation Queue Sidebar */}
-        <div className="p-1 rounded-2xl bg-neutral-200/50">
+        <div className="p-1 rounded-2xl bg-neutral-500/10">
           <div className="p-2.5 flex flex-col">
             <span className="text-sm font-semibold text-neutral-600">
               Pending Queue
@@ -388,7 +388,7 @@ export const AnalyticsView = () => {
               Oldest requests waiting for response
             </span>
           </div>
-          <Card className="border-none shadow-sm bg-white overflow-hidden relative p-0">
+          <Card className="border-none shadow-sm bg-white/80 overflow-hidden relative p-0">
             <CardContent className="py-4 px-4 flex flex-col gap-3 h-[300px]">
               {loading ? (
                 <PendingQueueSkeleton />
@@ -447,10 +447,10 @@ export const AnalyticsView = () => {
       {/* AI Performance & Analytics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {/* Knowledge Base Coverage */}
-        <div className="p-1 rounded-2xl bg-neutral-200/50">
-          <Card className="border border-neutral-200/60 shadow-sm bg-white overflow-hidden p-0 h-[200px]">
+        <div className="p-1 rounded-2xl bg-neutral-500/10">
+          <Card className="border border-neutral-200/60 shadow-sm bg-white/80 overflow-hidden p-0 h-[200px]">
             <CardHeader className="gap-0 justify-center text-center">
-              <div className="w-fit bg-neutral-200/50 px-3.5 py-1.5 rounded-b-lg">
+              <div className="w-fit bg-neutral-500/5 px-3.5 py-1.5 rounded-b-lg">
                 <CardTitle className="text-sm font-medium text-neutral-600 tracking-tight">
                   AI Knowledge Coverage
                 </CardTitle>
@@ -491,10 +491,10 @@ export const AnalyticsView = () => {
         </div>
 
         {/* Support Demand Pattern */}
-        <div className="p-1 rounded-2xl bg-neutral-200/50">
-          <Card className="border border-neutral-200/60 shadow-sm bg-white overflow-hidden p-0 h-[200px]">
+        <div className="p-1 rounded-2xl bg-neutral-500/10">
+          <Card className="border border-neutral-200/60 shadow-sm bg-white/80 overflow-hidden p-0 h-[200px]">
             <CardHeader className="gap-0 justify-center text-center">
-              <div className="w-fit bg-neutral-200/50 px-3.5 py-1.5 rounded-b-lg">
+              <div className="w-fit bg-neutral-500/5 px-3.5 py-1.5 rounded-b-lg">
                 <CardTitle className="text-sm font-medium text-neutral-600 tracking-tight">
                   Support Demand Pattern
                 </CardTitle>

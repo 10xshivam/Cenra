@@ -69,8 +69,8 @@ export const IntegrationsView = () => {
 
     return (
         <div className="w-full h-full flex items-center p-16 flex-col gap-8 md:gap-14">
-            <div className="rounded-2xl w-full p-2 pb-5 max-w-6xl h-fit bg-neutral-200">
-                <div className="flex flex-col gap-3.5 w-full h-full border border-neutral-400 rounded-xl p-5 bg-neutral-50">
+           <div className="rounded-2xl w-full p-2 max-w-6xl h-fit bg-neutral-500/10 pb-6">
+        <div  className="flex flex-col gap-2 w-full h-full border border-neutral-300 rounded-xl p-5 bg-white/60">
                     <span className="flex gap-1.5 text-2xl items-center text-emerald-800 font-semibold tracking-tight">
                         Integrations
                     </span>
@@ -90,7 +90,7 @@ export const IntegrationsView = () => {
                             />
                             <Button
                                 onClick={() => handleCopyId(workspaceId)}
-                                className="h-8 px-4 bg-emerald-700 hover:bg-emerald-800 text-white rounded-md shrink-0 transition-colors flex items-center gap-1.5 font-medium text-xs"
+                                className="h-8 px-4 bg-emerald-800 border-2 border-b-4 border-emerald-700 hover:bg-emerald-900 text-white rounded-md shrink-0 transition-colors flex items-center gap-1.5 font-medium text-xs"
                             >
                                 {copiedId ? (
                                     <><Check className="size-3.5" /> Copied</>
@@ -113,7 +113,7 @@ export const IntegrationsView = () => {
                                 setSelectedIntegration(integration);
                                 setCopiedScript(false);
                             }}
-                            className="rounded-xl w-full px-5 py-4 flex flex-col gap-2.5 border border-dashed border-neutral-300 bg-neutral-50 hover:bg-neutral-100 hover:border-neutral-400 hover:shadow-sm cursor-pointer transition-all"
+                            className="rounded-xl w-full px-5 py-4 flex flex-col gap-2.5 border border-dashed border-neutral-300 bg-white/50 hover:bg-white/70 hover:border-neutral-400 hover:shadow-sm cursor-pointer transition-all"
                         >
                             <div className="flex items-center gap-2.5">
                                 <Icon className="size-5 text-emerald-700" />

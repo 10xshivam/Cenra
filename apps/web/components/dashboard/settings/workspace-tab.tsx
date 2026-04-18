@@ -110,7 +110,7 @@ export const WorkspaceTab = () => {
                         <Button
                             type="submit"
                             disabled={!form.formState.isDirty || updateMutation.isPending}
-                            className="h-9 px-4 text-sm font-medium bg-emerald-700 hover:bg-emerald-800 text-white rounded-lg disabled:opacity-50 gap-1.5"
+                             className="h-9 px-4 text-sm font-medium bg-emerald-800 border-2 border-b-4 border-emerald-700 hover:bg-emerald-900 text-white rounded-lg disabled:opacity-50 gap-1.5"
                         >
                             {updateMutation.isPending ? (
                                 <Loader2 className="size-4 animate-spin" />

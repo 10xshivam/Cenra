@@ -144,8 +144,8 @@ export default function WidgetCustomizationView() {
 
   return (
     <div className="w-full h-full flex items-center p-16 flex-col gap-12 overflow-y-auto no-scrollbar">
-      <div className="rounded-2xl w-full p-2 pb-5 max-w-6xl h-fit bg-neutral-200">
-        <div className="flex flex-col gap-3.5 w-full h-full border border-neutral-400 rounded-xl p-5 bg-neutral-50">
+      <div className="rounded-2xl w-full p-2 max-w-6xl h-fit bg-neutral-500/10 pb-6">
+        <div className="flex flex-col gap-2 w-full h-full border border-neutral-300 rounded-xl p-5 bg-white/60">
           <span className="flex gap-1 text-2xl items-center text-emerald-800 font-semibold tracking-tight">
             {/* <SquareInfo size="18" />  */}
             Widget Customization
@@ -177,8 +177,8 @@ export default function WidgetCustomizationView() {
 
       <div className="w-full max-w-6xl space-y-5">
         <form className="space-y-5" noValidate>
-          <section className="rounded-2xl border border-neutral-400 border-dashed bg-neutral-100 p-2">
-            <div className="rounded-xl border border-neutral-300 bg-neutral-50 p-6 space-y-4">
+          <section className="rounded-2xl border border-neutral-400 border-dashed bg-neutral-500/10 p-2">
+            <div className="rounded-xl border border-neutral-300 bg-white/60 p-6 space-y-4">
               <h2 className="text-xl font-semibold tracking-tight text-neutral-700">
                 Brand and Messages
               </h2>
@@ -251,8 +251,8 @@ export default function WidgetCustomizationView() {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-dashed border-neutral-400 bg-neutral-100 p-2">
-            <div className="rounded-xl border border-neutral-300 bg-neutral-50 p-6 space-y-4">
+          <section className="rounded-2xl border border-dashed border-neutral-400 bg-neutral-500/10 p-2">
+            <div className="rounded-xl border border-neutral-300 bg-white/60 p-6 space-y-4">
               <h2 className="text-xl font-semibold tracking-tight text-neutral-700">
                 Theme
               </h2>
@@ -275,9 +275,11 @@ export default function WidgetCustomizationView() {
                         >
                           <SelectValue />
                         </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="light">Light</SelectItem>
-                          <SelectItem value="dark">Dark</SelectItem>
+                        <SelectContent className="shadow-none rounded-xl border border-neutral-300 bg-neutral-100 ">
+                          <div className="border border-neutral-200 rounded-lg bg-white p-1">
+                            <SelectItem value="light">Light</SelectItem>
+                            <SelectItem value="dark">Dark</SelectItem>
+                          </div>
                         </SelectContent>
                       </Select>
                     </Field>
@@ -345,8 +347,8 @@ export default function WidgetCustomizationView() {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-neutral-400 border-dashed bg-neutral-100 p-2">
-            <div className="rounded-xl border border-neutral-300 bg-neutral-50 p-6 space-y-5">
+          <section className="rounded-2xl border border-neutral-400 border-dashed bg-neutral-500/10 p-2">
+            <div className="rounded-xl border border-neutral-300 bg-white/60 p-6 space-y-5">
               <div className="flex items-center justify-between gap-4">
                 <h2 className="text-xl font-semibold tracking-tight text-neutral-700">
                   What&apos;s New Section
@@ -391,7 +393,7 @@ export default function WidgetCustomizationView() {
                   {[0, 1].map((index) => (
                     <div
                       key={`whats-new-${index}`}
-                      className="rounded-xl border border-neutral-300 bg-neutral-100 p-4 space-y-3"
+                      className="rounded-xl border border-neutral-300 bg-white/70 p-4 space-y-3"
                     >
                       <p className="text-sm font-semibold tracking-tight text-neutral-700">
                         Card {index + 1}
@@ -474,8 +476,8 @@ export default function WidgetCustomizationView() {
             </div>
           </section>
 
-          <section className="rounded-2xl border border-dashed border-neutral-400 bg-neutral-100 p-2">
-            <div className="rounded-xl border border-neutral-300 bg-neutral-50 p-6 space-y-5">
+          <section className="rounded-2xl border border-dashed border-neutral-400 bg-neutral-500/10 p-2">
+            <div className="rounded-xl border border-neutral-300 bg-white/60 p-6 space-y-5">
               <div className="flex items-center justify-between gap-4">
                 <h2 className="text-xl font-semibold tracking-tight text-neutral-700">
                   Featured Articles Section
@@ -520,7 +522,7 @@ export default function WidgetCustomizationView() {
                   {[0, 1].map((index) => (
                     <div
                       key={`featured-${index}`}
-                      className="rounded-xl border border-neutral-300 bg-neutral-100 p-4 space-y-3"
+                      className="rounded-xl border border-neutral-300 bg-white/70 p-4 space-y-3"
                     >
                       <p className="text-sm font-semibold tracking-tight text-neutral-700">
                         Article {index + 1}

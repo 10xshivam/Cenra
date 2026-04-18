@@ -51,13 +51,13 @@ export const CustomerInfo = () => {
   const { data, isLoading } = useCustomerInfo(workspace?.id as string, conversationId);
   const customer: CustomerInfo = data?.customer ?? {};
 
-  if (isLoading) {
+  if (!isLoading) {
     return <CustomerDetailsSkeleton />;
   }
 
   return (
     <div className="w-full h-full flex flex-col p-4 gap-4">
-      <div className="flex items-center gap-2.5 border-b-3 border-neutral-300 py-4 bg-neutral-200/60 rounded-xl flex-col">
+      <div className="flex items-center gap-2.5 border-b-3 border-neutral-300/40 py-4 bg-neutral-500/10 rounded-xl flex-col">
         <div
           className={`rounded-full size-14 text-lg font-bold border ${getAvatarColors(conversationId)} flex justify-center items-center`}
         >
@@ -78,7 +78,7 @@ export const CustomerInfo = () => {
             value="item-1"
             className="ring ring-neutral-300 rounded-lg border-neutral-300 overflow-hidden"
           >
-            <AccordionTrigger className="border-box hover:no-underline py-2 bg-neutral-200/70 rounded-md tracking-tight font-medium px-3 text-neutral-700">
+            <AccordionTrigger className="border-box hover:no-underline py-2 bg-neutral-300/20 rounded-md tracking-tight font-medium px-3 text-neutral-700">
               Visitor Device
             </AccordionTrigger>
             <AccordionContent className="p-3 flex flex-col gap-2 text-sm ">
@@ -98,7 +98,7 @@ export const CustomerInfo = () => {
         </Accordion>
         <Accordion type="single" collapsible>
           <AccordionItem value="item-1" className="ring ring-neutral-300 rounded-lg border-neutral-300 overflow-hidden">
-            <AccordionTrigger className="border-box hover:no-underline py-2 bg-neutral-200/70 rounded-md tracking-tight font-medium px-3 text-neutral-700">
+            <AccordionTrigger className="border-box hover:no-underline py-2 bg-neutral-300/20 rounded-md tracking-tight font-medium px-3 text-neutral-700">
               Main Information
             </AccordionTrigger>
             <AccordionContent className="p-3 flex flex-col gap-2.5 text-sm">
@@ -126,7 +126,7 @@ export const CustomerInfo = () => {
         </Accordion>
         <Accordion type="single" collapsible>
           <AccordionItem value="item-1" className="ring ring-neutral-300 rounded-lg border-neutral-300 overflow-hidden">
-            <AccordionTrigger className="border-box hover:no-underline py-2 bg-neutral-200/70 rounded-md tracking-tight font-medium px-3 text-neutral-700">
+            <AccordionTrigger className="border-box hover:no-underline py-2 bg-neutral-300/20 rounded-md tracking-tight font-medium px-3 text-neutral-700">
               Session Details
             </AccordionTrigger>
             <AccordionContent className="p-3 flex justify-between items-center gap-2 text-sm">

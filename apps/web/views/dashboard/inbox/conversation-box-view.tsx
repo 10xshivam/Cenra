@@ -165,10 +165,10 @@ export const ConversationBoxView = ({
           </Hint>
 
           <DialogContent
-            className="max-w-2xl rounded-2xl p-1.5 pb-5 bg-neutral-300"
+            className="max-w-2xl rounded-2xl p-1.5 pb-5 bg-neutral-100/50 border border-neutral-500"
             showCloseButton={false}
           >
-            <div className="flex flex-col gap-4 relative w-full rounded-xl p-5 border border-neutral-400 bg-neutral-50">
+            <div className="flex flex-col gap-4 relative w-full rounded-xl p-5 border border-neutral-400 bg-neutral-100">
               <DialogHeader>
                 <DialogTitle className="text-neutral-600 tracking-tight font-medium">
                   Delete this conversation?
@@ -181,7 +181,7 @@ export const ConversationBoxView = ({
               </DialogHeader>
               <DialogFooter>
                 <DialogClose asChild>
-                  <Button variant="outline">Cancel</Button>
+                  <Button>Cancel</Button>
                 </DialogClose>
                 <Button
                   onClick={handleDeleteConversation}
@@ -216,12 +216,12 @@ export const ConversationBoxView = ({
           messages.map((m) =>
             m.from === "user" ? (
               <div key={m.id} className="flex items-end gap-1.5 mb-4">
-                <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 bg-neutral-100 border border-neutral-300">
+                <div className="size-7 rounded-full flex items-center justify-center flex-shrink-0 bg-neutral-400/10 border border-neutral-300">
                   <User size={12} className="text-neutral-600" />
                 </div>
                 <UiMessage
                   from="assistant"
-                  className="border max-w-[75%] w-fit px-3.5 py-2.5 rounded-xl bg-white rounded-bl-none text-neutral-600"
+                  className="border max-w-[75%] w-fit px-3.5 py-2.5 rounded-xl bg-neutral-400/10 rounded-bl-none text-neutral-600"
                 >
                   <MessageContent>
                     <MessageResponse>{m.content}</MessageResponse>
@@ -243,7 +243,7 @@ export const ConversationBoxView = ({
         )}
       </div>
       <div className="w-full p-2 pt-0">
-        <div className="border rounded-2xl bg-white">
+        <div className="border border-neutral-300 rounded-2xl bg-neutral-400/10">
           <form onSubmit={form.handleSubmit(handleSendMessage)}>
             <Controller
               name="message"

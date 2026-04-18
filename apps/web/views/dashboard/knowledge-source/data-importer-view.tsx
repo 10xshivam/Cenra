@@ -62,8 +62,8 @@ export const DataImporterView = () => {
 
   return (
     <div className="w-full h-full flex items-center p-16 flex-col gap-20">
-      <div className="bg-neutral-100 rounded-2xl w-full p-2 max-w-6xl h-fit border">
-        <div className="w-full border border-neutral-300 h-60 rounded-xl p-5 bg-neutral-50 flex flex-col justify-center gap-4">
+      <div className="bg-neutral-500/10 rounded-2xl w-full p-2 max-w-6xl h-fit border">
+        <div className="w-full border border-neutral-300 h-60 rounded-xl p-5 bg-white/60 flex flex-col justify-center gap-4">
           <div className="flex gap-2 items-center">
             <Image
               width={60}
@@ -108,11 +108,11 @@ export const DataImporterView = () => {
             / 5 Documents
           </p>
         </div>
-        <div className="bg-neutral-100 rounded-2xl w-full p-2 border border-neutral-400 border-dashed">
-          <div className="rounded-lg overflow-hidden border bg-neutral-50 border-neutral-300 ">
+        <div className="bg-neutral-400/10 rounded-2xl w-full p-2 border border-neutral-400 border-dashed">
+          <div className="rounded-lg overflow-hidden border bg-white/60 border-neutral-300 ">
             <Table>
               <TableHeader>
-                <TableRow className="bg-neutral-200 hover:bg-neutral-300/60 border-b border-neutral-300">
+                <TableRow className="bg-neutral-400/10 hover:bg-neutral-400/15 border-b border-neutral-300">
                   <TableHead className="pl-10 w-[260px] tracking-tight text-neutral-500 font-semibold">
                     Document Title
                   </TableHead>
@@ -138,7 +138,7 @@ export const DataImporterView = () => {
                   resources.map((resource: Resource) => (
                     <TableRow
                       key={resource.id}
-                      className="hover:bg-neutral-200/10 border-b border-neutral-300"
+                      className="hover:bg-neutral-200/10 bg-white/60 border-b border-neutral-300"
                     >
                       <TableCell className="relative font-medium pl-10 w-[260px] text-neutral-600 tracking-tight flex items-center gap-1">
                         <Dialog>
@@ -159,7 +159,7 @@ export const DataImporterView = () => {
                             </TooltipContent>
                           </Tooltip>
                           <DialogContent
-                            className="max-w-2xl rounded-2xl p-1.5 pb-5 bg-neutral-300"
+                            className="max-w-2xl rounded-2xl p-1.5 pb-5 bg-neutral-100/50 border border-neutral-500"
                             showCloseButton={false}
                           >
                             <div className="flex flex-col gap-4 relative w-full rounded-xl p-5 border border-neutral-400 bg-neutral-50">
@@ -176,7 +176,7 @@ export const DataImporterView = () => {
                               </DialogHeader>
                               <DialogFooter>
                                 <DialogClose asChild>
-                                  <Button variant="outline">Cancel</Button>
+                                  <Button>Cancel</Button>
                                 </DialogClose>
                                 <Button
                                   onClick={() =>

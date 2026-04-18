@@ -116,8 +116,8 @@ export const WebContentView = () => {
   };
   return (
     <div className="w-full h-full flex items-center p-16 flex-col gap-20">
-      <div className="rounded-2xl w-full p-2 max-w-6xl h-fit bg-neutral-200 pb-6">
-        <div className="flex flex-col gap-3.5 w-full h-full border border-neutral-400 rounded-xl p-5 bg-neutral-50">
+      <div className="rounded-2xl w-full p-2 max-w-6xl h-fit bg-neutral-500/10 pb-6">
+        <div  className="flex flex-col gap-2 w-full h-full border border-neutral-300 rounded-xl p-5 bg-white/60">
           <span className="flex gap-1 text-lg items-center text-emerald-800 font-semibold tracking-tight">
             <SquareInfo size="18" /> What is Web Content?
           </span>
@@ -134,15 +134,15 @@ export const WebContentView = () => {
           </span>
           <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
-              <Button className="w-40 h-11 bg-emerald-800 rounded-lg mt-2 hover:bg-emerald-900">
+              <Button className="w-40 h-11 bg-emerald-800 border-2 border-b-4 border-emerald-700 rounded-lg mt-2 hover:bg-emerald-900">
                 <CirclePlus size="18" /> Add a domain
               </Button>
             </DialogTrigger>
             <DialogContent
-              className="max-w-3xl rounded-2xl p-2 pb-5 bg-neutral-300"
+              className="max-w-3xl rounded-2xl p-2 pb-5 bg-neutral-100/50 border border-neutral-500"
               showCloseButton={false}
             >
-              <div className=" relative w-full rounded-xl p-5 pt-4 border border-neutral-400 bg-neutral-50">
+              <div className=" relative w-full rounded-xl p-5 pt-4 border border-neutral-400 bg-neutral-100">
                 <DialogClose className="absolute top-4 right-5 text-neutral-500 hover:text-neutral-700">
                   ✕
                 </DialogClose>
@@ -238,12 +238,12 @@ export const WebContentView = () => {
                 [resource.id]: isOpenState,
               }))
             }
-            className="w-full max-w-6xl flex flex-col bg-neutral-200/60 rounded-xl p-1"
+            className="w-full max-w-6xl flex flex-col bg-neutral-400/10 rounded-xl p-1"
             key={resource.id}
           >
             <div
               key={resource.id}
-              className="rounded-xl w-full px-4 py-3.5 flex gap-5 items-center justify-between border border-neutral-300 bg-neutral-50"
+              className="rounded-xl w-full px-4 py-3.5 flex gap-5 items-center justify-between border border-neutral-300 bg-white/60"
             >
               <span className="font-semibold flex items-center gap-1.5 tracking-tight text-base text-neutral-700">
                 <Globe className="size-4 text-emerald-700" /> {resource.url}
@@ -373,10 +373,10 @@ export const WebContentView = () => {
                       </TooltipContent>
                     </Tooltip>
                     <DialogContent
-                      className="max-w-2xl rounded-2xl p-1.5 pb-5 bg-neutral-300"
+                      className="max-w-2xl rounded-2xl p-1.5 pb-5 bg-neutral-100/50 border border-neutral-500"
                       showCloseButton={false}
                     >
-                      <div className="flex flex-col gap-4 relative w-full rounded-xl p-5 border border-neutral-400 bg-neutral-50">
+                      <div className="flex flex-col gap-4 relative w-full rounded-xl p-5 border border-neutral-400 bg-neutral-100">
                         <DialogHeader>
                           <DialogTitle className="text-neutral-600 tracking-tight font-medium">
                             Delete this domain?
@@ -390,7 +390,7 @@ export const WebContentView = () => {
                         </DialogHeader>
                         <DialogFooter>
                           <DialogClose asChild>
-                            <Button variant="outline">Cancel</Button>
+                            <Button>Cancel</Button>
                           </DialogClose>
                           <Button
                             onClick={() =>
@@ -439,7 +439,7 @@ export const WebContentView = () => {
                     </span>
                     <Dialog>
                       <DialogTrigger>
-                        <div className="flex gap-1 items-center border border-neutral-300 rounded-lg p-1 px-2 text-sm text-neutral-600 hover:text-neutral-700 bg-neutral-100 hover:bg-neutral-200/50 cursor-pointer">
+                        <div className="flex gap-1 items-center border border-neutral-300 rounded-lg p-1 px-2 text-sm text-neutral-600 hover:text-neutral-700 bg-neutral-50 hover:bg-neutral-100 cursor-pointer">
                           <span>Open</span>
                           <CircleArrowOutUpRight
                             strokeWidth={2.5}

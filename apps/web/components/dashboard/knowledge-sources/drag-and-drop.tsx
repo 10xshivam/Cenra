@@ -81,7 +81,7 @@ export const DragAndDrop = () => {
           <button
             type="button"
             onClick={handleUploadAnother}
-            className="mt-1 px-2.5 py-1.5 rounded-md text-xs font-medium text-neutral-500 border border-dashed border-neutral-300 hover:border-neutral-400 bg-neutral-100 hover:bg-neutral-200/40 transition-all duration-200 flex items-center gap-2 tracking-tight"
+            className="mt-1 px-2.5 py-1.5 rounded-md text-xs font-medium text-neutral-500 border border-dashed border-neutral-300 hover:border-neutral-400 bg-white/70 hover:bg-white/80 transition-all duration-200 flex items-center gap-2 tracking-tight"
           >
             Import another file
             <ReloadIcon size="10px" />
@@ -91,12 +91,12 @@ export const DragAndDrop = () => {
         <div
           {...getRootProps()}
           className={`w-full h-full border-2 border-dashed p-6 rounded-lg transition-all duration-300 flex flex-col justify-center items-center ${isUploading
-            ? "bg-neutral-100 border-neutral-300 cursor-not-allowed"
+            ? "bg-white/70 border-neutral-300 cursor-not-allowed"
             : isDragReject
-              ? "border-red-500 bg-neutral-100 cursor-pointer"
+              ? "border-red-500 bg-white/70 cursor-pointer"
               : isDragActive
-                ? "border-emerald-500 bg-neutral-100/30 hover:bg-neutral-100 cursor-pointer"
-                : "border-neutral-300 bg-neutral-100/30 hover:bg-neutral-100 cursor-pointer"
+                ? "border-emerald-500 bg-white/70 hover:bg-white/80 cursor-pointer"
+                : "border-neutral-300 bg-white/70 hover:bg-white/80 cursor-pointer"
             }`}
         >
           <input {...getInputProps()} />

@@ -244,7 +244,7 @@ function Sidebar({
         <div
           data-sidebar="sidebar"
           data-slot="sidebar-inner"
-          className="bg-white/80 border-b border-x border-neutral-500/15 flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg  "
+          className="bg-amber-100/20 border-b border-x border-neutral-500/15 flex h-full w-full flex-col group-data-[variant=floating]:rounded-lg  "
         >
           {children}
         </div>
@@ -517,7 +517,7 @@ function SidebarMenuButton({
       data-sidebar="menu-button"
       data-size={size}
       data-active={isActive}
-      className={cn(sidebarMenuButtonVariants({ variant, size }), className,"hover:text-emerald-800 text-neutral-600 font-medium tracking-tight hover:bg-neutral-400/10 transition-colors duration-200 data-[active=true]:bg-neutral-400/10 data-[active=true]:text-emerald-800 data-[active=true]:inset-shadow-sm active:text-emerald-900")}
+      className={cn(sidebarMenuButtonVariants({ variant, size }), className,"hover:text-emerald-800 text-neutral-600 font-medium tracking-tight hover:bg-neutral-400/10 hover:inset-shadow-sm transition-colors duration-200 data-[active=true]:bg-neutral-400/10 data-[active=true]:text-emerald-800 data-[active=true]:inset-shadow-sm active:text-emerald-900 active:bg-neutral-400/10 ")}
       {...props}
     />
   )

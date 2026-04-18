@@ -54,7 +54,7 @@ export const ConversationMenu = () => {
     <div className="flex flex-col h-full w-full">
       <div className="border-b h-14 w-full flex items-center px-4 gap-2">
         <Select value={selectedStatus} onValueChange={setSelectedStatus}>
-          <SelectTrigger className="h-7 border border-neutral-300 bg-white rounded-lg px-3 shadow-none ring-0 focus-visible:ring-0 focus-visible:ring-neutral-200">
+          <SelectTrigger className="h-7 border border-neutral-300 bg-neutral-400/10 rounded-lg px-3 shadow-none ring-0 focus-visible:ring-0 focus-visible:ring-neutral-200">
             <SelectValue placeholder="Filter" />
           </SelectTrigger>
           <SelectContent className="shadow-none rounded-xl border border-neutral-300 bg-neutral-100 ">

@@ -15,14 +15,14 @@ export const MetricCard = ({
     description,
 }: MetricCardProps) => {
     return (
-        <div className="p-1 rounded-2xl bg-neutral-200/50">
-            <Card className="border border-neutral-300 shadow-[0_2px_8px_rgba(0,0,0,0.02)] bg-white rounded-[14px] overflow-hidden px-4 py-3.5 flex flex-col justify-between">
+        <div className="p-1 rounded-2xl bg-neutral-400/10">
+            <Card className="border border-neutral-300 shadow-[0_2px_8px_rgba(0,0,0,0.02)] bg-white/80 rounded-[14px] overflow-hidden px-4 py-3.5 flex flex-col justify-between">
                 <div className="flex-1 flex flex-row items-end justify-between w-full">
                     <div className="flex flex-col justify-end w-full shrink-0 min-w-[50%]">
                         {loading ? (
                             <div className="flex flex-col gap-2.5">
-                                <Skeleton className="w-10 h-10 rounded-md" />
-                                <Skeleton className="w-32 h-4 rounded-sm" />
+                                <Skeleton className="w-10 h-10 rounded-md bg-neutral-400/10" />
+                                <Skeleton className="w-32 h-4 rounded-sm bg-neutral-400/10" />
                             </div>
                         ) : (
                             <div className="flex flex-col gap-2">

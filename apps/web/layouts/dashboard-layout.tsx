@@ -29,9 +29,9 @@ export const DashboardLayout = async ({
         <SidebarProvider defaultValue={defaultOpen ? "true" : "false"}>
           <WorkspaceSessionSync />
           <DashboardSidebar />
-          <SidebarInset className="h-svh overflow-hidden flex flex-col bg-amber-50">
-            <main className="flex-1 p-2 pl-0 min-h-0">
-              <div className="rounded-lg w-full h-full overflow-hidden border flex flex-col bg-white/80">
+          <SidebarInset className="h-svh overflow-hidden flex flex-col bg-white">
+            <main className="flex-1 p-2 pl-0.5 min-h-0">
+              <div className="rounded-lg w-full h-full overflow-hidden border border-t-0 flex flex-col bg-amber-100/20">
                 <MainHeader />
                 <RouteVisitTracker />
                 <div className="flex-1 min-h-0 overflow-hidden">{children}</div>
