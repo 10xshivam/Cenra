@@ -38,13 +38,13 @@ export function proxy(req: NextRequest) {
 
   if (token && hasSubscription) {
     if (pathname.startsWith("/billing")) {
-      return NextResponse.redirect(new URL("/create-workspace", req.url));
+      return NextResponse.redirect(new URL(hasWorkspace ? "/inbox" : "/create-workspace", req.url));
     }
   }
 
   if (pathname === "/payment" && token && hasSubscription) {
     return NextResponse.redirect(
-      new URL(hasWorkspace ? "/get-started" : "/create-workspace", req.url),
+      new URL(hasWorkspace ? "/inbox" : "/create-workspace", req.url),
     );
   }
 
@@ -54,7 +54,7 @@ export function proxy(req: NextRequest) {
         new URL(
           hasSubscription
             ? hasWorkspace
-              ? "/get-started"
+              ? "/inbox"
               : "/create-workspace"
             : "/payment",
           req.url,

@@ -51,7 +51,7 @@ export const CustomerInfo = () => {
   const { data, isLoading } = useCustomerInfo(workspace?.id as string, conversationId);
   const customer: CustomerInfo = data?.customer ?? {};
 
-  if (!isLoading) {
+  if (isLoading) {
     return <CustomerDetailsSkeleton />;
   }
 
