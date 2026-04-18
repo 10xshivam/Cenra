@@ -1,0 +1,34 @@
+FROM node:20-alpine
+
+# Install OpenSSL (required by Prisma)
+RUN apk add --no-cache openssl
+
+# Enable pnpm
+RUN corepack enable
+
+WORKDIR /app
+
+# Ensure root configs are copied first
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
+
+# Copy all packages
+COPY packages ./packages
+
+# Install all workspace deps
+RUN pnpm install --frozen-lockfile
+
+# Generate Prisma client
+RUN pnpm run db:generate
+
+# Build the backend
+RUN pnpm run build:backend
+
+EXPOSE 8080
+
+# Fix for Node 20.x DNS lookup bug with IPv6 over Docker networks connected to Neon PostgreSQL
+ENV NODE_OPTIONS="--dns-result-order=ipv4first"
+
+# Set WORKDIR directly to the backend package to make sure
+# dotenv perfectly reads the .env from its own folder
+WORKDIR /app/packages/backend
+CMD ["pnpm", "start"]

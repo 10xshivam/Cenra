@@ -5,6 +5,9 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "build:backend": "cd packages/backend && pnpm build",
+    "start:backend": "cd packages/backend && pnpm start",
+    "db:generate": "cd packages/db && pnpm exec prisma generate",
     "lint": "corepack pnpm -r --if-present lint",
     "format": "corepack pnpm exec prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css,scss,yml,yaml}\""
   },
