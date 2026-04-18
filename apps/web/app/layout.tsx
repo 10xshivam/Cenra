@@ -27,9 +27,35 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
+const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://cenra.10xshivam.dev";
+
 export const metadata = {
+  metadataBase: new URL(BASE_URL),
   icons: {
     icon: "/favicon.svg",
+  },
+  openGraph: {
+    title: "Cenra",
+    description: "AI Agent for Customer Support",
+    url: BASE_URL,
+    siteName: "Cenra",
+    images: [
+      {
+        url: `/opengraph.png`,
+        width: 1200,
+        height: 630,
+        alt: "Cenra",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Cenra",
+    description: "AI Agent for Customer Support",
+    images: ["/opengraph.png"],
+    creator: "@cenra",
   },
 };
 

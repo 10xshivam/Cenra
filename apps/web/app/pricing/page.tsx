@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Pricing Plans | Cenra",
+  description: "Compare affordable subscription plans for Cenra's AI customer support tools and find the best fit for your team.",
+};
+
 import { PricingView } from '@/views/pricing-view'
 
 const PricingPage = () => {

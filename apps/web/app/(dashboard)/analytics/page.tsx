@@ -1,10 +1,11 @@
-import { AnalyticsView } from "@/views/dashboard/analytics-view";
-import { Metadata } from "next";
+import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Analytics - Cenra",
-    description: "View your workspace analytics and insights.",
+  title: "Analytics & Insights | Cenra",
+  description: "Track conversation volume, resolution progress, and queue health across your Cenra workspaces.",
 };
+
+import { AnalyticsView } from "@/views/dashboard/analytics-view";
 
 export default function AnalyticsPage() {
     return <AnalyticsView />;

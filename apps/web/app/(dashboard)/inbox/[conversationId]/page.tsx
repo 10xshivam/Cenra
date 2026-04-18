@@ -1,3 +1,10 @@
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Conversation | Cenra",
+  description: "Review and respond to specific customer inquiries in your Cenra workspace inbox.",
+};
+
 import { ConversationBoxView } from "@/views/dashboard/inbox/conversation-box-view";
 
 const ConversationBox = async ({
@@ -10,5 +17,7 @@ const ConversationBox = async ({
   const { conversationId } = await params;
   return <ConversationBoxView conversationId={conversationId} />;
 };
+
+
 
 export default ConversationBox;
