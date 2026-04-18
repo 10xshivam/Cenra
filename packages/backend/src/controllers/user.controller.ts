@@ -153,12 +153,12 @@ export const googleLogin = async (req: Request, res: Response) => {
       where: { email },
       update: {
         firstName: given_name,
-        lastName: family_name,
+        lastName: family_name || "",
       },
       create: {
         email,
         firstName: given_name,
-        lastName: family_name,
+        lastName: family_name || "",
         password: await bcrypt.hash(Math.random().toString(36), 10),
       },
     });
