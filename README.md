@@ -6,6 +6,7 @@ Cenra is a production-ready AI support agent that deeply understands your busine
 
 [![Visit Site](https://img.shields.io/badge/Visit_Site-cenra.10xshivam.dev-blue?style=flat)](https://cenra.10xshivam.dev)
 [![Live Demo](https://img.shields.io/badge/Live_Demo-x.com/10xshivam-purple?style=flat)](https://x.com/10xshivam)
+
 [![Stars](https://img.shields.io/github/stars/10xshivam/Cenra?style=social)](https://github.com/10xshivam/Cenra)
 [![Forks](https://img.shields.io/github/forks/10xshivam/Cenra?style=social)](https://github.com/10xshivam/Cenra/forks)
 [![Issues](https://img.shields.io/github/issues/10xshivam/Cenra?style=flat)](https://github.com/10xshivam/Cenra/issues)
