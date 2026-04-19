@@ -1,5 +1,3 @@
-<div align="center">
-
 <img src="apps/web/public/cenra.png" alt="Cenra Logo" width="120" />
 
 <h3>Cenra - AI Agent that actually understands your business</h3>
@@ -11,7 +9,6 @@
 [![Issues](https://img.shields.io/github/issues/10xshivam/Cenra?style=flat)](https://github.com/10xshivam/Cenra/issues)
 [![License MIT](https://img.shields.io/github/license/10xshivam/Cenra?style=flat)](https://github.com/10xshivam/Cenra/blob/main/LICENSE)
 
-</div>
 
 ---
 
