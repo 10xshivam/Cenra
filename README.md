@@ -1,14 +1,8 @@
-![Cenra Banner](apps/web/public/opengraph.png)
-
 <div align="center">
 
-[![Visit Site](https://img.shields.io/badge/Visit_Site-cenra.10xshivam.dev-blue?style=flat)](https://cenra.10xshivam.dev)
-[![Live Demo](https://img.shields.io/badge/Live_Demo-x.com/10xshivam-purple?style=flat)](https://x.com/10xshivam)
+![Cenra Banner](apps/web/public/opengraph.png)
 
-[![Stars](https://img.shields.io/github/stars/10xshivam/Cenra?style=social)](https://github.com/10xshivam/Cenra)
-[![Forks](https://img.shields.io/github/forks/10xshivam/Cenra?style=social)](https://github.com/10xshivam/Cenra/forks)
-[![Issues](https://img.shields.io/github/issues/10xshivam/Cenra?style=flat)](https://github.com/10xshivam/Cenra/issues)
-[![License MIT](https://img.shields.io/github/license/10xshivam/Cenra?style=flat)](https://github.com/10xshivam/Cenra/blob/main/LICENSE)
+[![Visit Site](https://img.shields.io/badge/Visit_Site-cenra.10xshivam.dev-blue?style=flat)](https://cenra.10xshivam.dev) [![Live Demo](https://img.shields.io/badge/Live_Demo-x.com/10xshivam-purple?style=flat)](https://x.com/10xshivam) [![Stars](https://img.shields.io/github/stars/10xshivam/Cenra?style=social)](https://github.com/10xshivam/Cenra) [![Forks](https://img.shields.io/github/forks/10xshivam/Cenra?style=social)](https://github.com/10xshivam/Cenra/forks) [![Issues](https://img.shields.io/github/issues/10xshivam/Cenra?style=flat)](https://github.com/10xshivam/Cenra/issues) [![License MIT](https://img.shields.io/github/license/10xshivam/Cenra?style=flat)](https://github.com/10xshivam/Cenra/blob/main/LICENSE)
 
 </div>
 
