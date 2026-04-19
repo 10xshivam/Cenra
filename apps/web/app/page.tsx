@@ -1,10 +1,5 @@
 import type { Metadata } from "next";
 
-export const metadata: Metadata = {
-  title: "Cenra | AI-Powered Customer Support & Chat Widget",
-  description: "Elevate your customer experience with Cenra. Integrate intelligent chat widgets, manage shared inboxes, and provide instant, accurate support with our AI-driven platform.",
-};
-
 import {
   FooterSection,
   HeroSection,
@@ -14,6 +9,12 @@ import {
   Navbar,
 } from "@/components/landing";
 import LenisProvider from "@/components/lenis-provider";
+
+export const metadata: Metadata = {
+  title: "Cenra | AI-Powered Customer Support & Chat Widget",
+  description: "Elevate your customer experience with Cenra. Integrate intelligent chat widgets, manage shared inboxes, and provide instant, accurate support with our AI-driven platform.",
+};
+
 
 const Page = () => {
   return (

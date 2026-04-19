@@ -1,0 +1,77 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.web
+    container_name: cenra-web-container
+    ports:
+      - "3000:3000"
+    env_file:
+      - apps/web/.env
+    depends_on:
+      - backend
+    restart: unless-stopped
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/web
+          target: /src/apps/web
+          ignore:
+            - node_modules/
+            - .next/
+        - action: sync
+          path: ./packages/ui
+          target: /src/packages/ui
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./package.json
+
+  widget:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.widget
+    container_name: cenra-widget-container
+    ports:
+      - "3001:3001"
+    env_file:
+      - apps/widget/.env
+    depends_on:
+      - backend
+    restart: unless-stopped
+    develop:
+      watch:
+        - action: sync
+          path: ./apps/widget
+          target: /src/apps/widget
+          ignore:
+            - node_modules/
+            - .next/
+        - action: sync
+          path: ./packages/ui
+          target: /src/packages/ui
+          ignore:
+            - node_modules/
+        - action: rebuild
+          path: ./package.json
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.backend
+    container_name: cenra-backend-container
+    ports:
+      - "8080:8080" 
+    env_file:
+      - packages/backend/.env
+    restart: unless-stopped
+    develop:
+      watch:
+        - action: sync
+          path: ./packages/backend/src
+          target: /src/packages/backend/src
+        - action: sync
+          path: ./packages/db/prisma
+          target: /src/packages/db/prisma
+        - action: rebuild
+          path: ./package.json

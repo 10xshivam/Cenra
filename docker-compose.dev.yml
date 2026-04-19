@@ -1,0 +1,15 @@
+services:
+  web:
+    command: pnpm run dev
+    environment:
+      - NODE_ENV=development
+
+  widget:
+    command: pnpm run dev
+    environment:
+      - NODE_ENV=development
+
+  backend:
+    command: pnpm run dev
+    environment:
+      - NODE_ENV=development
