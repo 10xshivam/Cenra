@@ -1,8 +1,5 @@
 FROM node:25-alpine
 
-# Install OpenSSL (required by Prisma)
-RUN apk add --no-cache openssl
-
 # Enable pnpm
 RUN npm install -g pnpm
 
@@ -11,19 +8,20 @@ WORKDIR /src
 # Ensure root configs are copied first
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
 
-# Copy all packages
-COPY packages ./packages
+# Copy only the required packages
+COPY packages/eslint-config ./packages/eslint-config
+COPY packages/typescript-config ./packages/typescript-config
+COPY packages/ui ./packages/ui
+
+COPY apps/web ./apps/web
 
 # Install all workspace deps
 RUN pnpm install --frozen-lockfile
 
-# Generate Prisma client
-RUN pnpm run db:generate
+RUN pnpm build:web
 
-# Build the backend
-RUN pnpm run build:backend
+EXPOSE 3000
 
-EXPOSE 8080
+WORKDIR /src/apps/web
 
-WORKDIR /src/packages/backend
 CMD ["pnpm", "start"]

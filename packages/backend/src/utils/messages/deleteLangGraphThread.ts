@@ -1,21 +1,12 @@
 import { Pool } from "pg";
-import { lookup } from "node:dns/promises";
 
 export async function deleteLangGraphThread(threadId: string) {
   if (!threadId) {
     throw new Error("threadId is required to delete LangGraph thread");
   }
 
-  const url = new URL(process.env.THREADS_DB_URL || "");
-  const { address } = await lookup(url.hostname, { family: 4 });
-
   const pool = new Pool({
-    user: url.username,
-    password: url.password,
-    host: address,
-    port: parseInt(url.port || "5432"),
-    database: url.pathname.slice(1),
-    ssl: { rejectUnauthorized: false, servername: url.hostname },
+    connectionString: process.env.THREADS_DB_URL,
   });
 
   const client = await pool.connect();

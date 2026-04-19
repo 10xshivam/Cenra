@@ -1,6 +1,5 @@
 import { PostgresSaver } from "@langchain/langgraph-checkpoint-postgres";
 import { Pool } from "pg";
-import { lookup } from "node:dns/promises";
 
 type Chatbot = any;
 
@@ -27,18 +26,8 @@ export async function initLangGraph() {
   }
 
   chatbotInitPromise = (async () => {
-    const url = new URL(dbUrl);
-    
-    // Explicitly bypass Node 20's broken IPv6 fallback by manually querying for IPv4
-    const { address } = await lookup(url.hostname, { family: 4 });
-
     const pool = new Pool({
-      user: url.username,
-      password: url.password,
-      host: address,
-      port: parseInt(url.port || "5432"),
-      database: url.pathname.slice(1),
-      ssl: { rejectUnauthorized: false, servername: url.hostname },
+      connectionString: dbUrl,
     });
     
     const checkpointer = new PostgresSaver(pool);
