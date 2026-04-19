@@ -32,7 +32,7 @@ const BASE_URL = process.env.NEXT_PUBLIC_APP_URL || "https://cenra.10xshivam.dev
 export const metadata = {
   metadataBase: new URL(BASE_URL),
   icons: {
-    icon: "/favicon.svg",
+    icon: "/cenra.png",
   },
   openGraph: {
     title: "Cenra",
