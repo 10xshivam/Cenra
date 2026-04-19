@@ -1,5 +1,8 @@
 <div align="center">
-![Cenra Logo](apps/web/public/cenra.png)
+
+<img src="apps/web/public/cenra.png" alt="Cenra Logo" width="120" />
+
+<br />
 
 [![Visit Site](https://img.shields.io/badge/Visit_Site-cenra.10xshivam.dev-blue?style=flat)](https://cenra.10xshivam.dev)
 [![Live Demo](https://img.shields.io/badge/Live_Demo-x.com/10xshivam-purple?style=flat)](https://x.com/10xshivam)
