@@ -5,6 +5,15 @@
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
+    "docker:dev": "docker compose -f docker-compose.yml -f docker-compose.dev.yml watch",
+    "docker:prod": "docker compose up",
+    "build:backend": "cd packages/backend && pnpm build",
+    "start:backend": "cd packages/backend && pnpm start",
+    "db:generate": "cd packages/db && pnpm exec prisma generate",
+    "build:web": "cd apps/web && pnpm build",
+    "start:web": "cd apps/web && pnpm start",
+    "build:widget": "cd apps/widget && pnpm build",
+    "start:widget": "cd apps/widget && pnpm start",
     "lint": "corepack pnpm -r --if-present lint",
     "format": "corepack pnpm exec prettier --write \"**/*.{js,jsx,ts,tsx,json,md,css,scss,yml,yaml}\""
   },

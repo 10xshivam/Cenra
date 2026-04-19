@@ -1,143 +1,138 @@
-# Cenra
-### AI Agent that actually understands your business
-Cenra turns your content, docs, and product knowledge into a conversational support agent that remembers chats, understands context, and responds like your best teammate, without building AI infrastructure.
+# <img src="apps/web/public/cenra.png" alt="Cenra Logo" width="45" align="top" /> Cenra
 
-## What Cenra does
-- Generates contextual answers from your business content.
-- Remembers past conversations and threads with LangGraph checkpointing.
-- Handles identity collection only when needed.
-- Streams replies for a natural, human-like feel.
-- Supports workspace-level greetings, suggestions, and knowledge.
-- Ships as an embeddable widget for any product or website.
+[![Visit Site](https://img.shields.io/badge/Visit_Site-cenra.10xshivam.dev-blue?style=flat)](https://cenra.10xshivam.dev) [![Live Demo](https://img.shields.io/badge/Live_Demo-x.com/10xshivam-purple?style=flat)](https://x.com/10xshivam) [![Stars](https://img.shields.io/github/stars/10xshivam/Cenra?style=social)](https://github.com/10xshivam/Cenra) [![Forks](https://img.shields.io/github/forks/10xshivam/Cenra?style=social)](https://github.com/10xshivam/Cenra/forks) [![Issues](https://img.shields.io/github/issues/10xshivam/Cenra?style=flat)](https://github.com/10xshivam/Cenra/issues) [![License MIT](https://img.shields.io/github/license/10xshivam/Cenra?style=flat)](https://github.com/10xshivam/Cenra/blob/main/LICENSE)
 
-## Why Cenra
-- Workspace-driven knowledge, not generic chat.
-- Customer-aware threads with conversation memory.
-- Smooth UI with identity capture and streaming output.
-- Optimised retrieval with Qdrant vector search and Postgres persistence.
+> AI Agent that actually understands your business
 
-## Architecture overview
-Workspace → Resources → Vector Store → AI Agent → Widget UI
+## What is Cenra
 
-- Backend: Express + LangGraph agent, Qdrant vector store, Postgres for business data and LangGraph PostgresSaver checkpoints.
-- Frontend: Next.js dashboard for ops teams, configurable widget for end users.
-- Data flow: resources (URLs, files) -> embeddings -> vector search -> agent -> streamed messages -> widget and dashboard.
+Cenra is a production-ready AI support agent that deeply understands your business context, documentation, and product knowledge. Built for modern SaaS companies, it transforms static resources into an interactive widget that remembers customer conversations, handles intelligent responses in real-time, and integrates seamlessly into your existing workflows without requiring complex AI infrastructure.
 
-## Tech stack
-- Frontend: Next.js 16 (React 19), TanStack Query, Zod, Radix UI, Turbopack.
-- Widget: Next.js client widget with Zustand state and shared UI kit.
-- Backend: Node/Express, LangChain/LangGraph, Qdrant, Postgres.
-- Auth: JWT, Google OAuth.
-- Tooling: pnpm workspaces, Turborepo, TypeScript, Prisma.
+![Cenra Banner](apps/web/public/opengraph.png)
 
-## Core concepts
-- Workspaces: each business has isolated knowledge, settings, and identity.
-- Customers: created dynamically when identification is needed.
-- Conversations: persisted threads with LangGraph checkpointing plus widget session state.
-- Messages: streamed assistant and user turns rendered in the UI.
+## Features
+- **Flexible Integrations & AI Chat Widget**: Deploy an embeddable, responsive customer support widget across websites and apps (HTML, React, Next.js) with real-time streaming responses.
+- **Product-Trained Knowledge**: Train Cenra on your website, docs, and FAQs. Automatically vectorize and ingest business documents via Firecrawl and Jina to deliver accurate, business-aligned responses.
+- **Context-Aware Support**: LangGraph-powered conversational memory maintains context across messages and follow-ups so users don't have to repeat themselves.
+- **Customer Context Extraction**: Access customer details like email, device, location, and session data directly within conversations for highly personalized AI responses.
+- **AI + Human Workflow**: Automatically resolve routine queries or smoothly escalate them, giving your support team full control directly from a unified dashboard inbox.
+- **Support Analytics**: Track requests, resolutions, escalations, and trends with real-time insights to continuously improve your support performance.
+- **Workspace Administration**: Comprehensive admin controls to manage agent settings, appearance, knowledge bases, and secure authentication (JWT & Google OAuth).
+- **Subscription & Billing**: Built-in pricing, billing tiers, and usage gating via Dodo Payments.
+- **Developer-First Architecture**: Clean monorepo structure (Turborepo) featuring containerized Docker services for rapid deployment and robust local development.
 
-## Data flow
-- Visitor opens widget → check session; if none, show greeting.
-- First message → agent answers and collects identity when required → thread stored in Postgres.
-- Follow-up → agent retrieves prior messages + vector search over workspace resources → generates contextual reply.
+## Tech Stack
 
-## Monorepo layout
-- `apps/web` – Next.js dashboard for agents and workspace management (port 3000).
-- `apps/widget` – Next.js embeddable chat widget (port 3001).
-- `packages/backend` – Express + LangGraph API service (default port 8080).
-- `packages/db` – Prisma schema and migrations for Postgres.
-- `packages/ui` – Shared UI primitives.
-- `packages/typescript-config`, `packages/eslint-config` – Shared tooling configs.
+| Category | Technologies |
+|---|---|
+| **Frontend** | Next.js 16 (App Router), React 19, TailwindCSS, shadcn/ui, Zustand, Framer Motion |
+| **Backend** | Node.js, Express, LangChain, LangGraph, Qdrant |
+| **Database** | PostgreSQL (Neon DB), Prisma ORM |
+| **AI Integration** | Gemini API, Jina AI |
+| **DevOps** | Docker, Docker Compose, Turborepo |
+| **Tooling** | TypeScript, ESLint, Prettier, PNPM |
 
-## Prerequisites
+## Project Structure
+
+```text
+cenra/
+├── apps/
+│   ├── web/               # Next.js workspace dashboard for ops teams
+│   └── widget/            # Next.js embeddable customer chat widget
+├── packages/
+│   ├── backend/           # Node.js/Express API and LangGraph AI agent
+│   ├── db/                # Prisma schema, migrations, and database client
+│   ├── eslint-config/     # Shared ESLint configurations
+│   ├── typescript-config/ # Shared TypeScript configurations
+│   └── ui/                # Shared React components (shadcn/ui)
+├── docker/                # Dockerfiles for web, widget, and backend
+└── docker-compose.yml     # Local deployment and orchestration
+```
+
+## Getting Started
+
+### Prerequisites
 - Node.js >= 20
-- pnpm (repo uses `pnpm@10.23.0`)
-- Postgres instance (`DATABASE_URL`, `THREADS_DB_URL`)
-- Qdrant instance + API key
-- Google OAuth client (for login)
+- PNPM >= 10.x
+- Docker (optional, but recommended)
 
-## Environment variables
-Create a `.env` for the backend (export or load via your process manager). Required by `packages/backend` and `packages/db`:
+### Option A: Run with Docker (Recommended)
+The fastest way to spin up the entire stack (Database, Backend, Web, Widget).
 
+```bash
+pnpm run docker:dev
 ```
-# Server
-PORT=8080
-NODE_ENV=development
-JWT_SECRET=replace-me
+This automatically starts:
+- Next.js Web Dashboard (`localhost:3000`)
+- Next.js Embeddable Widget (`localhost:3001`)
+- Node.js API Backend (`localhost:8080`)
+- Syncs local file changes to containers in real-time.
 
-# Database
-DATABASE_URL=postgresql://USER:PASSWORD@HOST:PORT/DB_NAME
-THREADS_DB_URL=postgresql://USER:PASSWORD@HOST:PORT/DB_NAME   # used by LangGraph PostgresSaver
+### Option B: Run Manually
+If you prefer running services directly via Turborepo:
 
-# Qdrant
-QDRANT_URL=https://your-qdrant-host
-QDRANT_API_KEY=your-key
-
-# Google OAuth
-GOOGLE_CLIENT_ID=...
-GOOGLE_CLIENT_SECRET=...
-GOOGLE_REDIRECT_URI=http://localhost:8080/api/v1/auth/google/callback
-```
-
-Tip: dashboard and widget axios clients default to `http://localhost:8080/api/v1`. Update `apps/web/lib/axios.ts` and `apps/widget/lib/axios.ts` or wire env-driven config for other environments.
-
-## Install and set up
 ```bash
 pnpm install
-
-# Generate Prisma client
-pnpm --filter @workspace/db db:generate
-
-# Apply migrations (dev loop)
-pnpm --filter @workspace/db db:migrate
-
-# Deploy migrations (CI/prod)
-pnpm --filter @workspace/db db:deploy
-```
-
-## Run in development
-Option A: Turbo all services
-```bash
+pnpm build
 pnpm dev
 ```
-- Dashboard: http://localhost:3000
-- Widget: http://localhost:3001
-- API: http://localhost:8080 (if `PORT` is 8080)
 
-Option B: Per package
+## Environment Variables
+Environment templates are provided in each application and package. Duplicate the `.env.example` files to `.env` and fill in your keys.
+
+| Location | Purpose | Key Variables |
+|---|---|---|
+| `apps/web/.env` | Next.js Dashboard | `NEXT_PUBLIC_API_BASE_URL`, `NEXT_PUBLIC_GOOGLE_CLIENT_ID`, `RESEND_API_KEY` |
+| `apps/widget/.env` | Next.js Widget | `NEXT_PUBLIC_API_BASE_URL` |
+| `packages/backend/.env` | API & AI Agent | `DATABASE_URL`, `QDRANT_URL`, `GOOGLE_API_KEY`, `GROQ_API_KEY`, `JWT_SECRET`, `DODO_API_KEY` |
+| `packages/db/.env` | Prisma ORM | `DATABASE_URL` |
+
+## Prisma Database Management
+Manage your PostgreSQL database from the root directory using PNPM filters.
+
 ```bash
-pnpm --filter @workspace/backend dev
-pnpm --filter @workspace/web dev
-pnpm --filter @workspace/widget dev
+# Generate the Prisma client after schema changes
+pnpm dlx turbo run db:generate
+
+# Apply pending migrations to the database
+pnpm dlx turbo run db:migrate
+
 ```
 
-## Build, lint, typecheck
-```bash
-pnpm build      # turbo build all
-pnpm lint       # turbo lint all
-pnpm format     # prettier on ts/tsx/md
+## Scripts
+Core commands available from the root `package.json`.
 
-pnpm --filter @workspace/web typecheck
-pnpm --filter @workspace/widget typecheck
-pnpm --filter @workspace/backend build
-```
+| Command | Description |
+|---|---|
+| `pnpm dev` | Starts all applications in development mode via Turborepo |
+| `pnpm build` | Builds all packages and applications for production |
+| `pnpm lint` | Runs ESLint across the entire workspace |
+| `pnpm format` | Runs Prettier to format source code |
+| `pnpm docker:dev` | Starts the Docker compose stack in watch mode for development |
+| `pnpm docker:prod` | Starts the standard optimized Docker compose stack |
 
-## Production notes
-- Provide production values for secrets, database URLs, and `NODE_ENV=production`.
-- Allow CORS for your dashboard/widget origins (`packages/backend/src/index.ts`).
-- Point frontend axios base URLs to your deployed API.
-- Run `db:deploy` before starting the API in new environments.
-
-## Troubleshooting
-- API will not start: verify `DATABASE_URL`, `THREADS_DB_URL`, `QDRANT_URL`, `QDRANT_API_KEY`; ensure `PORT` is free.
-- Google login fails: ensure redirect URI matches Google Cloud Console config.
-- Widget cannot connect: check CORS and axios base URL in web/widget.
-- Prisma issues: regenerate client after schema changes (`pnpm --filter @workspace/db db:generate`).
+## Deployment
+Cenra is designed to be highly deployable across modern infrastructure.
+- **Frontend (Web/Widget)**: Optimized for native deployment on Vercel. 
+- **Backend (API)**: Deployable as a Docker container on any VPS, or platforms like Render, Railway, and Fly.io.
+- **Database**: Use any managed PostgreSQL provider (e.g., Neon, Supabase, AWS RDS).
 
 ## Contributing
-1. Branch from `main`.
-2. Keep changes scoped and linted (`pnpm lint`).
-3. Open a PR with description and, for UI changes, screenshots.
+We welcome contributions from the community. Please follow these steps:
+1. Fork the repository.
+2. Create a feature branch (`git checkout -b feature/amazing-feature`).
+3. Ensure your code passes all linting and formatting checks (`pnpm lint`, `pnpm format`).
+4. Commit your changes with descriptive messages.
+5. Open a Pull Request.
+
+## Code of Conduct
+We are committed to providing a friendly, safe, and welcoming environment for all. Please behave professionally and respectfully in all interactions within our issue trackers, pull requests, and community channels.
 
 ## License
-MIT License. See `LICENSE` for full terms.
+This project is licensed under the MIT License. See the `LICENSE` file for details.
+
+---
+
+<div align="center">
+Made with love by Shivam
+</div>

@@ -1,0 +1,27 @@
+FROM node:22-alpine
+
+# Enable pnpm
+RUN npm install -g pnpm
+
+WORKDIR /src
+
+# Ensure root configs are copied first
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
+
+# Copy only the required packages
+COPY packages/eslint-config ./packages/eslint-config
+COPY packages/typescript-config ./packages/typescript-config
+COPY packages/ui ./packages/ui
+
+COPY apps/web ./apps/web
+
+# Install all workspace deps
+RUN pnpm install --frozen-lockfile
+
+RUN pnpm build:web
+
+EXPOSE 3000
+
+WORKDIR /src/apps/web
+
+CMD ["pnpm", "start"]

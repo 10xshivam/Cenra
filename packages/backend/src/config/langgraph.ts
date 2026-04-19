@@ -1,4 +1,5 @@
 import { PostgresSaver } from "@langchain/langgraph-checkpoint-postgres";
+import { Pool } from "pg";
 
 type Chatbot = any;
 
@@ -25,7 +26,11 @@ export async function initLangGraph() {
   }
 
   chatbotInitPromise = (async () => {
-    const checkpointer = PostgresSaver.fromConnString(dbUrl);
+    const pool = new Pool({
+      connectionString: dbUrl,
+    });
+    
+    const checkpointer = new PostgresSaver(pool);
     const compiledAgent = await initCompiledAgent();
 
     await checkpointer.setup();

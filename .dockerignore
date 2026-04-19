@@ -1,0 +1,10 @@
+**/node_modules
+**/.next
+.git
+.turbo
+*.log
+dist
+out
+build
+coverage
+.DS_Store

@@ -1,13 +1,13 @@
 import { Pool } from "pg";
 
-const pool = new Pool({
-  connectionString: process.env.THREADS_DB_URL,
-});
-
 export async function deleteLangGraphThread(threadId: string) {
   if (!threadId) {
     throw new Error("threadId is required to delete LangGraph thread");
   }
+
+  const pool = new Pool({
+    connectionString: process.env.THREADS_DB_URL,
+  });
 
   const client = await pool.connect();
 
@@ -32,5 +32,6 @@ export async function deleteLangGraphThread(threadId: string) {
     throw error;
   } finally {
     client.release();
+    await pool.end();
   }
 }
