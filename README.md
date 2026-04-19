@@ -4,6 +4,8 @@
 
 <br />
 
+## Cenra - AI Agent that actually understands your business
+
 [![Visit Site](https://img.shields.io/badge/Visit_Site-cenra.10xshivam.dev-blue?style=flat)](https://cenra.10xshivam.dev)
 [![Live Demo](https://img.shields.io/badge/Live_Demo-x.com/10xshivam-purple?style=flat)](https://x.com/10xshivam)
 [![Stars](https://img.shields.io/github/stars/10xshivam/Cenra?style=social)](https://github.com/10xshivam/Cenra)
@@ -17,8 +19,6 @@
 
 
 ![Cenra Banner](apps/web/public/opengraph.png)
-
-# Cenra - AI Agent that actually understands your business
 
 Cenra is a production-ready AI support agent that deeply understands your business context, documentation, and product knowledge. Built for modern SaaS companies, it transforms static resources into an interactive widget that remembers customer conversations, handles intelligent responses in real-time, and integrates seamlessly into your existing workflows without requiring complex AI infrastructure.
 
