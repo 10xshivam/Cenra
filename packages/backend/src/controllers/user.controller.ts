@@ -97,6 +97,9 @@ export const loginUser = async (req: Request, res: Response) => {
 
 export const logoutUser = (req: Request, res: Response) => {
   const cookieOptions = getAuthCookieOptions();
+  // Express `clearCookie` sets its own expires, but passing `maxAge` overrides it.
+  delete cookieOptions.maxAge;
+  
   res.clearCookie("token", cookieOptions);
   res.clearCookie("hasWorkspace", cookieOptions);
   res.clearCookie("hasSubscription", cookieOptions);

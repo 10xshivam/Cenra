@@ -36,7 +36,7 @@ export const metadata = {
   },
   openGraph: {
     title: "Cenra",
-    description: "AI Agent for Customer Support",
+    description: "AI Agent that actually understands your business",
     url: BASE_URL,
     siteName: "Cenra",
     images: [
@@ -53,7 +53,7 @@ export const metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Cenra",
-    description: "AI Agent for Customer Support",
+    description: "AI Agent that actually understands your business",
     images: ["/opengraph.png"],
     creator: "@cenra",
   },

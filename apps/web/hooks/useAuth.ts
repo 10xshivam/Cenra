@@ -126,6 +126,12 @@ export const useLogout = () => {
       toast.error(
         `Logout error: ${error instanceof Error ? error.message : String(error)}`
       );
+      // Fallback clean up in case of a 401/error from API
+      clearUser();
+      clearWorkspace();
+      queryClient.removeQueries({ queryKey: ["user"] });
+      queryClient.removeQueries({ queryKey: ["workspace"] });
+      router.push("/login");
     },
   });
 }
