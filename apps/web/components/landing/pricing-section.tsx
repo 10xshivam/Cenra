@@ -45,14 +45,14 @@ export function PricingSection() {
         whileInView="show"
         viewport={{ once: true, amount: 0.3 }}
         transition={{ delay: 0.12 }}
-        className="absolute top-10 right-10 md:top-12 md:right-13 flex flex-col gap-4 justify-center items-end"
+        className="absolute top-10 right-10 md:top-15 md:right-23 flex flex-col gap-4 justify-center items-end"
       >
         <div className="">
           <p className="text-xs md:text-sm text-neutral-400 tracking-tight">
             Starts from
           </p>
-          <p className="text-8xl md:text-9xl font-semibold tracking-tighter font-mono opacity-10">
-            $19
+          <p className="text-8xl md:text-9xl font-bold tracking-tighter font-mono opacity-10">
+            $9
           </p>
           <p className="text-xs md:text-sm text-neutral-400 text-end tracking-tight">
             per month

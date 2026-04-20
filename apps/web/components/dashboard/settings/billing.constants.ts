@@ -1,14 +1,14 @@
 export const PLAN_META = {
     STARTER: {
         label: "Starter",
-        price: "$19 / mo",
+        price: "$9 / mo",
         color: "text-emerald-700",
         bg: "bg-white/80",
         border: "border-neutral-300",
     },
     PRO: {
         label: "Pro",
-        price: "$49 / mo",
+        price: "$29 / mo",
         color: "text-violet-700",
         bg: "bg-violet-50",
         border: "border-violet-200",
