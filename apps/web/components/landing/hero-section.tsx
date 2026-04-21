@@ -119,7 +119,7 @@ export const HeroSection = () => {
             variant="outline"
             className="rounded-full hidden sm:flex border-neutral-300 bg-white/80 px-6 text-neutral-700 hover:bg-white"
           >
-            <Link href="/pricing">View Demo</Link>
+            <Link target="_blank" href="https://youtu.be/baSL9e6Nb-Q">View Demo</Link>
           </Button>
         </motion.div>
       </motion.div>
