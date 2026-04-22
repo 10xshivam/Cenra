@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Conversation | Cenra",
+  title: "Conversation",
   description: "Review and respond to specific customer inquiries in your Cenra workspace inbox.",
 };
 

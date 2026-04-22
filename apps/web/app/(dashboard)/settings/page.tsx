@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Settings | Cenra",
+  title: "Settings",
   description: "Manage your Cenra workspace configuration, profile information, and account preferences.",
 };
 

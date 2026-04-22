@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Customize Widget | Cenra",
+  title: "Customize Widget",
   description: "Personalize your Cenra chat widget with branded colors, greetings, and behaviors specific to your workspace.",
 };
 

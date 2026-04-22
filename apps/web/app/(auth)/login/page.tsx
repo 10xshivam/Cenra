@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Login | Cenra",
+  title: "Login",
   description: "Sign in to your Cenra account to access your AI customer support dashboard and workspace.",
 };
 

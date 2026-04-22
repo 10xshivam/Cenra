@@ -35,7 +35,7 @@ export const metadata = {
     icon: "/cenra.png",
   },
   openGraph: {
-    title: "Cenra",
+    title: "Cenra - AI Agent for Customer Support",
     description: "AI Agent that actually understands your business",
     url: BASE_URL,
     siteName: "Cenra",
@@ -52,7 +52,7 @@ export const metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "Cenra",
+    title: "Cenra - AI Agent for Customer Support",
     description: "AI Agent that actually understands your business",
     images: ["/opengraph.png"],
     creator: "@cenra",

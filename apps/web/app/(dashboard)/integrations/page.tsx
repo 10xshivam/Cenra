@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Integrations | Cenra",
+  title: "Integrations",
   description: "Connect Cenra with Next.js, React, and your favorite tools using our easy-to-install embed scripts.",
 };
 

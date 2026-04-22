@@ -11,7 +11,7 @@ import {
 import LenisProvider from "@/components/lenis-provider";
 
 export const metadata: Metadata = {
-  title: "Cenra | AI-Powered Customer Support & Chat Widget",
+  title: "Cenra - AI Agent for Customer Support",
   description: "Elevate your customer experience with Cenra. Integrate intelligent chat widgets, manage shared inboxes, and provide instant, accurate support with our AI-driven platform.",
 };
 

@@ -258,6 +258,12 @@ export const deleteConversation = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Conversation not found" });
     }
     await deleteLangGraphThread(conversation.threadId);
+    await prisma.notification.deleteMany({
+      where: {
+        conversationId,
+        workspaceId: conversation.workspaceId,
+      },
+    });
     await prisma.conversation.delete({
       where: { id: conversationId },
     });

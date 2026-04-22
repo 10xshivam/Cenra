@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Payment Successful | Cenra",
+  title: "Payment Successful",
   description: "Thank you for subscribing to Cenra. Your account is active, and you're ready to transform your customer support.",
 };
 

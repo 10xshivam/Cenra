@@ -43,6 +43,7 @@ model Workspace {
   resources      Resource[]
   customers      Customer[]
   conversations  Conversation[]
+  notifications  Notification[]
   widgetSettings WidgetSettings?
 }
 
@@ -88,8 +89,26 @@ model Conversation {
   customer    Customer           @relation(fields: [customerId], references: [id])
   threadId    String             @unique
   status      ConversationStatus @default(unresolved)
+  notifications Notification[]
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
+}
+
+model Notification {
+  id             String       @id @default(uuid())
+  workspaceId    String
+  workspace      Workspace    @relation(fields: [workspaceId], references: [id])
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id])
+  type           String
+  title          String
+  description    String
+  isRead         Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+
+  @@index([workspaceId, createdAt])
+  @@index([workspaceId, isRead])
+  @@index([conversationId])
 }
 
 model WidgetSettings {

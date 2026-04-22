@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Inbox | Cenra",
+  title: "Inbox",
   description: "Manage all customer conversations and escalations from your Cenra shared inbox dashboard.",
 };
 

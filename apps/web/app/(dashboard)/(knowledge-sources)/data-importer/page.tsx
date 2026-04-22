@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Data Importer | Cenra",
+  title: "Data Importer",
   description: "Upload and sync documents, FAQs, and files to train your Cenra AI support agent.",
 };
 

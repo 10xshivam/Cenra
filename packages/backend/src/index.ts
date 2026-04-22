@@ -13,6 +13,7 @@ import widgetSettingRouter from "./routes/widgetSetting.route";
 import widgetRouter from "./routes/widget.routes";
 import analyticsRouter from "./routes/analytics.route";
 import subscriptionRouter from "./routes/subscription.route";
+import notificationRouter from "./routes/notification.route";
 import { webhookController } from "./controllers/webhook.controller";
 import { prisma } from "@workspace/db";
 
@@ -95,6 +96,7 @@ app.use("/api/v1/workspace", conversationRouter);
 app.use("/api/v1/workspace", messageRouter);
 app.use("/api/v1/workspace", widgetSettingRouter);
 app.use("/api/v1/workspace", analyticsRouter);
+app.use("/api/v1/workspace", notificationRouter);
 app.use("/api/v1/widget", widgetRouter);
 app.use("/api/v1/subscription", subscriptionRouter);
 

@@ -2,6 +2,7 @@ import { tool } from "@langchain/core/tools";
 import * as z from "zod";
 import { getWorkspaceVectorStore } from "../utils/file-processing/workspaceVectorStore";
 import { prisma } from "@workspace/db";
+import { escalateConversation } from "../services/notification.service";
 
 export const vectorSearchTool = tool(
   async ({ query, workspaceId }: { query: string; workspaceId: string }) => {
@@ -15,7 +16,7 @@ export const vectorSearchTool = tool(
       select: { id: true },
     });
 
-    const activeIds = new Set(activeResources.map(r => r.id));
+    const activeIds = new Set(activeResources.map((resource) => resource.id));
 
     const results = await vectorStore.similaritySearch(query, 6);
 
@@ -38,11 +39,14 @@ export const vectorSearchTool = tool(
 );
 
 export const escalateConversationTool = tool(
-  async ({ conversationId }: { conversationId: string }) => {
-    await prisma.conversation.update({
-      where: { id: conversationId },
-      data: { status: "escalated" },
-    });
+  async ({
+    conversationId,
+    workspaceId,
+  }: {
+    conversationId: string;
+    workspaceId: string;
+  }) => {
+    await escalateConversation(workspaceId, conversationId);
 
     return "Conversation has been escalated to a human agent.";
   },
@@ -52,6 +56,7 @@ export const escalateConversationTool = tool(
       "Escalate the conversation to a human agent when the user asks for human help or is unhappy.",
     schema: z.object({
       conversationId: z.string(),
+      workspaceId: z.string(),
     }),
   }
 );
